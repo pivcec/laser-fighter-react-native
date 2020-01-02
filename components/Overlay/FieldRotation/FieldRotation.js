@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createRefToPlayer } from "../../../reduxUtils/actions/actionCreators";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Animated } from "react-native";
 import { vh } from "react-native-expo-viewport-units";
@@ -71,14 +69,4 @@ FieldRotation.propTypes = {
   enemyLasers: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    refsToPlayers: state.players.refsToPlayers
-  };
-};
-
-const mapDispatchToProps = {
-  createRefToPlayer
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FieldRotation);
+export default FieldRotation;

@@ -74,6 +74,7 @@ export default class Overlay extends Component {
               height={height}
               width={width}
               playerLaserIsFiring={playerLaserIsFiring}
+              heading={heading}
             />
             <FieldRotation
               heading={heading}
@@ -99,5 +100,6 @@ const styles = StyleSheet.create({
 Overlay.propTypes = {
   heading: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired,
-  playerLaserIsFiring: PropTypes.bool.isRequired
+  playerLaserIsFiring: PropTypes.bool.isRequired,
+  heading: PropTypes.number.isRequired
 };
