@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, Animated } from "react-native";
-import { vh } from "react-native-expo-viewport-units";
+import { Animated, View } from "react-native";
 import Field from "./Field/Field";
+import { vw, vh } from "react-native-expo-viewport-units";
 
 class FieldRotation extends Component {
   state = {
@@ -10,18 +10,18 @@ class FieldRotation extends Component {
   };
 
   componentDidMount() {
-    this.rotateGrid();
+    this.rotateField();
   }
 
   componentDidUpdate(prevProps) {
     const { heading } = prevProps;
 
     if (heading !== this.props.heading) {
-      this.rotateGrid();
+      this.rotateField();
     }
   }
 
-  rotateGrid = () => {
+  rotateField = () => {
     const { animatedValue } = this.state;
 
     Animated.timing(animatedValue, {
@@ -33,7 +33,7 @@ class FieldRotation extends Component {
 
   render() {
     const { animatedValue } = this.state;
-    const { height, enemyLasers } = this.props;
+    const { layoutWidth, enemyLasers } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
       inputRange: [0, 360],
@@ -42,30 +42,19 @@ class FieldRotation extends Component {
 
     return (
       <Animated.View
-        style={[
-          styles.rotator,
-          {
-            transform: [{ rotate: interpolatedRotateAnimation }]
-          }
-        ]}
+        style={{
+          transform: [{ rotate: interpolatedRotateAnimation }]
+        }}
       >
-        <Field height={height} enemyLasers={enemyLasers} />
+        <Field layoutWidth={layoutWidth} enemyLasers={enemyLasers} />
       </Animated.View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  rotator: {
-    zIndex: 1,
-    width: vh(100),
-    height: vh(100)
-  }
-});
-
 FieldRotation.propTypes = {
   heading: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  layoutWidth: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired
 };
 

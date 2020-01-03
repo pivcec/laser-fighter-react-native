@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  Text
 } from "react-native";
 import brushedMetal from "../../resources/brushed-metal.jpg";
 import Charger from "./Charger/Charger";
@@ -57,6 +58,7 @@ export default class Controls extends Component {
 
   render() {
     const { buttonIsPressed, charge } = this.state;
+    const { heading } = this.props;
     return (
       <View style={styles.container}>
         <Charger buttonIsPressed={buttonIsPressed} charge={charge} />
@@ -68,6 +70,7 @@ export default class Controls extends Component {
               onPressOut={this.handleOnPressOut}
             />
           </View>
+          <Text>{heading}</Text>
         </ImageBackground>
       </View>
     );
@@ -75,16 +78,12 @@ export default class Controls extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
+  container: { flex: 1 },
   chargerContainer: {
     flex: 1
   },
   imageBackground: {
-    flex: 2,
+    flex: 3,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",

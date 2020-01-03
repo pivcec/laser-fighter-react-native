@@ -5,30 +5,30 @@ import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
 
 export default Grid = props => {
-  const { width, height, gridLinesX, gridLinesY } = props;
+  const { layoutWidth, gridLines } = props;
   return (
     <View style={styles.grid}>
-      <Svg height={height} width={width}>
-        {gridLinesX.map(x => {
+      <Svg height={layoutWidth} width={layoutWidth}>
+        {gridLines.map(x => {
           return (
             <Line
               key={`grid-line-x-${x}`}
               x1={x}
               y1="0"
               x2={x}
-              y2={height}
+              y2={layoutWidth}
               stroke="green"
               strokeWidth="1"
             />
           );
         })}
-        {gridLinesY.map(y => {
+        {gridLines.map(y => {
           return (
             <Line
               key={`grid-line-y-${y}`}
               x1="0"
               y1={y}
-              x2={width}
+              x2={layoutWidth}
               y2={y}
               stroke="green"
               strokeWidth="1"
@@ -43,6 +43,7 @@ export default Grid = props => {
 const styles = StyleSheet.create({
   grid: {
     position: "absolute",
+    backgroundColor: "black",
     top: 0,
     width: vw(100),
     height: vh(100)
@@ -50,8 +51,6 @@ const styles = StyleSheet.create({
 });
 
 Grid.propTypes = {
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  gridLinesX: PropTypes.array.isRequired,
-  gridLinesY: PropTypes.array.isRequired
+  layoutWidth: PropTypes.number.isRequired,
+  gridLines: PropTypes.array.isRequired
 };

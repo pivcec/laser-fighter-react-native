@@ -7,6 +7,10 @@ export default TopMenu = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 20
+    position: "relative",
+    zIndex: 2,
+    height: 20,
+    width: "100%",
+    backgroundColor: "white"
   }
 });

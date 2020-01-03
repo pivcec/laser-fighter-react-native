@@ -1,70 +1,56 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, Text } from "react-native";
-import { vh } from "react-native-expo-viewport-units";
-import Svg, { Symbol, Circle, Use } from "react-native-svg";
+import { View } from "react-native";
+import { playerWidthAndHeight } from "../../../../constants/constants";
 import dummyData from "../../../../resources/dummyData";
 
+const playerPositionOffset = playerWidthAndHeight / 2;
+
 const Field = props => {
-  const { height, enemyLasers } = props;
+  const { layoutWidth, playerLasers } = props;
   return (
-    <View style={styles.container}>
-      <Svg height={height} width={height}>
-        <Symbol id="enemy" width="10" height="10">
-          <Circle r="10" fill="red" />
-        </Symbol>
+    <View
+      style={{
+        height: layoutWidth,
+        width: layoutWidth
+      }}
+    >
+      {dummyData.map(player => {
+        const { coords, id } = player;
+        return (
+          <View
+            key={id}
+            style={{
+              position: "absolute",
+              top: `${coords[1] - playerPositionOffset}%`,
+              left: `${coords[0] - playerPositionOffset}%`,
+              width: `${playerWidthAndHeight}%`,
+              height: `${playerWidthAndHeight}%`,
+              backgroundColor: "red",
+              borderRadius: 20,
+              zIndex: 1
+            }}
+          />
+        );
+      })}
 
-        {dummyData.map((enemy, i) => {
-          const { coords } = enemy;
-          return (
-            <Use
-              href="#enemy"
-              x={`${coords[0]}%`}
-              y={`${coords[1]}%`}
-              key={i}
-            />
-          );
-        })}
-
-        <Circle r="10" cx="50%" cy="50%" fill="blue" />
-
-        {/*
-          {enemyLasers.map((enemyLaser, i) => {
-            const { x1, y1, x2, y2 } = enemyLaser;
-            return (
-              <Line
-                key={i}
-                href="#laser"
-                x1={`${x1}%`}
-                y1={`${y1}%`}
-                x2={`${x2}%`}
-                y2={`${y2}%`}
-                stroke="red"
-                strokeWidth="2"
-              />
-            );
-          })}
-          */}
-      </Svg>
+      <View
+        style={{
+          position: "absolute",
+          top: `${50 - playerPositionOffset}%`,
+          left: `${50 - playerPositionOffset}%`,
+          width: `${playerWidthAndHeight}%`,
+          height: `${playerWidthAndHeight}%`,
+          backgroundColor: "blue",
+          borderRadius: 20
+        }}
+      />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: vh(100),
-    width: vh(100)
-  },
-  text: {
-    color: "white"
-  }
-});
-
 Field.propTypes = {
-  height: PropTypes.number.isRequired,
+  layoutWidth: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired
 };
 

@@ -13,7 +13,41 @@ export default class Main extends Component {
     longitude: null,
     heading: 0,
     enemyLasers: [],
-    playerLaserIsFiring: false
+    playerLaserIsFiring: false,
+    layoutWidth: null,
+    gridLinesX: []
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { layoutWidth } = prevState;
+    if (!layoutWidth && this.state.layoutWidth) {
+      this.createGridData();
+    }
+  }
+
+  findDimensions = e => {
+    const {
+      nativeEvent: {
+        layout: { width }
+      }
+    } = e;
+    this.setState({
+      layoutWidth: width
+    });
+  };
+
+  createGridData = () => {
+    const { layoutWidth } = this.state;
+    const cellWidth = layoutWidth / 10;
+
+    let gridLines = [];
+    let i;
+
+    for (i = 0; i <= layoutWidth; i = i + cellWidth) {
+      gridLines.push(i);
+    }
+
+    this.setState({ gridLines });
   };
 
   async componentDidMount() {
@@ -100,6 +134,7 @@ export default class Main extends Component {
   };
 
   render() {
+    const { layoutWidth, gridLines } = this.state;
     const {
       longitude,
       latitude,
@@ -108,14 +143,28 @@ export default class Main extends Component {
       playerLaserIsFiring
     } = this.state;
     return (
-      <View style={styles.container}>
+      <View
+        style={styles.container}
+        onLayout={e => {
+          this.findDimensions(e);
+        }}
+      >
         <TopMenu />
-        <Overlay
-          heading={heading}
-          enemyLasers={enemyLasers}
-          playerLaserIsFiring={playerLaserIsFiring}
-        />
-        <Controls startPlayerLaserFire={this.startPlayerLaserFire} />
+        {layoutWidth && gridLines && (
+          <View style={styles.overlayAndControls}>
+            <Overlay
+              layoutWidth={layoutWidth}
+              gridLines={gridLines}
+              heading={heading}
+              enemyLasers={enemyLasers}
+              playerLaserIsFiring={playerLaserIsFiring}
+            />
+            <Controls
+              startPlayerLaserFire={this.startPlayerLaserFire}
+              heading={heading}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -123,6 +172,9 @@ export default class Main extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  overlayAndControls: {
     flex: 1
   }
 });
