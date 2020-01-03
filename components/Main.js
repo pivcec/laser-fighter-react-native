@@ -6,6 +6,7 @@ import * as Permissions from "expo-permissions";
 import TopMenu from "./TopMenu/TopMenu";
 import Overlay from "./Overlay/Overlay";
 import Controls from "./Controls/Controls";
+import { playerWidthAndHeight } from "../constants/constants";
 
 export default class Main extends Component {
   state = {
@@ -133,6 +134,10 @@ export default class Main extends Component {
     }, 100);
   };
 
+  handleLaserFire = playerHitByLaser => {
+    console.warn("handle laser fire", playerHitByLaser);
+  };
+
   render() {
     const { layoutWidth, gridLines } = this.state;
     const {
@@ -158,6 +163,7 @@ export default class Main extends Component {
               heading={heading}
               enemyLasers={enemyLasers}
               playerLaserIsFiring={playerLaserIsFiring}
+              handleLaserFire={this.handleLaserFire}
             />
             <Controls
               startPlayerLaserFire={this.startPlayerLaserFire}

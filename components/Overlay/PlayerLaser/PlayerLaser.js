@@ -31,6 +31,8 @@ export default class PlayerLaser extends Component {
       this.setState({
         firstPlayerWithinPathOfLaser
       });
+
+      this.props.handleLaserFire(firstPlayerWithinPathOfLaser);
     }
 
     if (playerLaserIsFiring && !this.props.playerLaserIsFiring) {
@@ -113,5 +115,6 @@ const styles = StyleSheet.create({
 PlayerLaser.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   playerLaserIsFiring: PropTypes.bool.isRequired,
-  heading: PropTypes.number.isRequired
+  heading: PropTypes.number.isRequired,
+  handleLaserFire: PropTypes.func.isRequired
 };

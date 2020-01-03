@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Animated, View } from "react-native";
+import { Animated } from "react-native";
 import Field from "./Field/Field";
-import { vw, vh } from "react-native-expo-viewport-units";
 
 class FieldRotation extends Component {
   state = {

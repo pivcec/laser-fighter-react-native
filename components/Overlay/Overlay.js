@@ -1,45 +1,44 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View } from "react-native";
-import { vw, vh } from "react-native-expo-viewport-units";
+import { View } from "react-native";
 import Grid from "./Grid/Grid";
 import PlayerLaser from "./PlayerLaser/PlayerLaser";
 import FieldRotation from "./FieldRotation/FieldRotation";
 
-export default class Overlay extends Component {
-  render() {
-    const {
-      layoutWidth,
-      gridLines,
-      heading,
-      enemyLasers,
-      playerLaserIsFiring
-    } = this.props;
+export default Overlay = props => {
+  const {
+    layoutWidth,
+    gridLines,
+    heading,
+    enemyLasers,
+    playerLaserIsFiring
+  } = props;
 
-    return (
-      <View style={{}}>
-        <Grid layoutWidth={layoutWidth} gridLines={gridLines} />
+  return (
+    <View>
+      <Grid layoutWidth={layoutWidth} gridLines={gridLines} />
 
-        <PlayerLaser
-          layoutWidth={layoutWidth}
-          playerLaserIsFiring={playerLaserIsFiring}
-          heading={heading}
-        />
+      <PlayerLaser
+        layoutWidth={layoutWidth}
+        playerLaserIsFiring={playerLaserIsFiring}
+        heading={heading}
+        handleLaserFire={props.handleLaserFire}
+      />
 
-        <FieldRotation
-          heading={heading}
-          layoutWidth={layoutWidth}
-          enemyLasers={enemyLasers}
-        />
-      </View>
-    );
-  }
-}
+      <FieldRotation
+        heading={heading}
+        layoutWidth={layoutWidth}
+        enemyLasers={enemyLasers}
+      />
+    </View>
+  );
+};
 
 Overlay.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   gridLines: PropTypes.array.isRequired,
   heading: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired,
-  playerLaserIsFiring: PropTypes.bool.isRequired
+  playerLaserIsFiring: PropTypes.bool.isRequired,
+  handleLaserFire: PropTypes.func.isRequired
 };
