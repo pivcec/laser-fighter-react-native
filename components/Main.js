@@ -3,15 +3,18 @@ import { View, StyleSheet } from "react-native";
 import { ScreenOrientation } from "expo";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import { Audio } from "expo-av";
+import { Asset } from "expo-asset";
 import TopMenu from "./TopMenu/TopMenu";
 import Overlay from "./Overlay/Overlay";
 import Controls from "./Controls/Controls";
-import { playerWidthAndHeight } from "../constants/constants";
+
+const laserFire = Asset.fromModule(require("../assets/sounds/laser_01.wav"));
+const buzz = Asset.fromModule(require("../assets/sounds/buzz.wav"));
 
 export default class Main extends Component {
   state = {
-    latitude: null,
-    longitude: null,
+    coords: {},
     heading: 0,
     enemyLasers: [],
     playerLaserIsFiring: false,
@@ -83,8 +86,7 @@ export default class Main extends Component {
 
   updateLocation = locationObject => {
     this.setState({
-      latitude: locationObject.coords.latitude,
-      longitude: locationObject.coords.longitude
+      coords: locationObject.coords
     });
   };
 
@@ -99,33 +101,24 @@ export default class Main extends Component {
     this.setState({ heading: headingObject.trueHeading });
   };
 
-  /*
-  startEnemyLaserFire = id => {
-    const laserAnimation = { id, x1: 50, y1: 50, x2: 55, y2: 55 };
-
-    this.setState(
-      prevState => ({
-        enemyLasers: [...prevState.enemyLasers, laserAnimation]
-      }),
-      () => this.endLaserFire(id)
-    );
-  };
-
-  endEnemyLaserFire = id => {
-    setTimeout(() => {
-      console.warn("end laser fire", id);
-
-    }, 1000);
-  };
-  */
-
   startPlayerLaserFire = () => {
-    this.setState(
-      {
-        playerLaserIsFiring: true
-      },
-      this.endPlayerLaserFire
-    );
+    this.playSound(laserFire),
+      this.setState(
+        {
+          playerLaserIsFiring: true
+        },
+        this.endPlayerLaserFire
+      );
+  };
+
+  playSound = async sound => {
+    const soundObject = new Audio.Sound();
+    try {
+      await soundObject.loadAsync(sound);
+      await soundObject.playAsync();
+    } catch (error) {
+      console.log("error playing sound", error);
+    }
   };
 
   endPlayerLaserFire = () => {
@@ -134,19 +127,15 @@ export default class Main extends Component {
     }, 100);
   };
 
-  handleLaserFire = playerHitByLaser => {
-    console.warn("handle laser fire", playerHitByLaser);
+  handleLaserCollision = playerHitByLaser => {
+    if (playerHitByLaser) {
+      this.playSound(buzz);
+    }
   };
 
   render() {
     const { layoutWidth, gridLines } = this.state;
-    const {
-      longitude,
-      latitude,
-      heading,
-      enemyLasers,
-      playerLaserIsFiring
-    } = this.state;
+    const { coords, heading, enemyLasers, playerLaserIsFiring } = this.state;
     return (
       <View
         style={styles.container}
@@ -162,8 +151,9 @@ export default class Main extends Component {
               gridLines={gridLines}
               heading={heading}
               enemyLasers={enemyLasers}
+              coords={coords}
               playerLaserIsFiring={playerLaserIsFiring}
-              handleLaserFire={this.handleLaserFire}
+              handleLaserCollision={this.handleLaserCollision}
             />
             <Controls
               startPlayerLaserFire={this.startPlayerLaserFire}

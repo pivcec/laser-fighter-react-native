@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
 import { getRotatedPlayerCoords } from "../../../helpers/getRotatedPlayerCoords";
-import dummyData from "../../../resources/dummyData";
 import { playerWidthAndHeight } from "../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -16,10 +15,10 @@ export default class PlayerLaser extends Component {
 
   componentDidUpdate(prevProps) {
     const { playerLaserIsFiring } = prevProps;
-    const { heading } = this.props;
+    const { enemies, heading } = this.props;
 
     if (!playerLaserIsFiring && this.props.playerLaserIsFiring) {
-      const rotatedPlayerCoords = getRotatedPlayerCoords(heading, dummyData);
+      const rotatedPlayerCoords = getRotatedPlayerCoords(heading, enemies);
       const playersWithinPathOfLaser = this.getPlayersWithinPathOfLaser(
         rotatedPlayerCoords
       );
@@ -32,7 +31,7 @@ export default class PlayerLaser extends Component {
         firstPlayerWithinPathOfLaser
       });
 
-      this.props.handleLaserFire(firstPlayerWithinPathOfLaser);
+      this.props.handleLaserCollision(firstPlayerWithinPathOfLaser);
     }
 
     if (playerLaserIsFiring && !this.props.playerLaserIsFiring) {
@@ -116,5 +115,6 @@ PlayerLaser.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   playerLaserIsFiring: PropTypes.bool.isRequired,
   heading: PropTypes.number.isRequired,
-  handleLaserFire: PropTypes.func.isRequired
+  handleLaserCollision: PropTypes.func.isRequired,
+  enemies: PropTypes.array.isRequired
 };

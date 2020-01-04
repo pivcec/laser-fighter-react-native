@@ -2,12 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
 import { playerWidthAndHeight } from "../../../../constants/constants";
-import dummyData from "../../../../resources/dummyData";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
 const Field = props => {
-  const { layoutWidth, playerLasers } = props;
+  const { enemies, layoutWidth, playerLasers } = props;
   return (
     <View
       style={{
@@ -15,7 +14,7 @@ const Field = props => {
         width: layoutWidth
       }}
     >
-      {dummyData.map(player => {
+      {enemies.map(player => {
         const { coords, id } = player;
         return (
           <View
@@ -51,7 +50,8 @@ const Field = props => {
 
 Field.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
-  enemyLasers: PropTypes.array.isRequired
+  enemyLasers: PropTypes.array.isRequired,
+  enemies: PropTypes.array.isRequired
 };
 
 export default Field;

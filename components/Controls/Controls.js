@@ -7,7 +7,7 @@ import {
   ImageBackground,
   Text
 } from "react-native";
-import brushedMetal from "../../resources/brushed-metal.jpg";
+import brushedMetal from "../../assets/images/brushed-metal.jpg";
 import Charger from "./Charger/Charger";
 
 export default class Controls extends Component {
