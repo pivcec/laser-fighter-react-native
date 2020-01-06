@@ -6,7 +6,7 @@ import PlayerLaser from "./PlayerLaser/PlayerLaser";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
 
-class FieldOverlay extends Component {
+class FieldLayers extends Component {
   state = {
     enemies: []
   };
@@ -59,7 +59,7 @@ class FieldOverlay extends Component {
   }
 }
 
-FieldOverlay.propTypes = {
+FieldLayers.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   heading: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired,
@@ -67,4 +67,4 @@ FieldOverlay.propTypes = {
   handleLaserCollision: PropTypes.func.isRequired
 };
 
-export default FieldOverlay;
+export default FieldLayers;

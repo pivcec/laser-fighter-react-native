@@ -7,20 +7,19 @@ export const getNewEnemyData = () => {
 
   const newEnemyData = {
     coords: [
-      // entryAxis === 0 ? entryPoint : getRandomNumberToLimit(100.0),
-      // entryAxis === 1 ? entryPoint : getRandomNumberToLimit(100.0)
-      70,
-      90
+      entryAxis === 0 ? entryPoint : getRandomNumberToLimit(100),
+      entryAxis === 1 ? entryPoint : getRandomNumberToLimit(100)
     ],
-    id: uuid()
-    // movementPath
+    id: uuid(),
+    movementPath,
+    nextCoordsKey: 0
   };
 
   return newEnemyData;
 };
 
 const getRandomNumberToLimit = limit => {
-  return (Math.random() * (limit - 1.0 + 1.0) + 1.0).toFixed(2);
+  return Math.floor(Math.random() * (limit - 0 + 1)) + 0;
 };
 
 const generateMovementPath = () => {
@@ -28,10 +27,7 @@ const generateMovementPath = () => {
 
   let i;
   for (i = 0; i < 100; i++) {
-    const movement = [
-      getRandomNumberToLimit(100.0),
-      getRandomNumberToLimit(100.0)
-    ];
+    const movement = [getRandomNumberToLimit(100), getRandomNumberToLimit(100)];
 
     movementPath.push(movement);
   }

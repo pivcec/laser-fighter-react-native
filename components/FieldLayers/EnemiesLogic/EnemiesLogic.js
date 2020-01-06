@@ -11,28 +11,48 @@ class EnemiesLogic extends Component {
     }, 100);
   }
 
+  componentWillUnmount() {
+    // clear interval
+  }
+
   listenForPlayerMovement = () => {
     // spawn enemy after X amount of movement
   };
 
   animateEnemy = () => {
+    const { coords, movementPath, nextCoordsKey, id } = this.props.enemies[0];
     const newEnemy = {
       coords: [
-        this.generateMovement(this.props.enemies[0].coords[0]),
-        this.generateMovement(this.props.enemies[0].coords[1])
+        this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
+        this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
       ],
-      id: "12345"
+      movementPath: movementPath,
+      nextCoordsKey: this.getNextCoordsKey(),
+      id: id
     };
 
     this.props.updateEnemy(newEnemy);
   };
 
-  generateMovement = originalPosition => {
-    const plusOrMinus = Math.round(Math.random());
-    if (plusOrMinus) {
-      return originalPosition + 1;
+  getNextCoordsKey = () => {
+    const { nextCoordsKey, coords, movementPath } = this.props.enemies[0];
+    const nextCoords = movementPath[nextCoordsKey];
+    if (JSON.stringify(coords) === JSON.stringify(nextCoords)) {
+      return nextCoordsKey + 1;
     }
-    return originalPosition - 1;
+    return nextCoordsKey;
+  };
+
+  getNewCoord = (coord, nextCoord) => {
+    if (coord > nextCoord) {
+      return coord - 1;
+    }
+
+    if (coord < nextCoord) {
+      return coord + 1;
+    }
+
+    return nextCoord;
   };
 
   spawnEnemy = () => {

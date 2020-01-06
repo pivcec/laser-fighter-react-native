@@ -6,7 +6,7 @@ import * as Permissions from "expo-permissions";
 import { Audio } from "expo-av";
 import { Asset } from "expo-asset";
 import TopMenu from "./TopMenu/TopMenu";
-import FieldOverlay from "./FieldOverlay/FieldOverlay";
+import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
 
 const laserFire = Asset.fromModule(require("../assets/sounds/laser_01.wav"));
@@ -123,8 +123,8 @@ export default class Main extends Component {
       >
         <TopMenu />
         {layoutWidth && (
-          <View style={styles.overlayAndControls}>
-            <FieldOverlay
+          <View style={styles.fieldAndControls}>
+            <FieldLayers
               layoutWidth={layoutWidth}
               heading={heading}
               enemyLasers={enemyLasers}
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  overlayAndControls: {
+  fieldAndControls: {
     flex: 1
   }
 });
