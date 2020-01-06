@@ -4,33 +4,25 @@ import { View } from "react-native";
 import Grid from "./Grid/Grid";
 import PlayerLaser from "./PlayerLaser/PlayerLaser";
 import FieldRotation from "./FieldRotation/FieldRotation";
+import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
 
-class Overlay extends Component {
+class FieldOverlay extends Component {
   state = {
     enemies: []
   };
 
-  componentDidMount() {
-    this.spawnEnemy();
-  }
-
-  listenForPlayerMovement = () => {
-    // spawn enemy after X amount of movement
-  };
-
-  spawnEnemy = () => {
-    const newEnemy = {
-      coords: [10, 35],
-      id: 1234
-    };
+  createEnemy = newEnemy => {
     this.setState(prevState => ({ enemies: [...prevState.enemies, newEnemy] }));
   };
 
+  updateEnemy = newEnemy => {
+    this.setState({ enemies: [newEnemy] });
+  };
+
   render() {
-    const { enemies } = this.state;
+    const { enemies, enemyRefs } = this.state;
     const {
       layoutWidth,
-      gridLines,
       heading,
       coords,
       enemyLasers,
@@ -40,7 +32,7 @@ class Overlay extends Component {
 
     return (
       <View>
-        <Grid layoutWidth={layoutWidth} gridLines={gridLines} />
+        <Grid layoutWidth={layoutWidth} />
 
         <PlayerLaser
           layoutWidth={layoutWidth}
@@ -56,18 +48,23 @@ class Overlay extends Component {
           enemyLasers={enemyLasers}
           enemies={enemies}
         />
+
+        <EnemiesLogic
+          createEnemy={this.createEnemy}
+          updateEnemy={this.updateEnemy}
+          enemies={enemies}
+        />
       </View>
     );
   }
 }
 
-Overlay.propTypes = {
+FieldOverlay.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
-  gridLines: PropTypes.array.isRequired,
   heading: PropTypes.number.isRequired,
   enemyLasers: PropTypes.array.isRequired,
   playerLaserIsFiring: PropTypes.bool.isRequired,
   handleLaserCollision: PropTypes.func.isRequired
 };
 
-export default Overlay;
+export default FieldOverlay;

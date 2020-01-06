@@ -70,7 +70,7 @@ export default class Controls extends Component {
               onPressOut={this.handleOnPressOut}
             />
           </View>
-          {/*<Text>{heading}</Text>*/}
+          <Text>{heading}</Text>
         </ImageBackground>
       </View>
     );

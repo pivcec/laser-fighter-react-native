@@ -3,67 +3,73 @@ import { StyleSheet, View } from "react-native";
 import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getRotatedPlayerCoords } from "../../../helpers/getRotatedPlayerCoords";
+import { getRotatedEnemyCoords } from "../../../helpers/getRotatedEnemyCoords";
 import { playerWidthAndHeight } from "../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
 export default class PlayerLaser extends Component {
   state = {
-    firstPlayerWithinPathOfLaser: null
+    firstEnemyWithinPathOfLaser: null
   };
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     const { playerLaserIsFiring } = prevProps;
-    const { enemies, heading } = this.props;
+    const { heading, enemies } = this.props;
 
     if (!playerLaserIsFiring && this.props.playerLaserIsFiring) {
-      const rotatedPlayerCoords = getRotatedPlayerCoords(heading, enemies);
-      const playersWithinPathOfLaser = this.getPlayersWithinPathOfLaser(
-        rotatedPlayerCoords
+      const rotatedEnemyCoords = getRotatedEnemyCoords(heading, enemies);
+
+      const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
+        rotatedEnemyCoords
       );
-      const firstPlayerWithinPathOfLaser =
-        playersWithinPathOfLaser.length > 0
-          ? this.getFirstPlayerWithinPathOfLaser(playersWithinPathOfLaser)
+
+      const firstEnemyWithinPathOfLaser =
+        enemiesWithinPathOfLaser.length > 0
+          ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
           : null;
 
       this.setState({
-        firstPlayerWithinPathOfLaser
+        firstEnemyWithinPathOfLaser
       });
 
-      this.props.handleLaserCollision(firstPlayerWithinPathOfLaser);
+      this.props.handleLaserCollision(firstEnemyWithinPathOfLaser);
     }
 
     if (playerLaserIsFiring && !this.props.playerLaserIsFiring) {
       this.setState({
-        firstPlayerWithinPathOfLaser: null
+        firstEnemyWithinPathOfLaser: null
       });
     }
   }
 
-  getFirstPlayerWithinPathOfLaser = playersWithinPathOfLaser => {
-    return playersWithinPathOfLaser.reduce((acc, player) => {
+  normalizeCoord = (coord, width, layoutWidth) => {
+    return ((coord + width / 2) / layoutWidth) * 100;
+  };
+
+  getFirstEnemyWithinPathOfLaser = enemiesWithinPathOfLaser => {
+    return enemiesWithinPathOfLaser.reduce((acc, enemy) => {
       if (acc.hasOwnProperty("coords")) {
-        if (player.coords[1] > acc.coords[1]) {
-          return player;
+        if (enemy.coords[1] > acc.coords[1]) {
+          return enemy;
         }
         return acc;
       }
-      return player;
+      return enemy;
     }, {});
   };
 
-  getPlayersWithinPathOfLaser = rotatedPlayerCoords => {
-    return rotatedPlayerCoords.reduce((acc, player) => {
-      if (this.checkIfPlayerIsWithinPathOfLaser(player)) {
-        acc.push(player);
+  getEnemiesWithinPathOfLaser = rotatedEnemyCoords => {
+    return rotatedEnemyCoords.reduce((acc, enemy) => {
+      if (this.checkIfEnemyIsWithinPathOfLaser(enemy)) {
+        acc.push(enemy);
       }
       return acc;
     }, []);
   };
 
-  checkIfPlayerIsWithinPathOfLaser = player => {
-    const { coords } = player;
+  checkIfEnemyIsWithinPathOfLaser = enemy => {
+    const { coords } = enemy;
     const x = coords[0];
     const y = coords[1];
 
@@ -79,9 +85,9 @@ export default class PlayerLaser extends Component {
 
   render() {
     const { layoutWidth, playerLaserIsFiring } = this.props;
-    const { firstPlayerWithinPathOfLaser } = this.state;
-    const y2 = firstPlayerWithinPathOfLaser
-      ? firstPlayerWithinPathOfLaser.coords[1]
+    const { firstEnemyWithinPathOfLaser } = this.state;
+    const y2 = firstEnemyWithinPathOfLaser
+      ? firstEnemyWithinPathOfLaser.coords[1]
       : 0;
     return (
       <View style={styles.playerLaser}>
@@ -112,7 +118,6 @@ const styles = StyleSheet.create({
 });
 
 PlayerLaser.propTypes = {
-  layoutWidth: PropTypes.number.isRequired,
   playerLaserIsFiring: PropTypes.bool.isRequired,
   heading: PropTypes.number.isRequired,
   handleLaserCollision: PropTypes.func.isRequired,

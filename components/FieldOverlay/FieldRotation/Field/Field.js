@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
+import Enemy from "./Enemy/Enemy";
 import { playerWidthAndHeight } from "../../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -16,21 +17,7 @@ const Field = props => {
     >
       {enemies.map(player => {
         const { coords, id } = player;
-        return (
-          <View
-            key={id}
-            style={{
-              position: "absolute",
-              top: `${coords[1] - playerPositionOffset}%`,
-              left: `${coords[0] - playerPositionOffset}%`,
-              width: `${playerWidthAndHeight}%`,
-              height: `${playerWidthAndHeight}%`,
-              backgroundColor: "red",
-              borderRadius: 20,
-              zIndex: 1
-            }}
-          />
-        );
+        return <Enemy key={id} coords={coords} />;
       })}
 
       <View

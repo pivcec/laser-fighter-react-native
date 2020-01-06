@@ -6,7 +6,7 @@ import * as Permissions from "expo-permissions";
 import { Audio } from "expo-av";
 import { Asset } from "expo-asset";
 import TopMenu from "./TopMenu/TopMenu";
-import Overlay from "./Overlay/Overlay";
+import FieldOverlay from "./FieldOverlay/FieldOverlay";
 import Controls from "./Controls/Controls";
 
 const laserFire = Asset.fromModule(require("../assets/sounds/laser_01.wav"));
@@ -18,16 +18,8 @@ export default class Main extends Component {
     heading: 0,
     enemyLasers: [],
     playerLaserIsFiring: false,
-    layoutWidth: null,
-    gridLinesX: []
+    layoutWidth: null
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    const { layoutWidth } = prevState;
-    if (!layoutWidth && this.state.layoutWidth) {
-      this.createGridData();
-    }
-  }
 
   findDimensions = e => {
     const {
@@ -38,20 +30,6 @@ export default class Main extends Component {
     this.setState({
       layoutWidth: width
     });
-  };
-
-  createGridData = () => {
-    const { layoutWidth } = this.state;
-    const cellWidth = layoutWidth / 10;
-
-    let gridLines = [];
-    let i;
-
-    for (i = 0; i <= layoutWidth; i = i + cellWidth) {
-      gridLines.push(i);
-    }
-
-    this.setState({ gridLines });
   };
 
   async componentDidMount() {
@@ -134,7 +112,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { layoutWidth, gridLines } = this.state;
+    const { layoutWidth } = this.state;
     const { coords, heading, enemyLasers, playerLaserIsFiring } = this.state;
     return (
       <View
@@ -144,11 +122,10 @@ export default class Main extends Component {
         }}
       >
         <TopMenu />
-        {layoutWidth && gridLines && (
+        {layoutWidth && (
           <View style={styles.overlayAndControls}>
-            <Overlay
+            <FieldOverlay
               layoutWidth={layoutWidth}
-              gridLines={gridLines}
               heading={heading}
               enemyLasers={enemyLasers}
               coords={coords}

@@ -1,6 +1,6 @@
-export const getRotatedPlayerCoords = (heading, playerData) => {
-  return (rotatedPlayerCoords = playerData.map(player => {
-    const { coords, id } = player;
+export const getRotatedEnemyCoords = (heading, enemies) => {
+  return (rotatedEnemyCoords = enemies.map(enemy => {
+    const { coords, id } = enemy;
     return {
       coords: getRotatedCoords(coords[0], coords[1], heading),
       id
