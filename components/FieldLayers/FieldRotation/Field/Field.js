@@ -6,8 +6,7 @@ import { playerWidthAndHeight } from "../../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
-const Field = props => {
-  const { enemies, layoutWidth, playerLasers } = props;
+const Field = ({ enemies, layoutWidth, playerLasers }) => {
   return (
     <View
       style={{
@@ -15,9 +14,8 @@ const Field = props => {
         width: layoutWidth
       }}
     >
-      {enemies.map(player => {
-        const { coords, id } = player;
-        return <Enemy key={id} coords={coords} />;
+      {enemies.map(({ coords, id, life }) => {
+        return <Enemy key={id} coords={coords} id={id} life={life} />;
       })}
 
       <View

@@ -20,7 +20,13 @@ class EnemiesLogic extends Component {
   };
 
   animateEnemy = () => {
-    const { coords, movementPath, nextCoordsKey, id } = this.props.enemies[0];
+    const {
+      coords,
+      movementPath,
+      nextCoordsKey,
+      id,
+      life
+    } = this.props.enemies[0];
     const newEnemy = {
       coords: [
         this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
@@ -28,7 +34,8 @@ class EnemiesLogic extends Component {
       ],
       movementPath,
       nextCoordsKey: this.getNextCoordsKey(),
-      id
+      id,
+      life
     };
 
     this.props.updateEnemy(newEnemy);
