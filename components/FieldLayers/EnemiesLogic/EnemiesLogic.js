@@ -26,9 +26,9 @@ class EnemiesLogic extends Component {
         this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
         this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
       ],
-      movementPath: movementPath,
+      movementPath,
       nextCoordsKey: this.getNextCoordsKey(),
-      id: id
+      id
     };
 
     this.props.updateEnemy(newEnemy);
@@ -37,6 +37,9 @@ class EnemiesLogic extends Component {
   getNextCoordsKey = () => {
     const { nextCoordsKey, coords, movementPath } = this.props.enemies[0];
     const nextCoords = movementPath[nextCoordsKey];
+    if (nextCoordsKey === 99) {
+      return 0;
+    }
     if (JSON.stringify(coords) === JSON.stringify(nextCoords)) {
       return nextCoordsKey + 1;
     }

@@ -12,7 +12,8 @@ export const getNewEnemyData = () => {
     ],
     id: uuid(),
     movementPath,
-    nextCoordsKey: 0
+    nextCoordsKey: 0,
+    life: 100
   };
 
   return newEnemyData;

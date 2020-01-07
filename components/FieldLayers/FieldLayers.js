@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
+import { Asset } from "expo-asset";
 import Grid from "./Grid/Grid";
 import PlayerLaser from "./PlayerLaser/PlayerLaser";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
 
+const buzz = Asset.fromModule(require("../../assets/sounds/buzz.wav"));
+
 class FieldLayers extends Component {
   state = {
-    enemies: []
+    enemies: [],
+    enemyLasers: []
   };
 
   createEnemy = newEnemy => {
@@ -19,15 +23,28 @@ class FieldLayers extends Component {
     this.setState({ enemies: [newEnemy] });
   };
 
+  handleLaserCollision = playerHitByLaser => {
+    const { enemies } = this.state;
+    const { laserCharge } = this.props;
+    const enemy = enemies[0];
+    if (playerHitByLaser) {
+      this.props.playSound(buzz);
+      const newEnemy = {
+        ...enemy,
+        life: 0
+      };
+      this.updateEnemy(newEnemy);
+    }
+  };
+
   render() {
-    const { enemies, enemyRefs } = this.state;
+    const { enemies, enemyLasers } = this.state;
     const {
       layoutWidth,
       heading,
       coords,
-      enemyLasers,
       playerLaserIsFiring,
-      handleLaserCollision
+      laserCharge
     } = this.props;
 
     return (
@@ -38,7 +55,7 @@ class FieldLayers extends Component {
           layoutWidth={layoutWidth}
           playerLaserIsFiring={playerLaserIsFiring}
           heading={heading}
-          handleLaserCollision={handleLaserCollision}
+          handleLaserCollision={this.handleLaserCollision}
           enemies={enemies}
         />
 
@@ -62,9 +79,9 @@ class FieldLayers extends Component {
 FieldLayers.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   heading: PropTypes.number.isRequired,
-  enemyLasers: PropTypes.array.isRequired,
   playerLaserIsFiring: PropTypes.bool.isRequired,
-  handleLaserCollision: PropTypes.func.isRequired
+  laserCharge: PropTypes.number.isRequired,
+  playSound: PropTypes.func.isRequired
 };
 
 export default FieldLayers;

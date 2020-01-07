@@ -10,15 +10,14 @@ import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
 
 const laserFire = Asset.fromModule(require("../assets/sounds/laser_01.wav"));
-const buzz = Asset.fromModule(require("../assets/sounds/buzz.wav"));
 
 export default class Main extends Component {
   state = {
     coords: {},
     heading: 0,
-    enemyLasers: [],
+    layoutWidth: null,
     playerLaserIsFiring: false,
-    layoutWidth: null
+    laserCharge: 0
   };
 
   findDimensions = e => {
@@ -89,6 +88,14 @@ export default class Main extends Component {
       );
   };
 
+  increaseLaserCharge = () => {
+    this.setState(prevState => ({ laserCharge: prevState.laserCharge + 1 }));
+  };
+
+  resetLaserCharge = () => {
+    this.setState({ laserCharge: 0 });
+  };
+
   playSound = async sound => {
     const soundObject = new Audio.Sound();
     try {
@@ -105,15 +112,14 @@ export default class Main extends Component {
     }, 100);
   };
 
-  handleLaserCollision = playerHitByLaser => {
-    if (playerHitByLaser) {
-      this.playSound(buzz);
-    }
-  };
-
   render() {
-    const { layoutWidth } = this.state;
-    const { coords, heading, enemyLasers, playerLaserIsFiring } = this.state;
+    const {
+      layoutWidth,
+      playerLaserIsFiring,
+      laserCharge,
+      coords,
+      heading
+    } = this.state;
     return (
       <View
         style={styles.container}
@@ -127,14 +133,16 @@ export default class Main extends Component {
             <FieldLayers
               layoutWidth={layoutWidth}
               heading={heading}
-              enemyLasers={enemyLasers}
               coords={coords}
               playerLaserIsFiring={playerLaserIsFiring}
-              handleLaserCollision={this.handleLaserCollision}
+              laserCharge={laserCharge}
+              playSound={this.playSound}
             />
             <Controls
               startPlayerLaserFire={this.startPlayerLaserFire}
-              heading={heading}
+              laserCharge={laserCharge}
+              increaseLaserCharge={this.increaseLaserCharge}
+              resetLaserCharge={this.resetLaserCharge}
             />
           </View>
         )}
