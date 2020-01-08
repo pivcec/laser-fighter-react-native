@@ -6,7 +6,7 @@ import { playerWidthAndHeight } from "../../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
-const Field = ({ enemies, layoutWidth, playerLasers }) => {
+const Field = ({ enemies, layoutWidth, updateEnemies }) => {
   return (
     <View
       style={{
@@ -15,9 +15,17 @@ const Field = ({ enemies, layoutWidth, playerLasers }) => {
       }}
     >
       {enemies.map(({ coords, id, life }) => {
-        return <Enemy key={id} coords={coords} id={id} life={life} />;
+        return (
+          <Enemy
+            enemies={enemies}
+            key={id}
+            coords={coords}
+            id={id}
+            life={life}
+            updateEnemies={updateEnemies}
+          />
+        );
       })}
-
       <View
         style={{
           position: "absolute",
@@ -35,8 +43,8 @@ const Field = ({ enemies, layoutWidth, playerLasers }) => {
 
 Field.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
-  enemyLasers: PropTypes.array.isRequired,
-  enemies: PropTypes.array.isRequired
+  enemies: PropTypes.array.isRequired,
+  updateEnemies: PropTypes.func.isRequired
 };
 
 export default Field;

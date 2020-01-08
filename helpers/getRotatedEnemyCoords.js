@@ -1,9 +1,9 @@
 export const getRotatedEnemyCoords = (heading, enemies) => {
   return (rotatedEnemyCoords = enemies.map(enemy => {
-    const { coords, id } = enemy;
+    const { coords } = enemy;
     return {
-      coords: getRotatedCoords(coords[0], coords[1], heading),
-      id
+      ...enemy,
+      coords: getRotatedCoords(coords[0], coords[1], heading)
     };
   }));
 };

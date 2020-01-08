@@ -13,27 +13,11 @@ export default class PlayerLaser extends Component {
     firstEnemyWithinPathOfLaser: null
   };
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const { playerLaserIsFiring } = prevProps;
-    const { heading, enemies } = this.props;
 
     if (!playerLaserIsFiring && this.props.playerLaserIsFiring) {
-      const rotatedEnemyCoords = getRotatedEnemyCoords(heading, enemies);
-
-      const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
-        rotatedEnemyCoords
-      );
-
-      const firstEnemyWithinPathOfLaser =
-        enemiesWithinPathOfLaser.length > 0
-          ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
-          : null;
-
-      this.setState({
-        firstEnemyWithinPathOfLaser
-      });
-
-      this.props.handleLaserCollision(firstEnemyWithinPathOfLaser);
+      this.handlePlayerLaserFireStart();
     }
 
     if (playerLaserIsFiring && !this.props.playerLaserIsFiring) {
@@ -42,6 +26,26 @@ export default class PlayerLaser extends Component {
       });
     }
   }
+
+  handlePlayerLaserFireStart = () => {
+    const { heading, enemies } = this.props;
+    const rotatedEnemyCoords = getRotatedEnemyCoords(heading, enemies);
+    const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
+      rotatedEnemyCoords
+    );
+    const firstEnemyWithinPathOfLaser =
+      enemiesWithinPathOfLaser.length > 0
+        ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
+        : null;
+
+    this.setState({
+      firstEnemyWithinPathOfLaser
+    });
+
+    if (firstEnemyWithinPathOfLaser) {
+      this.props.handleLaserCollision(firstEnemyWithinPathOfLaser);
+    }
+  };
 
   normalizeCoord = (coord, width, layoutWidth) => {
     return ((coord + width / 2) / layoutWidth) * 100;

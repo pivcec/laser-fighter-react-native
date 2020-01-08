@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { View, Text } from "react-native";
+import { View, Image } from "react-native";
 import { playerWidthAndHeight } from "../../../../../constants/constants";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -12,22 +12,24 @@ class Enemy extends Component {
 
   componentDidUpdate(prevProps) {
     const { life } = prevProps;
-    if (life && !this.props.life) {
+    if (life > 0 && this.props.life < 1) {
       this.setState({ enemyIsDying: true }, this.handleRemoveEnemyFromData);
     }
   }
 
   handleRemoveEnemyFromData = () => {
+    const { enemies, id } = this.props;
+    const newEnemies = enemies.filter(enemy => enemy.id !== id);
     setTimeout(() => {
-      console.warn("remove enemy from data");
+      this.props.updateEnemies(newEnemies);
     }, 1000);
   };
 
   render() {
     const { coords } = this.props;
     const { enemyIsDying } = this.state;
-    if (!enemyIsDying) {
-      return (
+    return (
+      <>
         <View
           style={{
             position: "absolute",
@@ -40,16 +42,31 @@ class Enemy extends Component {
             zIndex: 1
           }}
         />
-      );
-    }
-    return <View />;
+
+        {enemyIsDying && (
+          <Image
+            source={require("../../../../../assets/images/splosion.gif")}
+            style={{
+              position: "absolute",
+              top: `${coords[1] - playerPositionOffset}%`,
+              left: `${coords[0] - playerPositionOffset}%`,
+              width: `${playerWidthAndHeight}%`,
+              height: `${playerWidthAndHeight}%`,
+              zIndex: 2
+            }}
+          />
+        )}
+      </>
+    );
   }
 }
 
 export default Enemy;
 
 Enemy.propTypes = {
+  enemies: PropTypes.array.isRequired,
   coords: PropTypes.array.isRequired,
   id: PropTypes.string.isRequired,
-  life: PropTypes.number.isRequired
+  life: PropTypes.number.isRequired,
+  updateEnemies: PropTypes.func.isRequired
 };

@@ -32,7 +32,7 @@ class FieldRotation extends Component {
 
   render() {
     const { animatedValue } = this.state;
-    const { enemies, layoutWidth, enemyLasers } = this.props;
+    const { enemies, layoutWidth, updateEnemies } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
       inputRange: [0, 360],
@@ -48,7 +48,7 @@ class FieldRotation extends Component {
         <Field
           enemies={enemies}
           layoutWidth={layoutWidth}
-          enemyLasers={enemyLasers}
+          updateEnemies={updateEnemies}
         />
       </Animated.View>
     );
@@ -58,8 +58,8 @@ class FieldRotation extends Component {
 FieldRotation.propTypes = {
   heading: PropTypes.number.isRequired,
   layoutWidth: PropTypes.number.isRequired,
-  enemyLasers: PropTypes.array.isRequired,
-  enemies: PropTypes.array.isRequired
+  enemies: PropTypes.array.isRequired,
+  updateEnemies: PropTypes.func.isRequired
 };
 
 export default FieldRotation;

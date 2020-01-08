@@ -11,34 +11,41 @@ const buzz = Asset.fromModule(require("../../assets/sounds/buzz.wav"));
 
 class FieldLayers extends Component {
   state = {
-    enemies: [],
-    enemyLasers: []
+    enemies: []
   };
 
   createEnemy = newEnemy => {
     this.setState(prevState => ({ enemies: [...prevState.enemies, newEnemy] }));
   };
 
-  updateEnemy = newEnemy => {
-    this.setState({ enemies: [newEnemy] });
+  updateEnemy = updatedEnemy => {
+    this.setState(prevState => ({
+      enemies: prevState.enemies.map(enemy =>
+        enemy.id === updatedEnemy.id ? updatedEnemy : enemy
+      )
+    }));
   };
 
-  handleLaserCollision = playerHitByLaser => {
-    const { enemies } = this.state;
+  updateEnemies = updatedEnemies => {
+    this.setState({ enemies: updatedEnemies });
+  };
+
+  handleLaserCollision = ({ id }) => {
     const { laserCharge } = this.props;
-    const enemy = enemies[0];
-    if (playerHitByLaser) {
-      this.props.playSound(buzz);
-      const newEnemy = {
-        ...enemy,
-        life: 0
-      };
-      this.updateEnemy(newEnemy);
-    }
+    const { enemies } = this.state;
+    const enemyHitByLaser = enemies.find(enemy => enemy.id === id);
+
+    const updatedEnemy = {
+      ...enemyHitByLaser,
+      life: enemyHitByLaser.life - laserCharge
+    };
+
+    this.updateEnemy(updatedEnemy);
+    this.props.playSound(buzz);
   };
 
   render() {
-    const { enemies, enemyLasers } = this.state;
+    const { enemies } = this.state;
     const {
       layoutWidth,
       heading,
@@ -62,8 +69,8 @@ class FieldLayers extends Component {
         <FieldRotation
           heading={heading}
           layoutWidth={layoutWidth}
-          enemyLasers={enemyLasers}
           enemies={enemies}
+          updateEnemies={this.updateEnemies}
         />
 
         <EnemiesLogic

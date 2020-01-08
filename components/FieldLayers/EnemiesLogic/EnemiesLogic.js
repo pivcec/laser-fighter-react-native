@@ -20,25 +20,23 @@ class EnemiesLogic extends Component {
   };
 
   animateEnemy = () => {
-    const {
-      coords,
-      movementPath,
-      nextCoordsKey,
-      id,
-      life
-    } = this.props.enemies[0];
-    const newEnemy = {
-      coords: [
-        this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
-        this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
-      ],
-      movementPath,
-      nextCoordsKey: this.getNextCoordsKey(),
-      id,
-      life
-    };
+    const { enemies } = this.props;
 
-    this.props.updateEnemy(newEnemy);
+    if (enemies.length > 0) {
+      enemies.forEach(({ coords, movementPath, nextCoordsKey, id, life }) => {
+        const updatedEnemy = {
+          coords: [
+            this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
+            this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
+          ],
+          movementPath,
+          nextCoordsKey: this.getNextCoordsKey(),
+          id,
+          life
+        };
+        this.props.updateEnemy(updatedEnemy);
+      });
+    }
   };
 
   getNextCoordsKey = () => {
