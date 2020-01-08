@@ -75,7 +75,7 @@ class FieldLayers extends Component {
 
         <EnemiesLogic
           createEnemy={this.createEnemy}
-          updateEnemy={this.updateEnemy}
+          updateEnemies={this.updateEnemies}
           enemies={enemies}
         />
       </View>

@@ -5,10 +5,18 @@ import { getNewEnemyData } from "../../../helpers/getNewEnemyData";
 class EnemiesLogic extends Component {
   componentDidMount() {
     this.spawnEnemy();
+    this.spawnEnemy();
 
     setInterval(() => {
       this.animateEnemy();
     }, 100);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { enemies } = prevProps;
+    if (enemies.length > this.props.enemies.length) {
+      this.spawnEnemy();
+    }
   }
 
   componentWillUnmount() {
@@ -23,19 +31,21 @@ class EnemiesLogic extends Component {
     const { enemies } = this.props;
 
     if (enemies.length > 0) {
-      enemies.forEach(({ coords, movementPath, nextCoordsKey, id, life }) => {
-        const updatedEnemy = {
-          coords: [
-            this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
-            this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
-          ],
-          movementPath,
-          nextCoordsKey: this.getNextCoordsKey(),
-          id,
-          life
-        };
-        this.props.updateEnemy(updatedEnemy);
-      });
+      const updatedEnemies = enemies.map(
+        ({ coords, movementPath, nextCoordsKey, id, life }) => {
+          return {
+            coords: [
+              this.getNewCoord(coords[0], movementPath[nextCoordsKey][0]),
+              this.getNewCoord(coords[1], movementPath[nextCoordsKey][1])
+            ],
+            movementPath,
+            nextCoordsKey: this.getNextCoordsKey(),
+            id,
+            life
+          };
+        }
+      );
+      this.props.updateEnemies(updatedEnemies);
     }
   };
 
@@ -74,8 +84,8 @@ class EnemiesLogic extends Component {
 }
 
 EnemiesLogic.propTypes = {
+  updateEnemies: PropTypes.func.isRequired,
   createEnemy: PropTypes.func.isRequired,
-  updateEnemy: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired
 };
 

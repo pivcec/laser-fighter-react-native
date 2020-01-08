@@ -6,14 +6,10 @@ import { playerWidthAndHeight } from "../../../../../constants/constants";
 const playerPositionOffset = playerWidthAndHeight / 2;
 
 class Enemy extends Component {
-  state = {
-    enemyIsDying: false
-  };
-
   componentDidUpdate(prevProps) {
     const { life } = prevProps;
     if (life > 0 && this.props.life < 1) {
-      this.setState({ enemyIsDying: true }, this.handleRemoveEnemyFromData);
+      this.handleRemoveEnemyFromData();
     }
   }
 
@@ -26,8 +22,7 @@ class Enemy extends Component {
   };
 
   render() {
-    const { coords } = this.props;
-    const { enemyIsDying } = this.state;
+    const { coords, life } = this.props;
     return (
       <>
         <View
@@ -43,7 +38,7 @@ class Enemy extends Component {
           }}
         />
 
-        {enemyIsDying && (
+        {life < 1 && (
           <Image
             source={require("../../../../../assets/images/splosion.gif")}
             style={{
