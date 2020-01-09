@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
+import { Asset } from "expo-asset";
 import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
 import { getRotatedEnemyCoords } from "../../../helpers/getRotatedEnemyCoords";
 import { playerWidthAndHeight } from "../../../constants/constants";
 
+const buzz = Asset.fromModule(require("../../../assets/sounds/buzz.wav"));
 const playerPositionOffset = playerWidthAndHeight / 2;
 
 export default class PlayerLaser extends Component {
@@ -43,8 +45,21 @@ export default class PlayerLaser extends Component {
     });
 
     if (firstEnemyWithinPathOfLaser) {
-      this.props.handleLaserCollision(firstEnemyWithinPathOfLaser);
+      this.handleLaserCollision(firstEnemyWithinPathOfLaser);
     }
+  };
+
+  handleLaserCollision = ({ id }) => {
+    const { laserCharge, enemies } = this.props;
+    const enemyHitByLaser = enemies.find(enemy => enemy.id === id);
+
+    const updatedEnemy = {
+      ...enemyHitByLaser,
+      life: enemyHitByLaser.life - laserCharge
+    };
+
+    this.props.updateEnemy(updatedEnemy);
+    this.props.playSound(buzz);
   };
 
   normalizeCoord = (coord, width, layoutWidth) => {
@@ -124,6 +139,8 @@ const styles = StyleSheet.create({
 PlayerLaser.propTypes = {
   playerLaserIsFiring: PropTypes.bool.isRequired,
   heading: PropTypes.number.isRequired,
-  handleLaserCollision: PropTypes.func.isRequired,
+  updateEnemy: PropTypes.func.isRequired,
+  laserCharge: PropTypes.number.isRequired,
+  playSound: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired
 };

@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
-import { Asset } from "expo-asset";
 import Grid from "./Grid/Grid";
 import PlayerLaser from "./PlayerLaser/PlayerLaser";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
-
-const buzz = Asset.fromModule(require("../../assets/sounds/buzz.wav"));
 
 class FieldLayers extends Component {
   state = {
@@ -16,6 +13,12 @@ class FieldLayers extends Component {
 
   createEnemy = newEnemy => {
     this.setState(prevState => ({ enemies: [...prevState.enemies, newEnemy] }));
+  };
+
+  removeEnemy = id => {
+    this.setState(prevState => ({
+      enemies: prevState.enemies.filter(enemy => enemy.id !== id)
+    }));
   };
 
   updateEnemy = updatedEnemy => {
@@ -30,28 +33,15 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  handleLaserCollision = ({ id }) => {
-    const { laserCharge } = this.props;
-    const { enemies } = this.state;
-    const enemyHitByLaser = enemies.find(enemy => enemy.id === id);
-
-    const updatedEnemy = {
-      ...enemyHitByLaser,
-      life: enemyHitByLaser.life - laserCharge
-    };
-
-    this.updateEnemy(updatedEnemy);
-    this.props.playSound(buzz);
-  };
-
   render() {
     const { enemies } = this.state;
     const {
       layoutWidth,
       heading,
       coords,
+      laserCharge,
       playerLaserIsFiring,
-      laserCharge
+      playSound
     } = this.props;
 
     return (
@@ -62,7 +52,9 @@ class FieldLayers extends Component {
           layoutWidth={layoutWidth}
           playerLaserIsFiring={playerLaserIsFiring}
           heading={heading}
-          handleLaserCollision={this.handleLaserCollision}
+          laserCharge={laserCharge}
+          updateEnemy={this.updateEnemy}
+          playSound={playSound}
           enemies={enemies}
         />
 
@@ -71,6 +63,7 @@ class FieldLayers extends Component {
           layoutWidth={layoutWidth}
           enemies={enemies}
           updateEnemies={this.updateEnemies}
+          removeEnemy={this.removeEnemy}
         />
 
         <EnemiesLogic

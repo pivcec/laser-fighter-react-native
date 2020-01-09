@@ -4,10 +4,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ImageBackground,
-  Text
+  ImageBackground
 } from "react-native";
-import brushedMetal from "../../assets/images/brushed-metal.jpg";
+import brushedMetal from "../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 
 export default class Controls extends Component {
@@ -98,7 +97,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 60,
     height: 60,
-    width: 60
+    width: 60,
+    borderColor: "black",
+    borderWidth: 1
   },
   button: {
     backgroundColor: "red",
