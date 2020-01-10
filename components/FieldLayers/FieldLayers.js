@@ -65,8 +65,7 @@ class FieldLayers extends Component {
       layoutWidth,
       heading,
       coords,
-      laserCharge,
-      playerLaserIsFiring,
+      playerLaserCharge,
       playSound
     } = this.props;
 
@@ -76,9 +75,8 @@ class FieldLayers extends Component {
 
         <Player
           layoutWidth={layoutWidth}
-          playerLaserIsFiring={playerLaserIsFiring}
           heading={heading}
-          laserCharge={laserCharge}
+          playerLaserCharge={playerLaserCharge}
           updateEnemy={this.updateEnemy}
           playSound={playSound}
           enemies={enemies}
@@ -108,8 +106,7 @@ class FieldLayers extends Component {
 FieldLayers.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   heading: PropTypes.number.isRequired,
-  playerLaserIsFiring: PropTypes.bool.isRequired,
-  laserCharge: PropTypes.number.isRequired,
+  playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired
 };
 

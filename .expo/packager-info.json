@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 9218,
-  "expoServerNgrokUrl": "https://sr-k9m.anonymous.laserfighter-react-native.exp.direct",
-  "packagerNgrokUrl": "https://packager.sr-k9m.anonymous.laserfighter-react-native.exp.direct",
-  "ngrokPid": 9285,
+  "packagerPid": 3090,
+  "expoServerNgrokUrl": "https://nw-geb.anonymous.laserfighter-react-native.exp.direct",
+  "packagerNgrokUrl": "https://packager.nw-geb.anonymous.laserfighter-react-native.exp.direct",
+  "ngrokPid": 3131,
   "webpackServerPort": null
 }

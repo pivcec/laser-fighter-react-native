@@ -1,22 +1,18 @@
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import { ScreenOrientation } from "expo";
+import { Audio } from "expo-av";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import { Audio } from "expo-av";
-import { Asset } from "expo-asset";
 import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
-
-const laserFire = Asset.fromModule(require("../assets/sounds/laserFire.wav"));
 
 export default class Main extends Component {
   state = {
     coords: {},
     heading: 0,
     layoutWidth: null,
-    playerLaserIsFiring: false,
-    laserCharge: 0
+    playerLaserCharge: { isCharging: false, timestamp: null }
   };
 
   findDimensions = e => {
@@ -77,22 +73,9 @@ export default class Main extends Component {
     this.setState({ heading: headingObject.trueHeading });
   };
 
-  startPlayerLaserFire = () => {
-    this.playSound(laserFire),
-      this.setState(
-        {
-          playerLaserIsFiring: true
-        },
-        this.endPlayerLaserFire
-      );
-  };
-
-  increaseLaserCharge = () => {
-    this.setState(prevState => ({ laserCharge: prevState.laserCharge + 1 }));
-  };
-
-  resetLaserCharge = () => {
-    this.setState({ laserCharge: 0 });
+  togglePlayerLaserIsCharging = toggle => {
+    const timestamp = Date.now();
+    this.setState({ playerLaserCharge: { isCharging: toggle, timestamp } });
   };
 
   playSound = async sound => {
@@ -105,19 +88,13 @@ export default class Main extends Component {
     }
   };
 
-  endPlayerLaserFire = () => {
-    setTimeout(() => {
-      this.setState({ playerLaserIsFiring: false });
-    }, 100);
-  };
-
   render() {
     const {
       layoutWidth,
-      playerLaserIsFiring,
-      laserCharge,
       coords,
-      heading
+      heading,
+      playerLaserCharge,
+      playerLaserCharge: { isCharging }
     } = this.state;
     return (
       <View
@@ -134,18 +111,15 @@ export default class Main extends Component {
                 layoutWidth={layoutWidth}
                 heading={heading}
                 coords={coords}
-                playerLaserIsFiring={playerLaserIsFiring}
-                laserCharge={laserCharge}
+                playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
               />
             </View>
 
             <View style={styles.controls}>
               <Controls
-                startPlayerLaserFire={this.startPlayerLaserFire}
-                laserCharge={laserCharge}
-                increaseLaserCharge={this.increaseLaserCharge}
-                resetLaserCharge={this.resetLaserCharge}
+                playerLaserIsCharging={isCharging}
+                togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}
               />
             </View>
           </>

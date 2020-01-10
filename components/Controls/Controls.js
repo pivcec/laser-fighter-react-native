@@ -16,22 +16,19 @@ export default class Controls extends Component {
 
   chargingInterval = null;
 
-  componentWillUnmount() {
-    // remove interval
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const { buttonIsPressed } = prevState;
 
     if (!buttonIsPressed && this.state.buttonIsPressed) {
-      this.toggleButtonCharge(true);
+      this.props.togglePlayerLaserIsCharging(true);
     }
 
     if (buttonIsPressed && !this.state.buttonIsPressed) {
-      this.toggleButtonCharge(false);
+      this.props.togglePlayerLaserIsCharging(false);
     }
   }
 
+  /*
   toggleButtonCharge = toggle => {
     if (toggle) {
       this.chargingInterval = setInterval(() => {
@@ -42,12 +39,15 @@ export default class Controls extends Component {
       this.props.resetLaserCharge();
     }
   };
+  */
 
+  /*
   handleIncreaseLaserCharge = laserCharge => {
     if (laserCharge < 100) {
       this.props.increaseLaserCharge();
     }
   };
+  */
 
   handleOnPressIn = () => {
     this.setState({ buttonIsPressed: true });
@@ -55,15 +55,13 @@ export default class Controls extends Component {
 
   handleOnPressOut = () => {
     this.setState({ buttonIsPressed: false });
-    this.props.startPlayerLaserFire();
   };
 
   render() {
-    const { buttonIsPressed } = this.state;
-    const { laserCharge } = this.props;
+    const { playerLaserIsCharging } = this.props;
     return (
       <View style={styles.container}>
-        <Charger buttonIsPressed={buttonIsPressed} laserCharge={laserCharge} />
+        <Charger playerLaserIsCharging={playerLaserIsCharging} />
         <ImageBackground source={brushedMetal} style={styles.imageBackground}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -109,8 +107,6 @@ const styles = StyleSheet.create({
 });
 
 Controls.propTypes = {
-  startPlayerLaserFire: PropTypes.func.isRequired,
-  laserCharge: PropTypes.number.isRequired,
-  increaseLaserCharge: PropTypes.func.isRequired,
-  resetLaserCharge: PropTypes.func.isRequired
+  playerLaserIsCharging: PropTypes.bool.isRequired,
+  togglePlayerLaserIsCharging: PropTypes.func.isRequired
 };
