@@ -4,10 +4,12 @@ import { Asset } from "expo-asset";
 import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getRotatedEnemyCoords } from "../../../helpers/getRotatedEnemyCoords";
-import { playerWidthAndHeight } from "../../../constants/constants";
+import { getRotatedEnemyCoords } from "../../../../helpers/getRotatedEnemyCoords";
+import { playerWidthAndHeight } from "../../../../constants/constants";
 
-const buzz = Asset.fromModule(require("../../../assets/sounds/buzz.wav"));
+const enemyPain = Asset.fromModule(
+  require("../../../../assets/sounds/enemyPain.wav")
+);
 const playerPositionOffset = playerWidthAndHeight / 2;
 
 export default class PlayerLaser extends Component {
@@ -59,7 +61,7 @@ export default class PlayerLaser extends Component {
     };
 
     this.props.updateEnemy(updatedEnemy);
-    this.props.playSound(buzz);
+    this.props.playSound(enemyPain);
   };
 
   normalizeCoord = (coord, width, layoutWidth) => {

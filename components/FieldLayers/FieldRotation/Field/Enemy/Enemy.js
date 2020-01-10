@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Image } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import { playerWidthAndHeight } from "../../../../../constants/constants";
 import { Animated } from "react-native";
 
@@ -11,14 +11,34 @@ class Enemy extends Component {
     animatedValue: new Animated.Value(0)
   };
 
+  duration = Math.floor(Math.random() * (2000 - 100 + 1)) + 500;
+
   componentDidMount() {
     this.rotateEnemy();
   }
 
   componentDidUpdate(prevProps) {
-    const { life } = prevProps;
+    const { life, coords } = prevProps;
+
     if (life > 0 && this.props.life < 1) {
       this.handleRemoveEnemyFromData();
+    }
+
+    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
+      const { coords } = this.props;
+      const top = coords[1] - playerPositionOffset;
+      const left = coords[0] - playerPositionOffset;
+      const bottom = top + playerWidthAndHeight;
+      const right = left + playerWidthAndHeight;
+
+      if (
+        bottom > 50 - playerPositionOffset &&
+        top < 50 + playerPositionOffset &&
+        right > 50 - playerPositionOffset &&
+        left < 50 + playerPositionOffset
+      ) {
+        this.props.handleEnemyCollision();
+      }
     }
   }
 
@@ -26,7 +46,8 @@ class Enemy extends Component {
     this.state.animatedValue.setValue(0);
     Animated.timing(this.state.animatedValue, {
       toValue: 360,
-      duration: 500
+      duration: this.duration,
+      useNativeDriver: true
     }).start(() => this.rotateEnemy());
   };
 
@@ -44,6 +65,7 @@ class Enemy extends Component {
       inputRange: [0, 360],
       outputRange: ["360deg", "0deg"]
     });
+
     return (
       <>
         <Animated.View
@@ -54,15 +76,12 @@ class Enemy extends Component {
             left: `${coords[0] - playerPositionOffset}%`,
             width: `${playerWidthAndHeight}%`,
             height: `${playerWidthAndHeight}%`,
-            zIndex: 2
+            zIndex: 1
           }}
         >
           <Image
             source={require("../../../../../assets/images/eyeball.png")}
-            style={{
-              width: `100%`,
-              height: `100%`
-            }}
+            style={styles.enemy}
           />
         </Animated.View>
 
@@ -75,7 +94,7 @@ class Enemy extends Component {
               left: `${coords[0] - playerPositionOffset}%`,
               width: `${playerWidthAndHeight}%`,
               height: `${playerWidthAndHeight}%`,
-              zIndex: 2
+              zIndex: 1
             }}
           />
         )}
@@ -84,6 +103,13 @@ class Enemy extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  enemy: {
+    width: "100%",
+    height: "100%"
+  }
+});
+
 export default Enemy;
 
 Enemy.propTypes = {
@@ -91,5 +117,6 @@ Enemy.propTypes = {
   id: PropTypes.string.isRequired,
   life: PropTypes.number.isRequired,
   updateEnemies: PropTypes.func.isRequired,
-  removeEnemy: PropTypes.func.isRequired
+  removeEnemy: PropTypes.func.isRequired,
+  handleEnemyCollision: PropTypes.func.isRequired
 };

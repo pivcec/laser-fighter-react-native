@@ -81,7 +81,7 @@ export default class Controls extends Component {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   chargerContainer: {
-    flex: 1
+    flex: 2
   },
   imageBackground: {
     flex: 3,
@@ -98,11 +98,10 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     height: 60,
     width: 60,
-    borderColor: "black",
     borderWidth: 1
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "black",
     borderRadius: 50,
     height: 50,
     width: 50

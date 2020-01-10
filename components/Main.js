@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, StatusBar } from "react-native";
 import { ScreenOrientation } from "expo";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { Audio } from "expo-av";
 import { Asset } from "expo-asset";
-import TopMenu from "./TopMenu/TopMenu";
 import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
 
-const laserFire = Asset.fromModule(require("../assets/sounds/laser_01.wav"));
+const laserFire = Asset.fromModule(require("../assets/sounds/laserFire.wav"));
 
 export default class Main extends Component {
   state = {
@@ -127,24 +126,29 @@ export default class Main extends Component {
           this.findDimensions(e);
         }}
       >
-        <TopMenu />
         {layoutWidth && (
-          <View style={styles.fieldAndControls}>
-            <FieldLayers
-              layoutWidth={layoutWidth}
-              heading={heading}
-              coords={coords}
-              playerLaserIsFiring={playerLaserIsFiring}
-              laserCharge={laserCharge}
-              playSound={this.playSound}
-            />
-            <Controls
-              startPlayerLaserFire={this.startPlayerLaserFire}
-              laserCharge={laserCharge}
-              increaseLaserCharge={this.increaseLaserCharge}
-              resetLaserCharge={this.resetLaserCharge}
-            />
-          </View>
+          <>
+            <StatusBar hidden />
+            <View style={{ height: layoutWidth }}>
+              <FieldLayers
+                layoutWidth={layoutWidth}
+                heading={heading}
+                coords={coords}
+                playerLaserIsFiring={playerLaserIsFiring}
+                laserCharge={laserCharge}
+                playSound={this.playSound}
+              />
+            </View>
+
+            <View style={styles.controls}>
+              <Controls
+                startPlayerLaserFire={this.startPlayerLaserFire}
+                laserCharge={laserCharge}
+                increaseLaserCharge={this.increaseLaserCharge}
+                resetLaserCharge={this.resetLaserCharge}
+              />
+            </View>
+          </>
         )}
       </View>
     );
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  fieldAndControls: {
+  controls: {
     flex: 1
   }
 });
