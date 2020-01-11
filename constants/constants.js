@@ -1,3 +1,3 @@
 export const playerWidthAndHeight = 7;
 
-export const playerLaserChargeTime = 3000;
+export const playerLaserChargeTime = 5000;

@@ -23,11 +23,23 @@ class FieldLayers extends Component {
   throttledPlaySound = throttle(this.props.playSound, 1000);
 
   componentDidUpdate(prevProps, prevState) {
+    const { showPlayAgainMenu } = prevProps;
     const { chi } = prevState;
     if (chi && !this.state.chi) {
       this.props.handlePlayerDeath();
     }
+
+    if (showPlayAgainMenu && !this.props.showPlayAgainMenu) {
+      this.resetPlayer();
+    }
   }
+
+  resetPlayer = () => {
+    this.setState({
+      chi: 100,
+      karma: 0
+    });
+  };
 
   createEnemy = newEnemy => {
     this.setState(prevState => ({ enemies: [...prevState.enemies, newEnemy] }));
@@ -115,7 +127,8 @@ FieldLayers.propTypes = {
   heading: PropTypes.number.isRequired,
   playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired,
-  handlePlayerDeath: PropTypes.func.isRequired
+  handlePlayerDeath: PropTypes.func.isRequired,
+  showPlayAgainMenu: PropTypes.bool.isRequired
 };
 
 export default FieldLayers;

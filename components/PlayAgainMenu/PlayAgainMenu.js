@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Animated } from "react-native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-class Menu extends Component {
+class PlayAgainMenu extends Component {
   state = {
     animatedValue: new Animated.Value(0)
   };
@@ -59,7 +59,7 @@ class Menu extends Component {
   }
 }
 
-export default Menu;
+export default PlayAgainMenu;
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
   }
 });
 
-Menu.propTypes = {
+PlayAgainMenu.propTypes = {
   handlePlayAgain: PropTypes.func.isRequired
 };

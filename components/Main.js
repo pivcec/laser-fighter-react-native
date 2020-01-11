@@ -5,7 +5,7 @@ import { Audio } from "expo-av";
 import throttle from "lodash.throttle";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import Menu from "./Menu/Menu";
+import PlayAgainMenu from "./PlayAgainMenu/PlayAgainMenu";
 import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
 
@@ -15,7 +15,7 @@ export default class Main extends Component {
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
-    showMenu: false
+    showPlayAgainMenu: false
   };
 
   findDimensions = e => {
@@ -94,11 +94,11 @@ export default class Main extends Component {
   };
 
   handlePlayerDeath = () => {
-    this.setState({ showMenu: true });
+    this.setState({ showPlayAgainMenu: true });
   };
 
   handlePlayAgain = () => {
-    console.warn("play again");
+    this.setState({ showPlayAgainMenu: false });
   };
 
   render() {
@@ -108,7 +108,7 @@ export default class Main extends Component {
       heading,
       playerLaserCharge,
       playerLaserCharge: { isCharging },
-      showMenu
+      showPlayAgainMenu
     } = this.state;
     return (
       <View
@@ -120,7 +120,9 @@ export default class Main extends Component {
         {layoutWidth && (
           <>
             <StatusBar hidden />
-            {showMenu && <Menu handlePlayAgain={this.handlePlayAgain} />}
+            {showPlayAgainMenu && (
+              <PlayAgainMenu handlePlayAgain={this.handlePlayAgain} />
+            )}
             <View style={{ height: layoutWidth }}>
               <FieldLayers
                 layoutWidth={layoutWidth}
@@ -129,6 +131,7 @@ export default class Main extends Component {
                 playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
                 handlePlayerDeath={this.handlePlayerDeath}
+                showPlayAgainMenu={showPlayAgainMenu}
               />
             </View>
 
