@@ -28,27 +28,6 @@ export default class Controls extends Component {
     }
   }
 
-  /*
-  toggleButtonCharge = toggle => {
-    if (toggle) {
-      this.chargingInterval = setInterval(() => {
-        this.handleIncreaseLaserCharge(this.props.laserCharge);
-      }, 10);
-    } else {
-      clearInterval(this.chargingInterval);
-      this.props.resetLaserCharge();
-    }
-  };
-  */
-
-  /*
-  handleIncreaseLaserCharge = laserCharge => {
-    if (laserCharge < 100) {
-      this.props.increaseLaserCharge();
-    }
-  };
-  */
-
   handleOnPressIn = () => {
     this.setState({ buttonIsPressed: true });
   };

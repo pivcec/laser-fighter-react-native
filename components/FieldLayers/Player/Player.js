@@ -34,10 +34,6 @@ class Player extends Component {
         count++;
       }, 300);
     }
-
-    if (chi && !this.props.chi) {
-      console.warn("you died");
-    }
   }
 
   blinkKarmaText = () => {
