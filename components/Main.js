@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import { ScreenOrientation } from "expo";
 import { Audio } from "expo-av";
+import throttle from "lodash.throttle";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import FieldLayers from "./FieldLayers/FieldLayers";
@@ -65,13 +66,15 @@ export default class Main extends Component {
   watchHeading = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status === "granted") {
-      Location.watchHeadingAsync(this.updateHeading);
+      Location.watchHeadingAsync(this.throttledUpdateHeading);
     }
   };
 
   updateHeading = headingObject => {
     this.setState({ heading: headingObject.trueHeading });
   };
+
+  throttledUpdateHeading = throttle(this.updateHeading, 64);
 
   togglePlayerLaserIsCharging = toggle => {
     const timestamp = Date.now();
