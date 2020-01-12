@@ -6,7 +6,7 @@ import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
 
-const powerUp = Asset.fromModule(require("../../assets/sounds/powerUp.wav"));
+const powerUp = Asset.fromModule(require("../../../assets/sounds/powerUp.wav"));
 
 class FieldLayers extends Component {
   state = {

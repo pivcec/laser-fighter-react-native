@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { getNewEnemyData } from "../../../helpers/getNewEnemyData";
+import { getNewEnemyData } from "../../../../helpers/getNewEnemyData";
 
 class EnemiesLogic extends Component {
   componentDidMount() {

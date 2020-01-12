@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ImageBackground
 } from "react-native";
-import brushedMetal from "../../assets/images/rusty.jpg";
+import brushedMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 
 export default class Controls extends Component {

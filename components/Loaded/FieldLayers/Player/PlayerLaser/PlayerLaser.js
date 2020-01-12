@@ -4,18 +4,18 @@ import { Asset } from "expo-asset";
 import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getRotatedEnemyCoords } from "../../../../helpers/getRotatedEnemyCoords";
+import { getRotatedEnemyCoords } from "../../../../../helpers/getRotatedEnemyCoords";
 import {
   playerWidthAndHeight,
   playerLaserChargeTime
-} from "../../../../constants/constants";
+} from "../../../../../constants/constants";
 
 const laserFire = Asset.fromModule(
-  require("../../../../assets/sounds/laserFire.wav")
+  require("../../../../../assets/sounds/laserFire.wav")
 );
 
 const enemyPain = Asset.fromModule(
-  require("../../../../assets/sounds/enemyPain.wav")
+  require("../../../../../assets/sounds/enemyPain.wav")
 );
 const playerPositionOffset = playerWidthAndHeight / 2;
 

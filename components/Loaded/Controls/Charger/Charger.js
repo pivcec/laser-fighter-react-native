@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Animated, Easing } from "react-native";
 import { StyleSheet, View } from "react-native";
-import { playerLaserChargeTime } from "../../../constants/constants";
+import { playerLaserChargeTime } from "../../../../constants/constants";
 import ChargerLines from "./ChargerLines/ChargerLines";
 
 export default class Charger extends Component {

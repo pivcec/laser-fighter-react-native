@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Image } from "react-native";
 import { View, Text, StyleSheet } from "react-native";
-import { playerWidthAndHeight } from "../../../constants/constants";
+import { playerWidthAndHeight } from "../../../../constants/constants";
 import PlayerLaser from "./PlayerLaser/PlayerLaser";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -78,7 +78,7 @@ class Player extends Component {
           ]}
         >
           <Image
-            source={require("../../../assets/images/yinyang.png")}
+            source={require("../../../../assets/images/yinyang.png")}
             style={styles.player}
           />
         </View>

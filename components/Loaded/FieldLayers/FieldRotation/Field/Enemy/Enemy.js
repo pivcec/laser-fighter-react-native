@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Image, StyleSheet } from "react-native";
-import { playerWidthAndHeight } from "../../../../../constants/constants";
+import { playerWidthAndHeight } from "../../../../../../constants/constants";
 import { Animated } from "react-native";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -84,14 +84,14 @@ class Enemy extends Component {
           }}
         >
           <Image
-            source={require("../../../../../assets/images/eyeball.png")}
+            source={require("../../../../../../assets/images/eyeball.png")}
             style={styles.enemy}
           />
         </Animated.View>
 
         {life < 1 && (
           <Image
-            source={require("../../../../../assets/images/splosion.gif")}
+            source={require("../../../../../../assets/images/splosion.gif")}
             style={{
               position: "absolute",
               top: `${coords[1] - playerPositionOffset}%`,
