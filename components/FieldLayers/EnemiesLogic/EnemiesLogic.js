@@ -7,27 +7,38 @@ class EnemiesLogic extends Component {
     this.spawnEnemy();
     this.spawnEnemy();
 
-    setInterval(() => {
-      this.animateEnemy();
+    this.intervalId = setInterval(() => {
+      this.animateEnemies();
     }, 100);
   }
 
   componentDidUpdate(prevProps) {
-    const { enemies } = prevProps;
-    if (enemies.length > this.props.enemies.length) {
+    const { playerIsDead } = prevProps;
+    if (this.props.enemies.length === 1) {
       this.spawnEnemy();
+    }
+
+    if (playerIsDead && !this.props.playerIsDead) {
+      this.handlePlayerRespawn();
     }
   }
 
   componentWillUnmount() {
-    // clear interval
+    clearInterval(this.intervalId);
   }
 
   listenForPlayerMovement = () => {
     // spawn enemy after X amount of movement
   };
 
-  animateEnemy = () => {
+  handlePlayerRespawn = () => {
+    const newEnemies = [];
+    this.props.updateEnemies(newEnemies);
+    this.spawnEnemy();
+    this.spawnEnemy();
+  };
+
+  animateEnemies = () => {
     const { enemies } = this.props;
 
     if (enemies.length > 0) {
@@ -86,7 +97,8 @@ class EnemiesLogic extends Component {
 EnemiesLogic.propTypes = {
   updateEnemies: PropTypes.func.isRequired,
   createEnemy: PropTypes.func.isRequired,
-  enemies: PropTypes.array.isRequired
+  enemies: PropTypes.array.isRequired,
+  playerIsDead: PropTypes.bool.isRequired
 };
 
 export default EnemiesLogic;

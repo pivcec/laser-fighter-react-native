@@ -11,7 +11,7 @@ class Enemy extends Component {
     animatedValue: new Animated.Value(0)
   };
 
-  duration = Math.floor(Math.random() * (2000 - 100 + 1)) + 500;
+  enemySpinDuration = Math.floor(Math.random() * (2000 - 500) + 500);
 
   componentDidMount() {
     this.rotateEnemy();
@@ -19,12 +19,16 @@ class Enemy extends Component {
 
   componentDidUpdate(prevProps) {
     const { life, coords } = prevProps;
+    const { playerIsDead } = this.props;
 
     if (life > 0 && this.props.life < 1) {
       this.handleRemoveEnemyFromData();
     }
 
-    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
+    if (
+      JSON.stringify(coords) !== JSON.stringify(this.props.coords) &&
+      !playerIsDead
+    ) {
       const { coords } = this.props;
       const top = coords[1] - playerPositionOffset;
       const left = coords[0] - playerPositionOffset;
@@ -46,7 +50,7 @@ class Enemy extends Component {
     this.state.animatedValue.setValue(0);
     Animated.timing(this.state.animatedValue, {
       toValue: 360,
-      duration: this.duration,
+      duration: this.enemySpinDuration,
       useNativeDriver: true
     }).start(() => this.rotateEnemy());
   };
@@ -118,5 +122,6 @@ Enemy.propTypes = {
   life: PropTypes.number.isRequired,
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
-  handleEnemyCollision: PropTypes.func.isRequired
+  handleEnemyCollision: PropTypes.func.isRequired,
+  playerIsDead: PropTypes.bool.isRequired
 };

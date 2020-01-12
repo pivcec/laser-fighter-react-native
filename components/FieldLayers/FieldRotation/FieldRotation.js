@@ -37,7 +37,8 @@ class FieldRotation extends Component {
       layoutWidth,
       updateEnemies,
       removeEnemy,
-      handleEnemyCollision
+      handleEnemyCollision,
+      playerIsDead
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -57,6 +58,7 @@ class FieldRotation extends Component {
           updateEnemies={updateEnemies}
           removeEnemy={removeEnemy}
           handleEnemyCollision={handleEnemyCollision}
+          playerIsDead={playerIsDead}
         />
       </Animated.View>
     );
@@ -69,7 +71,8 @@ FieldRotation.propTypes = {
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
-  handleEnemyCollision: PropTypes.func.isRequired
+  handleEnemyCollision: PropTypes.func.isRequired,
+  playerIsDead: PropTypes.bool.isRequired
 };
 
 export default FieldRotation;

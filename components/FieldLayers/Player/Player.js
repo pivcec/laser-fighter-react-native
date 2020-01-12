@@ -58,25 +58,24 @@ class Player extends Component {
     return (
       <>
         <Text
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            color: chiColor,
-            margin: 3
-          }}
+          style={[
+            styles.chi,
+            {
+              color: chiColor
+            }
+          ]}
         >{`Chi: ${chi}`}</Text>
         {showKarma && <Text style={styles.karma}>{`Karma: ${karma}`}</Text>}
         <View
-          style={{
-            position: "absolute",
-            top: `${50 - playerPositionOffset}%`,
-            left: `${50 - playerPositionOffset}%`,
-            width: `${playerWidthAndHeight}%`,
-            height: `${playerWidthAndHeight}%`,
-            borderRadius: 20,
-            zIndex: 1
-          }}
+          style={[
+            styles.playerContainer,
+            {
+              top: `${50 - playerPositionOffset}%`,
+              left: `${50 - playerPositionOffset}%`,
+              width: `${playerWidthAndHeight}%`,
+              height: `${playerWidthAndHeight}%`
+            }
+          ]}
         >
           <Image
             source={require("../../../assets/images/yinyang.png")}
@@ -97,16 +96,25 @@ class Player extends Component {
 }
 
 const styles = StyleSheet.create({
+  playerContainer: { position: "absolute", borderRadius: 20, zIndex: 1 },
   player: {
     width: "100%",
     height: "100%"
+  },
+  chi: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    margin: 3,
+    zIndex: 1
   },
   karma: {
     position: "absolute",
     top: 0,
     right: 0,
     color: "white",
-    margin: 3
+    margin: 3,
+    zIndex: 1
   }
 });
 

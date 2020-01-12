@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Asset } from "expo-asset";
-import throttle from "lodash.throttle";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
@@ -48,7 +47,8 @@ class FieldLayers extends Component {
       playSound,
       handleEnemyCollision,
       chi,
-      karma
+      karma,
+      playerIsDead
     } = this.props;
 
     return (
@@ -73,12 +73,14 @@ class FieldLayers extends Component {
           updateEnemies={this.updateEnemies}
           removeEnemy={this.removeEnemy}
           handleEnemyCollision={handleEnemyCollision}
+          playerIsDead={playerIsDead}
         />
 
         <EnemiesLogic
           createEnemy={this.createEnemy}
           updateEnemies={this.updateEnemies}
           enemies={enemies}
+          playerIsDead={playerIsDead}
         />
       </>
     );
@@ -93,7 +95,8 @@ FieldLayers.propTypes = {
   chi: PropTypes.number.isRequired,
   karma: PropTypes.number.isRequired,
   increaseKarma: PropTypes.func.isRequired,
-  handleEnemyCollision: PropTypes.func.isRequired
+  handleEnemyCollision: PropTypes.func.isRequired,
+  playerIsDead: PropTypes.bool.isRequired
 };
 
 export default FieldLayers;

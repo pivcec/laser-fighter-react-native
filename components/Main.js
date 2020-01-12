@@ -126,7 +126,7 @@ export default class Main extends Component {
       chi,
       karma
     } = this.state;
-    const showPlayAgainMenu = chi <= 0 ? true : false;
+    const playerIsDead = chi <= 0 ? true : false;
     return (
       <View
         style={styles.container}
@@ -137,7 +137,7 @@ export default class Main extends Component {
         {layoutWidth && (
           <>
             <StatusBar hidden />
-            {showPlayAgainMenu && (
+            {playerIsDead && (
               <PlayAgainMenu handlePlayAgain={this.handlePlayAgain} />
             )}
             <View style={{ height: layoutWidth }}>
@@ -151,11 +151,13 @@ export default class Main extends Component {
                 handleEnemyCollision={this.handleEnemyCollision}
                 chi={chi}
                 karma={karma}
+                playerIsDead={playerIsDead}
               />
             </View>
 
             <View style={styles.controls}>
               <Controls
+                playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}
               />

@@ -26,6 +26,10 @@ export default class Controls extends Component {
     if (buttonIsPressed && !this.state.buttonIsPressed) {
       this.props.togglePlayerLaserIsCharging(false);
     }
+
+    if (this.state.buttonIsPressed && this.props.playerIsDead) {
+      this.handleOnPressOut();
+    }
   }
 
   handleOnPressIn = () => {
@@ -91,6 +95,7 @@ const styles = StyleSheet.create({
 });
 
 Controls.propTypes = {
+  playerIsDead: PropTypes.bool.isRequired,
   playerLaserIsCharging: PropTypes.bool.isRequired,
   togglePlayerLaserIsCharging: PropTypes.func.isRequired
 };
