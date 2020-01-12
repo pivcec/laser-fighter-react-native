@@ -7,38 +7,11 @@ import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
 
-const playerPain = Asset.fromModule(
-  require("../../assets/sounds/playerPain.wav")
-);
-
 const powerUp = Asset.fromModule(require("../../assets/sounds/powerUp.wav"));
 
 class FieldLayers extends Component {
   state = {
-    enemies: [],
-    chi: 100,
-    karma: 0
-  };
-
-  throttledPlaySound = throttle(this.props.playSound, 1000);
-
-  componentDidUpdate(prevProps, prevState) {
-    const { showPlayAgainMenu } = prevProps;
-    const { chi } = prevState;
-    if (chi && !this.state.chi) {
-      this.props.handlePlayerDeath();
-    }
-
-    if (showPlayAgainMenu && !this.props.showPlayAgainMenu) {
-      this.resetPlayer();
-    }
-  }
-
-  resetPlayer = () => {
-    this.setState({
-      chi: 100,
-      karma: 0
-    });
+    enemies: []
   };
 
   createEnemy = newEnemy => {
@@ -47,7 +20,7 @@ class FieldLayers extends Component {
 
   removeEnemy = id => {
     this.props.playSound(powerUp);
-    this.increaseKarma();
+    this.props.increaseKarma();
     this.setState(prevState => ({
       enemies: prevState.enemies.filter(enemy => enemy.id !== id)
     }));
@@ -65,27 +38,17 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  increaseKarma = () => {
-    this.setState(prevState => ({
-      karma: prevState.karma + 1
-    }));
-  };
-
-  handleEnemyCollision = () => {
-    this.throttledPlaySound(playerPain);
-    this.setState(prevState => ({
-      chi: prevState.chi - 5
-    }));
-  };
-
   render() {
-    const { enemies, chi, karma } = this.state;
+    const { enemies } = this.state;
     const {
       layoutWidth,
       heading,
       coords,
       playerLaserCharge,
-      playSound
+      playSound,
+      handleEnemyCollision,
+      chi,
+      karma
     } = this.props;
 
     return (
@@ -109,7 +72,7 @@ class FieldLayers extends Component {
           enemies={enemies}
           updateEnemies={this.updateEnemies}
           removeEnemy={this.removeEnemy}
-          handleEnemyCollision={this.handleEnemyCollision}
+          handleEnemyCollision={handleEnemyCollision}
         />
 
         <EnemiesLogic
@@ -127,8 +90,10 @@ FieldLayers.propTypes = {
   heading: PropTypes.number.isRequired,
   playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired,
-  handlePlayerDeath: PropTypes.func.isRequired,
-  showPlayAgainMenu: PropTypes.bool.isRequired
+  chi: PropTypes.number.isRequired,
+  karma: PropTypes.number.isRequired,
+  increaseKarma: PropTypes.func.isRequired,
+  handleEnemyCollision: PropTypes.func.isRequired
 };
 
 export default FieldLayers;

@@ -40,7 +40,10 @@ export default class Controls extends Component {
     const { playerLaserIsCharging } = this.props;
     return (
       <View style={styles.container}>
-        <Charger playerLaserIsCharging={playerLaserIsCharging} />
+        <View style={styles.chargerContainer}>
+          <Charger playerLaserIsCharging={playerLaserIsCharging} />
+        </View>
+
         <ImageBackground source={brushedMetal} style={styles.imageBackground}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -58,7 +61,9 @@ export default class Controls extends Component {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   chargerContainer: {
-    flex: 2
+    flex: 1,
+    position: "relative",
+    backgroundColor: "black"
   },
   imageBackground: {
     flex: 3,

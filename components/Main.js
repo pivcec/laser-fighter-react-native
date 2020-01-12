@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import { ScreenOrientation } from "expo";
+import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
 import throttle from "lodash.throttle";
 import * as Location from "expo-location";
@@ -9,13 +10,16 @@ import PlayAgainMenu from "./PlayAgainMenu/PlayAgainMenu";
 import FieldLayers from "./FieldLayers/FieldLayers";
 import Controls from "./Controls/Controls";
 
+const playerPain = Asset.fromModule(require("../assets/sounds/playerPain.wav"));
+
 export default class Main extends Component {
   state = {
     coords: {},
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
-    showPlayAgainMenu: false
+    chi: 100,
+    karma: 0
   };
 
   findDimensions = e => {
@@ -93,12 +97,23 @@ export default class Main extends Component {
     }
   };
 
-  handlePlayerDeath = () => {
-    this.setState({ showPlayAgainMenu: true });
-  };
+  throttledPlaySound = throttle(this.playSound, 1000);
 
   handlePlayAgain = () => {
-    this.setState({ showPlayAgainMenu: false });
+    this.setState({ chi: 100, karma: 0 });
+  };
+
+  increaseKarma = () => {
+    this.setState(prevState => ({
+      karma: prevState.karma + 1
+    }));
+  };
+
+  handleEnemyCollision = () => {
+    this.throttledPlaySound(playerPain);
+    this.setState(prevState => ({
+      chi: prevState.chi - 5
+    }));
   };
 
   render() {
@@ -108,8 +123,10 @@ export default class Main extends Component {
       heading,
       playerLaserCharge,
       playerLaserCharge: { isCharging },
-      showPlayAgainMenu
+      chi,
+      karma
     } = this.state;
+    const showPlayAgainMenu = chi <= 0 ? true : false;
     return (
       <View
         style={styles.container}
@@ -130,8 +147,10 @@ export default class Main extends Component {
                 coords={coords}
                 playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
-                handlePlayerDeath={this.handlePlayerDeath}
-                showPlayAgainMenu={showPlayAgainMenu}
+                increaseKarma={this.increaseKarma}
+                handleEnemyCollision={this.handleEnemyCollision}
+                chi={chi}
+                karma={karma}
               />
             </View>
 

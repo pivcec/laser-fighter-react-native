@@ -136,7 +136,7 @@ export default class PlayerLaser extends Component {
               x2="50%"
               y2={`${y2}%`}
               stroke="red"
-              strokeWidth="3"
+              strokeWidth="2"
             />
           )}
         </Svg>

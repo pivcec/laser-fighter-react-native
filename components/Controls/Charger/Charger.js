@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Animated } from "react-native";
+import { Animated, Easing } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { playerLaserChargeTime } from "../../../constants/constants";
+import ChargerLines from "./ChargerLines/ChargerLines";
 
 export default class Charger extends Component {
   state = {
@@ -26,6 +27,7 @@ export default class Charger extends Component {
     Animated.timing(animatedValue, {
       toValue,
       duration,
+      easing: Easing.in(Easing.quad),
       useNativeDriver: true
     }).start();
   };
@@ -39,6 +41,8 @@ export default class Charger extends Component {
             flex: 1,
             height: "100%",
             width: "100%",
+            position: "absolute",
+            zIndex: 1,
             transform: [
               {
                 scaleX: animatedValue.interpolate({
@@ -56,6 +60,7 @@ export default class Charger extends Component {
             backgroundColor: "red"
           }}
         ></Animated.View>
+        <ChargerLines />
       </View>
     );
   }
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     width: "100%",
-    backgroundColor: "black"
+    position: "absolute"
   }
 });
 
