@@ -6,40 +6,40 @@ import { Image, StyleSheet } from "react-native";
 
 const imageSeries = [
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/1.png`)
+    require(`../../../../../../../assets/images/splosion/1.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/2.png`)
+    require(`../../../../../../../assets/images/splosion/2.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/3.png`)
+    require(`../../../../../../../assets/images/splosion/3.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/4.png`)
+    require(`../../../../../../../assets/images/splosion/4.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/5.png`)
+    require(`../../../../../../../assets/images/splosion/5.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/6.png`)
+    require(`../../../../../../../assets/images/splosion/6.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/7.png`)
+    require(`../../../../../../../assets/images/splosion/7.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/8.png`)
+    require(`../../../../../../../assets/images/splosion/8.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/8.png`)
+    require(`../../../../../../../assets/images/splosion/8.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/10.png`)
+    require(`../../../../../../../assets/images/splosion/10.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/11.png`)
+    require(`../../../../../../../assets/images/splosion/11.png`)
   ),
   Asset.fromModule(
-    require(`../../../../../../../assets/images/splosion2/12.png`)
+    require(`../../../../../../../assets/images/splosion/12.png`)
   )
 ];
 

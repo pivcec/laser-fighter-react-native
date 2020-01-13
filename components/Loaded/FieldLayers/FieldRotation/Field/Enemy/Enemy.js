@@ -59,27 +59,28 @@ class Enemy extends Component {
       inputRange: [0, 360],
       outputRange: ["360deg", "0deg"]
     });
-
+    const enemyIsDead = life < 1;
     return (
       <>
-        <Animated.View
-          style={{
-            transform: [{ rotate: interpolatedRotateAnimation }],
-            position: "absolute",
-            top: `${coords[1] - playerPositionOffset}%`,
-            left: `${coords[0] - playerPositionOffset}%`,
-            width: `${playerWidthAndHeight}%`,
-            height: `${playerWidthAndHeight}%`,
-            zIndex: 1
-          }}
-        >
-          <Image
-            source={require("../../../../../../assets/images/eyeball.png")}
-            style={styles.enemy}
-          />
-        </Animated.View>
-
-        {life < 1 && (
+        {!enemyIsDead && (
+          <Animated.View
+            style={{
+              transform: [{ rotate: interpolatedRotateAnimation }],
+              position: "absolute",
+              top: `${coords[1] - playerPositionOffset}%`,
+              left: `${coords[0] - playerPositionOffset}%`,
+              width: `${playerWidthAndHeight}%`,
+              height: `${playerWidthAndHeight}%`,
+              zIndex: 1
+            }}
+          >
+            <Image
+              source={require("../../../../../../assets/images/eyeball.png")}
+              style={styles.enemy}
+            />
+          </Animated.View>
+        )}
+        {enemyIsDead && (
           <View
             style={{
               position: "absolute",

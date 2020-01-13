@@ -41,7 +41,7 @@ export default class Loaded extends Component {
     this.lockScreenOrientation();
     this.watchLocation();
     this.watchHeading();
-    this.playSound(zenMusic)
+    this.playSound(zenMusic);
   }
 
   componentWillUnmount() {
@@ -131,7 +131,7 @@ export default class Loaded extends Component {
       chi,
       karma
     } = this.state;
-    const playerIsDead = chi <= 0 ? true : false;
+    const playerIsDead = chi < 1;
     return (
       <View
         style={styles.container}
