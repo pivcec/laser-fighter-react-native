@@ -20,7 +20,11 @@ class Main extends Component {
   };
 
   _loadAssetsAsync = async () => {
-    const imageAssets = cacheImages([require("../assets/images/rusty.jpg")]);
+    const imageAssets = cacheImages([
+      require("../assets/images/rusty.jpg"),
+      require("../assets/images/yinyang.png"),
+      require("../assets/images/eyeball.png")
+    ]);
 
     await Promise.all(imageAssets);
   };
