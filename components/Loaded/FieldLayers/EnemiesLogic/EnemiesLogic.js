@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { getNewEnemyData } from "../../../../helpers/getNewEnemyData";
+import {
+  getNewEnemyData,
+  getRandomNumberToLimit
+} from "../../../../helpers/getNewEnemyData";
 
 class EnemiesLogic extends Component {
   componentDidMount() {
@@ -67,12 +70,19 @@ class EnemiesLogic extends Component {
             this.getNewCoord(coords[1], heading[1])
           ],
           id,
-          heading,
+          heading: this.checkIfHeadingNeedsToBeUpdated(coords, heading),
           life
         };
       });
       this.props.updateEnemies(updatedEnemies);
     }
+  };
+
+  checkIfHeadingNeedsToBeUpdated = (coords, heading) => {
+    if (JSON.stringify(coords) === JSON.stringify(heading)) {
+      return [getRandomNumberToLimit(100), getRandomNumberToLimit(100)];
+    }
+    return heading;
   };
 
   getNewCoord = (coord, nextCoord) => {
