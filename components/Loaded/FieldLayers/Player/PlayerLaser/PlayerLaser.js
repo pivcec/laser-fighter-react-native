@@ -4,7 +4,7 @@ import { Asset } from "expo-asset";
 import PropTypes from "prop-types";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getRotatedEnemyCoords } from "../../../../../helpers/getRotatedEnemyCoords";
+import { getRotatedEnemyCoords } from "../../../../../helpers/coordsCalculations";
 import {
   playerWidthAndHeight,
   playerLaserChargeTime

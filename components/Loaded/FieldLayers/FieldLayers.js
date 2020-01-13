@@ -1,5 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import {
+  getMetersTraveled,
+  getBearing,
+  getDirectionKey,
+  getNewPlayerPosition
+} from "../../../helpers/coordsCalculations";
 import { Asset } from "expo-asset";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
@@ -10,7 +16,43 @@ const powerUp = Asset.fromModule(require("../../../assets/sounds/powerUp.wav"));
 
 class FieldLayers extends Component {
   state = {
-    enemies: []
+    enemies: [],
+    playerPosition: [50, 50]
+  };
+
+  componentDidUpdate(prevProps) {
+    const { coords } = prevProps;
+    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
+      this.handlePlayerPositionUpdate(coords, this.props.coords);
+    }
+  }
+
+  handlePlayerPositionUpdate = (start, end) => {
+    const { playerPosition } = this.state;
+
+    const playerMovementDistanceX = getMetersTraveled(
+      [start.longitude, start.latitude],
+      [end.longitude, start.latitude]
+    );
+    const playerMovementDistanceY = getMetersTraveled(
+      [start.longitude, start.latitude],
+      [start.longitude, end.latitude]
+    );
+
+    const bearing = getBearing(
+      [start.longitude, start.latitude],
+      [end.longitude, end.latitude]
+    );
+
+    const directionKey = getDirectionKey(bearing);
+
+    const newPlayerPosition = getNewPlayerPosition(
+      playerPosition,
+      [playerMovementDistanceX, playerMovementDistanceY],
+      directionKey
+    );
+
+    this.setState({ playerPosition: newPlayerPosition });
   };
 
   createEnemy = newEnemy => {
@@ -38,7 +80,7 @@ class FieldLayers extends Component {
   };
 
   render() {
-    const { enemies } = this.state;
+    const { enemies, playerPosition } = this.state;
     const {
       layoutWidth,
       heading,
@@ -74,6 +116,7 @@ class FieldLayers extends Component {
           removeEnemy={this.removeEnemy}
           handleEnemyCollision={handleEnemyCollision}
           playerIsDead={playerIsDead}
+          playerPosition={playerPosition}
         />
 
         <EnemiesLogic
@@ -81,6 +124,7 @@ class FieldLayers extends Component {
           updateEnemies={this.updateEnemies}
           enemies={enemies}
           playerIsDead={playerIsDead}
+          playerPosition={playerPosition}
         />
       </>
     );

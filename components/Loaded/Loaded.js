@@ -55,9 +55,9 @@ export default class Loaded extends Component {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     const options = {
-      accuracy: 10,
-      timeInterval: 100,
-      mayShowUserSettingsDialog: false
+      accuracy: Location.BestForNavigation,
+      timeInterval: 300,
+      distanceInterval: 1
     };
 
     if (status === "granted") {
