@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import { playerWidthAndHeight } from "../../../../../../constants/constants";
 import { Animated } from "react-native";
+import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
@@ -18,12 +19,8 @@ class Enemy extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { life, coords } = prevProps;
+    const { coords } = prevProps;
     const { playerIsDead } = this.props;
-
-    if (life > 0 && this.props.life < 1) {
-      this.handleRemoveEnemyFromData();
-    }
 
     if (
       JSON.stringify(coords) !== JSON.stringify(this.props.coords) &&
@@ -55,15 +52,8 @@ class Enemy extends Component {
     }).start(() => this.rotateEnemy());
   };
 
-  handleRemoveEnemyFromData = () => {
-    const { id } = this.props;
-    setTimeout(() => {
-      this.props.removeEnemy(id);
-    }, 1000);
-  };
-
   render() {
-    const { coords, life } = this.props;
+    const { coords, life, id, removeEnemy } = this.props;
     const { animatedValue } = this.state;
     const interpolatedRotateAnimation = animatedValue.interpolate({
       inputRange: [0, 360],
@@ -90,8 +80,7 @@ class Enemy extends Component {
         </Animated.View>
 
         {life < 1 && (
-          <Image
-            source={require("../../../../../../assets/images/splosion.gif")}
+          <View
             style={{
               position: "absolute",
               top: `${coords[1] - playerPositionOffset}%`,
@@ -100,7 +89,9 @@ class Enemy extends Component {
               height: `${playerWidthAndHeight}%`,
               zIndex: 1
             }}
-          />
+          >
+            <AnimatedImageSeries removeEnemy={removeEnemy} id={id} />
+          </View>
         )}
       </>
     );

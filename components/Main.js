@@ -29,7 +29,19 @@ class Main extends Component {
     const imageAssets = cacheImages([
       require("../assets/images/rusty.jpg"),
       require("../assets/images/yinyang.png"),
-      require("../assets/images/eyeball.png")
+      require("../assets/images/eyeball.png"),
+      require("../assets/images/splosion2/1.png"),
+      require("../assets/images/splosion2/2.png"),
+      require("../assets/images/splosion2/3.png"),
+      require("../assets/images/splosion2/4.png"),
+      require("../assets/images/splosion2/5.png"),
+      require("../assets/images/splosion2/6.png"),
+      require("../assets/images/splosion2/7.png"),
+      require("../assets/images/splosion2/8.png"),
+      require("../assets/images/splosion2/9.png"),
+      require("../assets/images/splosion2/10.png"),
+      require("../assets/images/splosion2/11.png"),
+      require("../assets/images/splosion2/12.png")
     ]);
 
     const audioAssets = cacheAudio([require("../assets/sounds/zenMusic.mp3")]);
