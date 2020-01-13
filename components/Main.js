@@ -14,6 +14,12 @@ const cacheImages = images => {
   });
 };
 
+const cacheAudio = audioFiles => {
+  return audioFiles.map(audioFile => {
+    return Asset.fromModule(audioFile).downloadAsync();
+  });
+};
+
 class Main extends Component {
   state = {
     isReady: false
@@ -26,7 +32,9 @@ class Main extends Component {
       require("../assets/images/eyeball.png")
     ]);
 
-    await Promise.all(imageAssets);
+    const audioAssets = cacheAudio([require("../assets/sounds/zenMusic.mp3")]);
+
+    await Promise.all([...imageAssets, ...audioAssets]);
   };
 
   render() {

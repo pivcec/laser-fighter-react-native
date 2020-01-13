@@ -14,6 +14,8 @@ const playerPain = Asset.fromModule(
   require("../../assets/sounds/playerPain.wav")
 );
 
+const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
+
 export default class Loaded extends Component {
   state = {
     coords: {},
@@ -39,6 +41,7 @@ export default class Loaded extends Component {
     this.lockScreenOrientation();
     this.watchLocation();
     this.watchHeading();
+    this.playSound(zenMusic)
   }
 
   componentWillUnmount() {
