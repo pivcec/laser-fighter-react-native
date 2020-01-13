@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
 import { Asset } from "expo-asset";
 import PropTypes from "prop-types";
+import { Animated } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
 import { getRotatedEnemyCoords } from "../../../../../helpers/coordsCalculations";
@@ -21,14 +22,16 @@ const playerPositionOffset = playerWidthAndHeight / 2;
 
 export default class PlayerLaser extends Component {
   state = {
+    animatedValue: new Animated.Value(0),
     laserPower: null,
     firstEnemyWithinPathOfLaser: null
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
       playerLaserCharge: { isCharging, timestamp }
     } = prevProps;
+    const { laserPower } = prevState;
 
     if (isCharging && !this.props.playerLaserCharge.isCharging) {
       const { heading, enemies } = this.props;
@@ -43,28 +46,43 @@ export default class PlayerLaser extends Component {
         enemiesWithinPathOfLaser.length > 0
           ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
           : null;
-      this.handlePlayerLaserFire(
-        Math.floor(laserPower),
+      this.setState({
+        laserPower: Math.floor(laserPower),
         firstEnemyWithinPathOfLaser
-      );
+      });
+    }
+
+    if (!laserPower && this.state.laserPower) {
+      this.handlePlayerLaserFire();
+    }
+
+    if (laserPower && !this.state.laserPower) {
+      this.animatePlayerLaser();
     }
   }
 
-  handlePlayerLaserFire = (laserPower, firstEnemyWithinPathOfLaser) => {
+  handlePlayerLaserFire = () => {
+    const { laserPower, firstEnemyWithinPathOfLaser } = this.state;
     this.props.playSound(laserFire);
-    this.setState(
-      { laserPower, firstEnemyWithinPathOfLaser },
-      this.endPlayerLaserFire
-    );
+    this.animatePlayerLaser();
     if (firstEnemyWithinPathOfLaser) {
       this.handleLaserCollision(laserPower, firstEnemyWithinPathOfLaser);
     }
   };
 
-  endPlayerLaserFire = () => {
-    setTimeout(() => {
+  animatePlayerLaser = () => {
+    const { animatedValue, laserPower } = this.state;
+    Animated.timing(animatedValue, {
+      toValue: laserPower ? 1 : 0,
+      duration: 50,
+      useNativeDriver: true
+    }).start(() => this.handleEndPlayerLaser(laserPower));
+  };
+
+  handleEndPlayerLaser = laserPower => {
+    if (laserPower) {
       this.setState({ laserPower: null, firstEnemyWithinPathOfLaser: null });
-    }, 100);
+    }
   };
 
   handleLaserCollision = (laserPower, { id }) => {
@@ -109,11 +127,9 @@ export default class PlayerLaser extends Component {
     const { coords } = enemy;
     const x = coords[0];
     const y = coords[1];
-
     const leftEdge = x - playerPositionOffset;
     const rightEdge = x + playerPositionOffset;
     const topEdge = y - playerPositionOffset;
-
     if (topEdge < 50 && leftEdge <= 50 && rightEdge >= 50) {
       return true;
     }
@@ -122,12 +138,23 @@ export default class PlayerLaser extends Component {
 
   render() {
     const { layoutWidth } = this.props;
-    const { laserPower, firstEnemyWithinPathOfLaser } = this.state;
+    const {
+      laserPower,
+      firstEnemyWithinPathOfLaser,
+      animatedValue
+    } = this.state;
     const y2 = firstEnemyWithinPathOfLaser
       ? firstEnemyWithinPathOfLaser.coords[1]
       : 0;
+    const animatedStyle = {
+      opacity: animatedValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1]
+      })
+    };
+
     return (
-      <View style={styles.playerLaser}>
+      <Animated.View style={[styles.playerLaser, animatedStyle]}>
         <Svg height={layoutWidth} width={layoutWidth}>
           {laserPower && (
             <Line
@@ -140,7 +167,7 @@ export default class PlayerLaser extends Component {
             />
           )}
         </Svg>
-      </View>
+      </Animated.View>
     );
   }
 }
