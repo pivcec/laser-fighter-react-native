@@ -4,10 +4,12 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  Image
 } from "react-native";
 import brushedMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
+// import MockMovement from "./MockMovement/MockMovement";
 
 export default class Controls extends Component {
   state = {
@@ -41,21 +43,37 @@ export default class Controls extends Component {
   };
 
   render() {
-    const { playerLaserIsCharging } = this.props;
+    const {
+      playerLaserIsCharging,
+      coords,
+      updateLocation,
+      heading
+    } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.chargerContainer}>
           <Charger playerLaserIsCharging={playerLaserIsCharging} />
         </View>
-
         <ImageBackground source={brushedMetal} style={styles.imageBackground}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
               onPressIn={this.handleOnPressIn}
               onPressOut={this.handleOnPressOut}
-            />
+            >
+              <Image
+                source={require("../../../assets/images/luck.png")}
+                style={styles.buttonImage}
+              />
+            </TouchableOpacity>
           </View>
+          {/*
+          <MockMovement
+            coords={coords}
+            updateLocation={updateLocation}
+            heading={heading}
+          />
+          */}
         </ImageBackground>
       </View>
     );
@@ -80,22 +98,32 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#DAA520",
     borderRadius: 60,
     height: 60,
     width: 60,
     borderWidth: 1
   },
   button: {
-    backgroundColor: "black",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
     borderRadius: 50,
     height: 50,
     width: 50
+  },
+  buttonImage: {
+    width: 45,
+    height: 45
   }
 });
 
 Controls.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerLaserIsCharging: PropTypes.bool.isRequired,
-  togglePlayerLaserIsCharging: PropTypes.func.isRequired
+  togglePlayerLaserIsCharging: PropTypes.func.isRequired,
+  coords: PropTypes.object.isRequired,
+  updateLocation: PropTypes.func.isRequired,
+  heading: PropTypes.number.isRequired
 };

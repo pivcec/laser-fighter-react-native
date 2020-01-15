@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { View, Image, StyleSheet } from "react-native";
 import { playerWidthAndHeight } from "../../../../../../constants/constants";
 import { Animated } from "react-native";
-import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
+// import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
 
@@ -19,16 +19,17 @@ class Enemy extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { coords } = prevProps;
+    const { position, enemyIsDead } = prevProps;
     const { playerIsDead } = this.props;
 
     if (
-      JSON.stringify(coords) !== JSON.stringify(this.props.coords) &&
-      !playerIsDead
+      JSON.stringify(position) !== JSON.stringify(this.props.position) &&
+      !playerIsDead &&
+      !enemyIsDead
     ) {
-      const { coords } = this.props;
-      const top = coords[1] - playerPositionOffset;
-      const left = coords[0] - playerPositionOffset;
+      const { position } = this.props;
+      const top = position[1] - playerPositionOffset;
+      const left = position[0] - playerPositionOffset;
       const bottom = top + playerWidthAndHeight;
       const right = left + playerWidthAndHeight;
 
@@ -41,6 +42,10 @@ class Enemy extends Component {
         this.props.handleEnemyCollision();
       }
     }
+
+    if (!enemyIsDead && this.props.enemyIsDead) {
+      this.handleEnemyIsDead();
+    }
   }
 
   rotateEnemy = () => {
@@ -52,14 +57,20 @@ class Enemy extends Component {
     }).start(() => this.rotateEnemy());
   };
 
+  handleEnemyIsDead = () => {
+    const { id, removeEnemy } = this.props;
+    setTimeout(() => {
+      removeEnemy(id);
+    }, 1000);
+  };
+
   render() {
-    const { coords, life, id, removeEnemy } = this.props;
+    const { position, enemyIsDead } = this.props;
     const { animatedValue } = this.state;
     const interpolatedRotateAnimation = animatedValue.interpolate({
       inputRange: [0, 360],
       outputRange: ["360deg", "0deg"]
     });
-    const enemyIsDead = life < 1;
     return (
       <>
         {!enemyIsDead && (
@@ -67,8 +78,8 @@ class Enemy extends Component {
             style={{
               transform: [{ rotate: interpolatedRotateAnimation }],
               position: "absolute",
-              top: `${coords[1] - playerPositionOffset}%`,
-              left: `${coords[0] - playerPositionOffset}%`,
+              top: `${position[1] - playerPositionOffset}%`,
+              left: `${position[0] - playerPositionOffset}%`,
               width: `${playerWidthAndHeight}%`,
               height: `${playerWidthAndHeight}%`,
               zIndex: 1
@@ -80,18 +91,23 @@ class Enemy extends Component {
             />
           </Animated.View>
         )}
+
         {enemyIsDead && (
           <View
             style={{
               position: "absolute",
-              top: `${coords[1] - playerPositionOffset}%`,
-              left: `${coords[0] - playerPositionOffset}%`,
+              top: `${position[1] - playerPositionOffset}%`,
+              left: `${position[0] - playerPositionOffset}%`,
               width: `${playerWidthAndHeight}%`,
               height: `${playerWidthAndHeight}%`,
               zIndex: 1
             }}
           >
-            <AnimatedImageSeries removeEnemy={removeEnemy} id={id} />
+            <Image
+              source={require("../../../../../../assets/images/splosion.gif")}
+              style={styles.enemy}
+            />
+            {/*<AnimatedImageSeries removeEnemy={removeEnemy} id={id} />*/}
           </View>
         )}
       </>
@@ -109,9 +125,9 @@ const styles = StyleSheet.create({
 export default Enemy;
 
 Enemy.propTypes = {
-  coords: PropTypes.array.isRequired,
+  position: PropTypes.array.isRequired,
   id: PropTypes.string.isRequired,
-  life: PropTypes.number.isRequired,
+  enemyIsDead: PropTypes.bool.isRequired,
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,

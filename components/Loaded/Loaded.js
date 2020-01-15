@@ -18,13 +18,15 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 export default class Loaded extends Component {
   state = {
-    coords: {},
+    coords: { latitude: 43.5167427956572, longitude: 16.431551669773466 },
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
     chi: 100,
     karma: 0
   };
+
+  animateCoords = null;
 
   findDimensions = e => {
     const {
@@ -39,14 +41,31 @@ export default class Loaded extends Component {
 
   async componentDidMount() {
     this.lockScreenOrientation();
-    this.watchLocation();
+    // this.watchLocation();
     this.watchHeading();
     this.playSound(zenMusic);
   }
 
   componentWillUnmount() {
-    console.log("cancel listeners");
+    clearInterval(this.animateCoords);
   }
+
+  /*
+  animateLocationForDebug = () => {
+    this.setState({
+      coords: { latitude: 43.5167427956572, longitude: 16.431551669773466 }
+    });
+
+    this.animateCoords = setInterval(() => {
+      this.setState(prevState => ({
+        coords: {
+          latitude: prevState.coords.latitude + 0.00001,
+          longitude: prevState.coords.longitude + 0.00001
+        }
+      }));
+    }, 1000);
+  };
+  */
 
   lockScreenOrientation = async () => {
     await ScreenOrientation.lockAsync(
@@ -98,7 +117,7 @@ export default class Loaded extends Component {
       await soundObject.loadAsync(sound);
       await soundObject.playAsync();
     } catch (error) {
-      console.log("error playing sound", error);
+      console.warn("error playing sound", error);
     }
   };
 
@@ -162,6 +181,9 @@ export default class Loaded extends Component {
 
             <View style={styles.controls}>
               <Controls
+                coords={coords}
+                updateLocation={this.updateLocation}
+                heading={heading}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

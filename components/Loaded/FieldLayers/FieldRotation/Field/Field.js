@@ -18,13 +18,13 @@ const Field = ({
         width: layoutWidth
       }}
     >
-      {enemies.map(({ coords, id, life }) => {
+      {enemies.map(({ position, id, life }) => {
         return (
           <Enemy
             key={id}
-            coords={coords}
+            position={position}
             id={id}
-            life={life}
+            enemyIsDead={life < 1}
             updateEnemies={updateEnemies}
             removeEnemy={removeEnemy}
             handleEnemyCollision={handleEnemyCollision}

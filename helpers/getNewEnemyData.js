@@ -7,9 +7,8 @@ export const getRandomNumberToLimit = limit => {
 export const getNewEnemyData = () => {
   const entryAxis = Math.round(Math.random());
   const entryPoint = Math.round(Math.random()) === 0 ? -5 : 105;
-
   const newEnemyData = {
-    coords: [
+    position: [
       entryAxis === 0 ? entryPoint : getRandomNumberToLimit(100),
       entryAxis === 1 ? entryPoint : getRandomNumberToLimit(100)
     ],

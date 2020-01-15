@@ -10,7 +10,7 @@ import { Asset } from "expo-asset";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
-import EnemiesLogic from "./EnemiesLogic/EnemiesLogic";
+import EntitiesLogic from "./EntitiesLogic/EntitiesLogic";
 
 const powerUp = Asset.fromModule(require("../../../assets/sounds/powerUp.wav"));
 
@@ -22,18 +22,20 @@ class FieldLayers extends Component {
 
   componentDidUpdate(prevProps) {
     const { coords } = prevProps;
+
     if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
-      this.handlePlayerPositionUpdate(coords, this.props.coords);
+      this.handlePlayerCoordsUpdate(coords, this.props.coords);
     }
   }
 
-  handlePlayerPositionUpdate = (start, end) => {
+  handlePlayerCoordsUpdate = (start, end) => {
     const { playerPosition } = this.state;
 
     const playerMovementDistanceX = getMetersTraveled(
       [start.longitude, start.latitude],
       [end.longitude, start.latitude]
     );
+
     const playerMovementDistanceY = getMetersTraveled(
       [start.longitude, start.latitude],
       [start.longitude, end.latitude]
@@ -119,7 +121,7 @@ class FieldLayers extends Component {
           playerPosition={playerPosition}
         />
 
-        <EnemiesLogic
+        <EntitiesLogic
           createEnemy={this.createEnemy}
           updateEnemies={this.updateEnemies}
           enemies={enemies}

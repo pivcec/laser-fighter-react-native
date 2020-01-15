@@ -15,6 +15,10 @@ class EnemiesLogic extends Component {
     }, 100);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
   componentDidUpdate(prevProps) {
     const { playerIsDead, playerPosition } = prevProps;
     if (this.props.enemies.length === 1) {
@@ -29,48 +33,42 @@ class EnemiesLogic extends Component {
       JSON.stringify(playerPosition) !==
       JSON.stringify(this.props.playerPosition)
     ) {
-      this.handleUpdateEnemyHeadings(playerPosition, this.props.playerPosition);
+      this.handleUpdateAllEntityPositions(
+        playerPosition,
+        this.props.playerPosition
+      );
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
-
-  handleUpdateEnemyHeadings = (prevPlayerPosition, newPlayerPosition) => {
+  handleUpdateAllEntityPositions = (prevPlayerPosition, newPlayerPosition) => {
     const { enemies } = this.props;
-    const playerMovementX = prevPlayerPosition[0] - newPlayerPosition[0];
-    const playerMovementY = prevPlayerPosition[1] - newPlayerPosition[1];
-    const updatedEnemies = enemies.map(({ coords, id, heading, life }) => {
+    const playerMovementX = prevPlayerPosition[0] + -newPlayerPosition[0];
+    const playerMovementY = prevPlayerPosition[1] + -newPlayerPosition[1];
+    const updatedEnemies = enemies.map(({ position, id, heading, life }) => {
       return {
-        coords,
+        position: [
+          position[0] + playerMovementX,
+          position[1] + playerMovementY
+        ],
         id,
-        heading: [heading[0] + playerMovementX, heading[1] + playerMovementY],
+        heading,
         life
       };
     });
     this.props.updateEnemies(updatedEnemies);
   };
 
-  handlePlayerRespawn = () => {
-    const newEnemies = [];
-    this.props.updateEnemies(newEnemies);
-    this.spawnEnemy();
-    this.spawnEnemy();
-  };
-
   animateEnemies = () => {
     const { enemies } = this.props;
-
     if (enemies.length > 0) {
-      const updatedEnemies = enemies.map(({ coords, id, heading, life }) => {
+      const updatedEnemies = enemies.map(({ position, id, heading, life }) => {
         return {
-          coords: [
-            this.getNewCoord(coords[0], heading[0]),
-            this.getNewCoord(coords[1], heading[1])
+          position: [
+            this.getNewPosition(position[0], heading[0]),
+            this.getNewPosition(position[1], heading[1])
           ],
           id,
-          heading: this.checkIfHeadingNeedsToBeUpdated(coords, heading),
+          heading: this.checkIfEnemyHasReachedHeading(position, heading),
           life
         };
       });
@@ -78,23 +76,33 @@ class EnemiesLogic extends Component {
     }
   };
 
-  checkIfHeadingNeedsToBeUpdated = (coords, heading) => {
-    if (JSON.stringify(coords) === JSON.stringify(heading)) {
+  getNewPosition = (position, nextPosition) => {
+    if (position > nextPosition) {
+      return position - 1;
+    }
+
+    if (position < nextPosition) {
+      return position + 1;
+    }
+
+    return position;
+  };
+
+  checkIfEnemyHasReachedHeading = (position, heading) => {
+    if (
+      Math.round(position[0]) === heading[0] &&
+      Math.round(position[1]) === heading[1]
+    ) {
       return [getRandomNumberToLimit(100), getRandomNumberToLimit(100)];
     }
     return heading;
   };
 
-  getNewCoord = (coord, nextCoord) => {
-    if (coord > nextCoord) {
-      return coord - 1;
-    }
-
-    if (coord < nextCoord) {
-      return coord + 1;
-    }
-
-    return nextCoord;
+  handlePlayerRespawn = () => {
+    const newEnemies = [];
+    this.props.updateEnemies(newEnemies);
+    this.spawnEnemy();
+    this.spawnEnemy();
   };
 
   spawnEnemy = () => {

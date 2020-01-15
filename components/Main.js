@@ -30,6 +30,9 @@ class Main extends Component {
       require("../assets/images/rusty.jpg"),
       require("../assets/images/yinyang.png"),
       require("../assets/images/eyeball.png"),
+      require("../assets/images/splosion.gif"),
+      require("../assets/images/luck.png")
+      /*
       require("../assets/images/splosion/1.png"),
       require("../assets/images/splosion/2.png"),
       require("../assets/images/splosion/3.png"),
@@ -42,6 +45,7 @@ class Main extends Component {
       require("../assets/images/splosion/10.png"),
       require("../assets/images/splosion/11.png"),
       require("../assets/images/splosion/12.png")
+      */
     ]);
 
     const audioAssets = cacheAudio([require("../assets/sounds/zenMusic.mp3")]);
