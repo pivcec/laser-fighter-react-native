@@ -46,38 +46,6 @@ export const getDirectionKey = bearing => {
   return Math.round(((bearing %= 360) < 0 ? bearing + 360 : bearing) / 45) % 8;
 };
 
-export const getNewPlayerPosition = (
-  playerPosition,
-  playerMovement,
-  directionKey
-) => {
-  playerHasMovedSouth = [3, 4, 5].includes(directionKey);
-  playerHasMovedNorth = [0, 1, 7].includes(directionKey);
-  playerHasMovedEast = [5, 6, 7].includes(directionKey);
-  playerHasMovedWest = [1, 2, 3].includes(directionKey);
-
-  let newPlayerPositionX = playerPosition[0];
-  let newPlayerPositionY = playerPosition[1];
-
-  if (playerHasMovedEast) {
-    newPlayerPositionX = playerPosition[0] + playerMovement[0];
-  }
-
-  if (playerHasMovedWest) {
-    newPlayerPositionX = playerPosition[0] - playerMovement[0];
-  }
-
-  if (playerHasMovedSouth) {
-    newPlayerPositionY = playerPosition[1] + playerMovement[1];
-  }
-
-  if (playerHasMovedNorth) {
-    newPlayerPositionY = playerPosition[1] - playerMovement[1];
-  }
-
-  return [newPlayerPositionX, newPlayerPositionY];
-};
-
 export const getRotatedEnemyPosition = (heading, enemies) => {
   return enemies.map(enemy => {
     const { position } = enemy;

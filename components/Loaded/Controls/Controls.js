@@ -7,7 +7,7 @@ import {
   ImageBackground,
   Image
 } from "react-native";
-import brushedMetal from "../../../assets/images/rusty.jpg";
+import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 // import MockMovement from "./MockMovement/MockMovement";
 
@@ -54,7 +54,7 @@ export default class Controls extends Component {
         <View style={styles.chargerContainer}>
           <Charger playerLaserIsCharging={playerLaserIsCharging} />
         </View>
-        <ImageBackground source={brushedMetal} style={styles.imageBackground}>
+        <ImageBackground source={rustyMetal} style={styles.imageBackground}>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
@@ -67,13 +67,13 @@ export default class Controls extends Component {
               />
             </TouchableOpacity>
           </View>
+
           {/*
           <MockMovement
             coords={coords}
             updateLocation={updateLocation}
             heading={heading}
-          />
-          */}
+          />*/}
         </ImageBackground>
       </View>
     );

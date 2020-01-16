@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
 import { View, Image, StyleSheet } from "react-native";
 import { playerWidthAndHeight } from "../../../../../../constants/constants";
 import { Animated } from "react-native";
@@ -57,10 +58,18 @@ class Enemy extends Component {
     }).start(() => this.rotateEnemy());
   };
 
+  handleGenerateChiToken = position => {
+    const zeroToNine = getRandomNumberToLimit(9);
+    if (zeroToNine === 0) {
+      console.warn("generate token in this position", position);
+    }
+  };
+
   handleEnemyIsDead = () => {
-    const { id, removeEnemy } = this.props;
+    const { id, position, removeEnemy } = this.props;
     setTimeout(() => {
       removeEnemy(id);
+      this.handleGenerateChiToken(position);
     }, 1000);
   };
 

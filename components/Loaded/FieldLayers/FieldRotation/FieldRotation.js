@@ -36,9 +36,11 @@ class FieldRotation extends Component {
       enemies,
       layoutWidth,
       updateEnemies,
-      removeEnemy,
       handleEnemyCollision,
-      playerIsDead
+      playerIsDead,
+      playerPosition,
+      playSound,
+      increaseKarma
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -56,9 +58,11 @@ class FieldRotation extends Component {
           enemies={enemies}
           layoutWidth={layoutWidth}
           updateEnemies={updateEnemies}
-          removeEnemy={removeEnemy}
           handleEnemyCollision={handleEnemyCollision}
           playerIsDead={playerIsDead}
+          playerPosition={playerPosition}
+          playSound={playSound}
+          increaseKarma={increaseKarma}
         />
       </Animated.View>
     );
@@ -70,9 +74,11 @@ FieldRotation.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,
-  removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
-  playerIsDead: PropTypes.bool.isRequired
+  playerIsDead: PropTypes.bool.isRequired,
+  playerPosition: PropTypes.array.isRequired,
+  playSound: PropTypes.func.isRequired,
+  increaseKarma: PropTypes.func.isRequired
 };
 
 export default FieldRotation;
