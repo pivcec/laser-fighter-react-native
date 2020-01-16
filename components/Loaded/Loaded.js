@@ -46,6 +46,13 @@ export default class Loaded extends Component {
     this.playSound(zenMusic);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { layoutWidth } = prevState;
+    if (!layoutWidth && this.state.layoutWidth) {
+      console.warn("this.props.layoutWidth", this.state.layoutWidth);
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.animateCoords);
   }
@@ -151,6 +158,7 @@ export default class Loaded extends Component {
       karma
     } = this.state;
     const playerIsDead = chi < 1;
+
     return (
       <View
         style={styles.container}

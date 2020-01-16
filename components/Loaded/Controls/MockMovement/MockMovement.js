@@ -26,8 +26,8 @@ const MockMovement = ({ coords, updateLocation, heading }) => {
     <>
       <View>
         <Text>{`player heading: ${heading}`}</Text>
-        <Text>{`player lat: ${coords.latitude}`}</Text>
-        <Text>{`player lng: ${coords.longitude}`}</Text>
+        {/*<Text>{`player lat: ${coords.latitude}`}</Text>*/}
+        {/*<Text>{`player lng: ${coords.longitude}`}</Text>*/}
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity

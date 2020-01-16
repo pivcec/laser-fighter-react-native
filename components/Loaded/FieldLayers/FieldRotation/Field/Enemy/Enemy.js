@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image } from "react-native";
 import { playerWidthAndHeight } from "../../../../../../constants/constants";
+import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
+import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
 import { Animated } from "react-native";
 // import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
 
@@ -58,19 +59,24 @@ class Enemy extends Component {
     }).start(() => this.rotateEnemy());
   };
 
-  handleGenerateChiToken = position => {
+  handleEnemyIsDead = () => {
+    const { id } = this.props;
+    setTimeout(() => {
+      this.handleGenerateChiToken();
+      this.props.removeEnemy(id);
+    }, 1000);
+  };
+
+  handleGenerateChiToken = () => {
+    const { chiTokens, position } = this.props;
+    /*
     const zeroToNine = getRandomNumberToLimit(9);
     if (zeroToNine === 0) {
       console.warn("generate token in this position", position);
     }
-  };
-
-  handleEnemyIsDead = () => {
-    const { id, position, removeEnemy } = this.props;
-    setTimeout(() => {
-      removeEnemy(id);
-      this.handleGenerateChiToken(position);
-    }, 1000);
+    */
+    const newChiToken = getNewChiToken(position);
+    this.props.updateChiTokens([...chiTokens, newChiToken]);
   };
 
   render() {
@@ -96,7 +102,10 @@ class Enemy extends Component {
           >
             <Image
               source={require("../../../../../../assets/images/eyeball.png")}
-              style={styles.enemy}
+              style={{
+                width: `100%`,
+                height: `100%`
+              }}
             />
           </Animated.View>
         )}
@@ -108,13 +117,15 @@ class Enemy extends Component {
               top: `${position[1] - playerPositionOffset}%`,
               left: `${position[0] - playerPositionOffset}%`,
               width: `${playerWidthAndHeight}%`,
-              height: `${playerWidthAndHeight}%`,
-              zIndex: 1
+              height: `${playerWidthAndHeight}%`
             }}
           >
             <Image
               source={require("../../../../../../assets/images/splosion.gif")}
-              style={styles.enemy}
+              style={{
+                width: `100%`,
+                height: `100%`
+              }}
             />
             {/*<AnimatedImageSeries removeEnemy={removeEnemy} id={id} />*/}
           </View>
@@ -123,13 +134,6 @@ class Enemy extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  enemy: {
-    width: "100%",
-    height: "100%"
-  }
-});
 
 export default Enemy;
 
@@ -140,5 +144,7 @@ Enemy.propTypes = {
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
-  playerIsDead: PropTypes.bool.isRequired
+  playerIsDead: PropTypes.bool.isRequired,
+  chiTokens: PropTypes.array.isRequired,
+  updateChiTokens: PropTypes.func.isRequired
 };

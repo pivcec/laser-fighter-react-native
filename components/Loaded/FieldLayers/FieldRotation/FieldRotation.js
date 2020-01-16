@@ -40,7 +40,10 @@ class FieldRotation extends Component {
       playerIsDead,
       playerPosition,
       playSound,
-      increaseKarma
+      increaseKarma,
+      chiTokens,
+      updateChiTokens,
+      heading
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -63,6 +66,9 @@ class FieldRotation extends Component {
           playerPosition={playerPosition}
           playSound={playSound}
           increaseKarma={increaseKarma}
+          chiTokens={chiTokens}
+          updateChiTokens={updateChiTokens}
+          heading={heading}
         />
       </Animated.View>
     );
@@ -78,7 +84,9 @@ FieldRotation.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerPosition: PropTypes.array.isRequired,
   playSound: PropTypes.func.isRequired,
-  increaseKarma: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired,
+  chiTokens: PropTypes.array.isRequired,
+  updateChiTokens: PropTypes.func.isRequired
 };
 
 export default FieldRotation;

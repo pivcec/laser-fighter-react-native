@@ -19,7 +19,7 @@ class FieldLayers extends Component {
       const updatedPlayerPosition = handleGetUpdatedPlayerPosition(
         coords,
         this.props.coords,
-        this.props.playerPosition
+        this.state.playerPosition
       );
       this.setState({ playerPosition: updatedPlayerPosition });
     }
@@ -37,8 +37,12 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
+  updateChiTokens = newChiTokens => {
+    this.setState({ chiTokens: newChiTokens });
+  };
+
   render() {
-    const { enemies, playerPosition } = this.state;
+    const { enemies, playerPosition, chiTokens } = this.state;
     const {
       layoutWidth,
       heading,
@@ -50,7 +54,6 @@ class FieldLayers extends Component {
       karma,
       playerIsDead
     } = this.props;
-
     return (
       <>
         <Grid layoutWidth={layoutWidth} />
@@ -76,6 +79,8 @@ class FieldLayers extends Component {
           playerPosition={playerPosition}
           playSound={this.props.playSound}
           increaseKarma={this.props.increaseKarma}
+          chiTokens={chiTokens}
+          updateChiTokens={this.updateChiTokens}
         />
       </>
     );

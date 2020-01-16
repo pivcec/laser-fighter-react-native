@@ -9,6 +9,7 @@ import {
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
 import Enemy from "./Enemy/Enemy";
+import ChiToken from "./ChiToken/ChiToken";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
@@ -68,6 +69,7 @@ class Field extends Component {
   handlePlayerRespawn = () => {
     const newEnemies = [getNewEnemyData(), getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
+    this.props.updateChiTokens([]);
   };
 
   createEnemy = () => {
@@ -90,7 +92,10 @@ class Field extends Component {
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
-      playerIsDead
+      playerIsDead,
+      chiTokens,
+      updateChiTokens,
+      heading
     } = this.props;
 
     return (
@@ -100,6 +105,9 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
+        {chiTokens.map(({ position, id }) => {
+          return <ChiToken position={position} key={id} heading={heading} />;
+        })}
         {enemies.map(({ position, id, life }) => {
           return (
             <Enemy
@@ -111,6 +119,8 @@ class Field extends Component {
               removeEnemy={this.removeEnemy}
               handleEnemyCollision={handleEnemyCollision}
               playerIsDead={playerIsDead}
+              chiTokens={chiTokens}
+              updateChiTokens={updateChiTokens}
             />
           );
         })}
@@ -127,7 +137,10 @@ Field.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerPosition: PropTypes.array.isRequired,
   playSound: PropTypes.func.isRequired,
-  increaseKarma: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired,
+  chiTokens: PropTypes.array.isRequired,
+  updateChiTokens: PropTypes.func.isRequired,
+  heading: PropTypes.number.isRequired
 };
 
 export default Field;

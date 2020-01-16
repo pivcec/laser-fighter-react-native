@@ -31,7 +31,8 @@ class Main extends Component {
       require("../assets/images/yinyang.png"),
       require("../assets/images/eyeball.png"),
       require("../assets/images/splosion.gif"),
-      require("../assets/images/luck.png")
+      require("../assets/images/luck.png"),
+      require("../assets/images/lotus.png")
       /*
       require("../assets/images/splosion/1.png"),
       require("../assets/images/splosion/2.png"),
