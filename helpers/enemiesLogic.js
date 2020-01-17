@@ -1,23 +1,23 @@
 import { v4 as uuid } from "uuid";
 import { getRandomNumberToLimit } from "./utils";
+import exactMath from "exact-math";
+
+const config = { returnString: false };
 
 export const getNewPosition = (position, nextPosition) => {
   if (position > nextPosition) {
-    return position - 1;
+    return exactMath.sub(position, 1, config);
   }
 
   if (position < nextPosition) {
-    return position + 1;
+    return exactMath.add(position, 1, config);
   }
 
   return position;
 };
 
 export const checkIfEnemyHasReachedHeading = (position, heading) => {
-  if (
-    Math.round(position[0]) === heading[0] &&
-    Math.round(position[1]) === heading[1]
-  ) {
+  if (position[0] === heading[0] && position[1] === heading[1]) {
     return [getRandomNumberToLimit(100), getRandomNumberToLimit(100)];
   }
   return heading;
@@ -44,11 +44,31 @@ export const getUpdatedEnemyPositions = (
   prevPlayerPosition,
   newPlayerPosition
 ) => {
-  const playerMovementX = prevPlayerPosition[0] + -newPlayerPosition[0];
-  const playerMovementY = prevPlayerPosition[1] + -newPlayerPosition[1];
+  const playerMovementX = exactMath.add(
+    prevPlayerPosition[0],
+    -newPlayerPosition[0],
+    config
+  );
+  const playerMovementY = exactMath.add(
+    prevPlayerPosition[1],
+    -newPlayerPosition[1],
+    config
+  );
+
   return (updatedEnemies = enemies.map(({ position, id, heading, life }) => {
     return {
-      position: [position[0] + playerMovementX, position[1] + playerMovementY],
+      position: [
+        exactMath.add(
+          position[0],
+          Math.round(playerMovementX).toFixed(2),
+          config
+        ),
+        exactMath.add(
+          position[1],
+          Math.round(playerMovementY).toFixed(2),
+          config
+        )
+      ],
       id,
       heading,
       life

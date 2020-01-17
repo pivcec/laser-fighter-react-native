@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { View, Image } from "react-native";
-import { playerWidthAndHeight } from "../../../../../../constants/constants";
+import { Image } from "react-native";
+import { playerWidthAndHeight } from "../../../../../../../constants/constants";
 import { Animated } from "react-native";
 
 const playerPositionOffset = playerWidthAndHeight / 2;
@@ -45,12 +45,12 @@ class ChiToken extends Component {
           position: "absolute",
           top: `${position[1] - playerPositionOffset}%`,
           left: `${position[0] - playerPositionOffset}%`,
-          width: `${playerWidthAndHeight * 2}%`,
-          height: `${playerWidthAndHeight * 2}%`
+          width: `${playerWidthAndHeight}%`,
+          height: `${playerWidthAndHeight}%`
         }}
       >
         <Image
-          source={require("../../../../../../assets/images/lotus.png")}
+          source={require("../../../../../../../assets/images/lotus.png")}
           style={{
             width: "100%",
             height: "75%"

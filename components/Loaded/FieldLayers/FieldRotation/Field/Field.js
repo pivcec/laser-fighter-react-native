@@ -8,14 +8,19 @@ import {
   getNewEnemyData,
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
+import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
-import ChiToken from "./ChiToken/ChiToken";
+import ChiTokensLayer from "./ChiTokensLayer/ChiTokensLayer";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
 );
 
 class Field extends Component {
+  state = {
+    playerPosition: [50, 50]
+  };
+
   componentDidMount() {
     this.createEnemy();
     this.createEnemy();
@@ -25,10 +30,21 @@ class Field extends Component {
     }, 100);
   }
 
-  componentDidUpdate(prevProps) {
-    const { playerIsDead, playerPosition } = prevProps;
+  componentDidUpdate(prevProps, prevState) {
+    const { playerIsDead, coords } = prevProps;
+    const { playerPosition } = prevState;
+
+    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
+      const updatedPlayerPosition = handleGetUpdatedPlayerPosition(
+        coords,
+        this.props.coords,
+        this.state.playerPosition
+      );
+      this.setState({ playerPosition: updatedPlayerPosition });
+    }
+
     if (this.props.enemies.length === 1) {
-      this.createEnemy();
+      // this.createEnemy();
     }
 
     if (playerIsDead && !this.props.playerIsDead) {
@@ -37,12 +53,12 @@ class Field extends Component {
 
     if (
       JSON.stringify(playerPosition) !==
-      JSON.stringify(this.props.playerPosition)
+      JSON.stringify(this.state.playerPosition)
     ) {
       const updatedEnemies = getUpdatedEnemyPositions(
         this.props.enemies,
         playerPosition,
-        this.props.playerPosition
+        this.state.playerPosition
       );
       this.props.updateEnemies(updatedEnemies);
     }
@@ -87,6 +103,7 @@ class Field extends Component {
   };
 
   render() {
+    const { playerPosition } = this.state;
     const {
       enemies,
       layoutWidth,
@@ -95,7 +112,8 @@ class Field extends Component {
       playerIsDead,
       chiTokens,
       updateChiTokens,
-      heading
+      heading,
+      coords
     } = this.props;
 
     return (
@@ -105,9 +123,14 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
-        {chiTokens.map(({ position, id }) => {
-          return <ChiToken position={position} key={id} heading={heading} />;
-        })}
+        {chiTokens.length > 0 && (
+          <ChiTokensLayer
+            chiTokens={chiTokens}
+            heading={heading}
+            coords={coords}
+            playerPosition={playerPosition}
+          />
+        )}
         {enemies.map(({ position, id, life }) => {
           return (
             <Enemy
@@ -135,12 +158,12 @@ Field.propTypes = {
   updateEnemies: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  playerPosition: PropTypes.array.isRequired,
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   chiTokens: PropTypes.array.isRequired,
   updateChiTokens: PropTypes.func.isRequired,
-  heading: PropTypes.number.isRequired
+  heading: PropTypes.number.isRequired,
+  coords: PropTypes.object.isRequired
 };
 
 export default Field;

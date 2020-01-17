@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { handleGetUpdatedPlayerPosition } from "../../../helpers/playerLogic";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
@@ -8,22 +7,8 @@ import FieldRotation from "./FieldRotation/FieldRotation";
 class FieldLayers extends Component {
   state = {
     enemies: [],
-    chiTokens: [],
-    playerPosition: [50, 50]
+    chiTokens: []
   };
-
-  componentDidUpdate(prevProps) {
-    const { coords } = prevProps;
-
-    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
-      const updatedPlayerPosition = handleGetUpdatedPlayerPosition(
-        coords,
-        this.props.coords,
-        this.state.playerPosition
-      );
-      this.setState({ playerPosition: updatedPlayerPosition });
-    }
-  }
 
   updateEnemy = updatedEnemy => {
     this.setState(prevState => ({
@@ -42,7 +27,7 @@ class FieldLayers extends Component {
   };
 
   render() {
-    const { enemies, playerPosition, chiTokens } = this.state;
+    const { enemies, chiTokens } = this.state;
     const {
       layoutWidth,
       heading,
@@ -76,11 +61,11 @@ class FieldLayers extends Component {
           updateEnemies={this.updateEnemies}
           handleEnemyCollision={handleEnemyCollision}
           playerIsDead={playerIsDead}
-          playerPosition={playerPosition}
           playSound={this.props.playSound}
           increaseKarma={this.props.increaseKarma}
           chiTokens={chiTokens}
           updateChiTokens={this.updateChiTokens}
+          coords={coords}
         />
       </>
     );
