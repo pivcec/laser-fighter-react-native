@@ -10,7 +10,7 @@ import {
 } from "../../../../../helpers/enemiesLogic";
 import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
-import PositionChiToken from "./PositionChiToken/PositionChiToken";
+// import PositionChiToken from "./PositionChiToken/PositionChiToken";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
@@ -126,6 +126,7 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
+        {/*
         {chiToken && (
           <PositionChiToken
             chiToken={chiToken}
@@ -135,6 +136,7 @@ class Field extends Component {
             handleChiTokenCollision={handleChiTokenCollision}
           />
         )}
+        */}
         {enemies.map(({ position, id, life }) => {
           return (
             <Enemy
@@ -149,6 +151,7 @@ class Field extends Component {
               chiToken={chiToken}
               updateChiToken={this.updateChiToken}
               handlePlayerRespawn={handleChiTokenCollision}
+              playerPosition={playerPosition}
             />
           );
         })}

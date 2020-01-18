@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Image } from "react-native";
-import { enemyWidthAndHeight } from "../../../../../../constants/constants";
+import {
+  enemyWidthAndHeight,
+  exactMathConfig
+} from "../../../../../../constants/constants";
 import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
 import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
 import { checkForCollisionWithPlayer } from "../../../../../../helpers/playerLogic";
 import { Animated } from "react-native";
+import exactMath from "exact-math";
 // import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
 
-const enemyPositionOffset = enemyWidthAndHeight / 2;
+const enemyPositionOffset = exactMath.div(enemyWidthAndHeight, 2);
 
 class Enemy extends Component {
   state = {

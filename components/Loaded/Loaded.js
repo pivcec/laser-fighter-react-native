@@ -18,7 +18,7 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 export default class Loaded extends Component {
   state = {
-    coords: {},
+    coords: { latitude: 0, longitude: 0 },
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
@@ -41,7 +41,7 @@ export default class Loaded extends Component {
 
   async componentDidMount() {
     this.lockScreenOrientation();
-    this.watchLocation();
+    // this.watchLocation();
     this.watchHeading();
     this.playSound(zenMusic);
   }
@@ -56,6 +56,7 @@ export default class Loaded extends Component {
     );
   };
 
+  /*
   watchLocation = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
@@ -69,6 +70,7 @@ export default class Loaded extends Component {
       Location.watchPositionAsync(options, this.updateLocation);
     }
   };
+  */
 
   updateLocation = locationObject => {
     this.setState({

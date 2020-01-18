@@ -1,16 +1,30 @@
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
+import exactMath from "exact-math";
+import { exactMathConfig } from "../../../../constants/constants";
 
 const getNewCoords = (coords, direction) => {
   if (direction === "up") {
-    return { latitude: coords.latitude + 0.0001, longitude: coords.longitude };
+    return {
+      latitude: exactMath.add(coords.latitude, 0.0001, exactMathConfig),
+      longitude: coords.longitude
+    };
   } else if (direction === "down") {
-    return { latitude: coords.latitude - 0.0001, longitude: coords.longitude };
+    return {
+      latitude: exactMath.sub(coords.latitude, 0.0001, exactMathConfig),
+      longitude: coords.longitude
+    };
   } else if (direction === "left") {
-    return { latitude: coords.latitude, longitude: coords.longitude + 0.0001 };
+    return {
+      latitude: coords.latitude,
+      longitude: exactMath.add(coords.longitude, 0.0001, exactMathConfig)
+    };
   }
-  return { latitude: coords.latitude, longitude: coords.longitude - 0.0001 };
+  return {
+    latitude: coords.latitude,
+    longitude: exactMath.sub(coords.longitude, 0.0001, exactMathConfig)
+  };
 };
 
 const handleOnPressIn = (coords, direction, updateLocation) => {
@@ -25,7 +39,7 @@ const MockMovement = ({ coords, updateLocation, heading }) => {
   return (
     <>
       <View>
-        <Text>{`player heading: ${heading}`}</Text>
+        {/*<Text>{`player heading: ${heading}`}</Text>*/}
         {/*<Text>{`player lat: ${coords.latitude}`}</Text>*/}
         {/*<Text>{`player lng: ${coords.longitude}`}</Text>*/}
       </View>
