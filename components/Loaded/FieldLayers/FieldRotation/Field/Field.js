@@ -10,7 +10,7 @@ import {
 } from "../../../../../helpers/enemiesLogic";
 import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
-import ChiTokensLayer from "./ChiTokensLayer/ChiTokensLayer";
+import PositionChiToken from "./PositionChiToken/PositionChiToken";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
@@ -18,7 +18,8 @@ const powerUp = Asset.fromModule(
 
 class Field extends Component {
   state = {
-    playerPosition: [50, 50]
+    playerPosition: [50, 50],
+    chiToken: null
   };
 
   componentDidMount() {
@@ -44,7 +45,7 @@ class Field extends Component {
     }
 
     if (this.props.enemies.length === 1) {
-      // this.createEnemy();
+      this.createEnemy();
     }
 
     if (playerIsDead && !this.props.playerIsDead) {
@@ -85,7 +86,7 @@ class Field extends Component {
   handlePlayerRespawn = () => {
     const newEnemies = [getNewEnemyData(), getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
-    this.props.updateChiTokens([]);
+    this.updateChiToken(null);
   };
 
   createEnemy = () => {
@@ -102,18 +103,19 @@ class Field extends Component {
     this.props.updateEnemies(newEnemies);
   };
 
+  updateChiToken = newChiToken => {
+    this.setState({ chiToken: newChiToken });
+  };
+
   render() {
-    const { playerPosition } = this.state;
+    const { playerPosition, chiToken } = this.state;
     const {
       enemies,
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
       playerIsDead,
-      chiTokens,
-      updateChiTokens,
-      heading,
-      coords
+      heading
     } = this.props;
 
     return (
@@ -123,12 +125,12 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
-        {chiTokens.length > 0 && (
-          <ChiTokensLayer
-            chiTokens={chiTokens}
+        {chiToken && (
+          <PositionChiToken
+            chiToken={chiToken}
             heading={heading}
-            coords={coords}
             playerPosition={playerPosition}
+            updateChiToken={this.updateChiToken}
           />
         )}
         {enemies.map(({ position, id, life }) => {
@@ -142,8 +144,8 @@ class Field extends Component {
               removeEnemy={this.removeEnemy}
               handleEnemyCollision={handleEnemyCollision}
               playerIsDead={playerIsDead}
-              chiTokens={chiTokens}
-              updateChiTokens={updateChiTokens}
+              chiToken={chiToken}
+              updateChiToken={this.updateChiToken}
             />
           );
         })}
@@ -160,8 +162,6 @@ Field.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
-  chiTokens: PropTypes.array.isRequired,
-  updateChiTokens: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
   coords: PropTypes.object.isRequired
 };

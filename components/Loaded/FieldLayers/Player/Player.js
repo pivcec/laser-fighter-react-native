@@ -96,7 +96,10 @@ class Player extends Component {
 }
 
 const styles = StyleSheet.create({
-  playerContainer: { position: "absolute", borderRadius: 20, zIndex: 1 },
+  playerContainer: {
+    position: "absolute",
+    zIndex: 1
+  },
   player: {
     width: "100%",
     height: "100%"

@@ -6,8 +6,7 @@ import FieldRotation from "./FieldRotation/FieldRotation";
 
 class FieldLayers extends Component {
   state = {
-    enemies: [],
-    chiTokens: []
+    enemies: []
   };
 
   updateEnemy = updatedEnemy => {
@@ -22,12 +21,8 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  updateChiTokens = newChiTokens => {
-    this.setState({ chiTokens: newChiTokens });
-  };
-
   render() {
-    const { enemies, chiTokens } = this.state;
+    const { enemies } = this.state;
     const {
       layoutWidth,
       heading,
@@ -63,8 +58,6 @@ class FieldLayers extends Component {
           playerIsDead={playerIsDead}
           playSound={this.props.playSound}
           increaseKarma={this.props.increaseKarma}
-          chiTokens={chiTokens}
-          updateChiTokens={this.updateChiTokens}
           coords={coords}
         />
       </>
@@ -81,7 +74,8 @@ FieldLayers.propTypes = {
   karma: PropTypes.number.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
-  playerIsDead: PropTypes.bool.isRequired
+  playerIsDead: PropTypes.bool.isRequired,
+  coords: PropTypes.object.isRequired
 };
 
 export default FieldLayers;

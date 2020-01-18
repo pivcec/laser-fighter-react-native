@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Image } from "react-native";
-import { playerWidthAndHeight } from "../../../../../../constants/constants";
+import { enemyWidthAndHeight } from "../../../../../../constants/constants";
 import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
 import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
+import { checkForCollisionWithPlayer } from "../../../../../../helpers/playerLogic";
 import { Animated } from "react-native";
 // import AnimatedImageSeries from "./AnimatedImageSeries/AnimatedImageSeries";
 
-const playerPositionOffset = playerWidthAndHeight / 2;
+const enemyPositionOffset = enemyWidthAndHeight / 2;
 
 class Enemy extends Component {
   state = {
@@ -25,22 +26,16 @@ class Enemy extends Component {
     const { playerIsDead } = this.props;
 
     if (
-      JSON.stringify(position) !== JSON.stringify(this.props.position) &&
+      (position[0] !== this.props.position[0] ||
+        position[1] !== this.props.position[1]) &&
       !playerIsDead &&
       !enemyIsDead
     ) {
-      const { position } = this.props;
-      const top = position[1] - playerPositionOffset;
-      const left = position[0] - playerPositionOffset;
-      const bottom = top + playerWidthAndHeight;
-      const right = left + playerWidthAndHeight;
-
-      if (
-        bottom > 50 - playerPositionOffset &&
-        top < 50 + playerPositionOffset &&
-        right > 50 - playerPositionOffset &&
-        left < 50 + playerPositionOffset
-      ) {
+      const hasCollided = checkForCollisionWithPlayer(
+        this.props.position,
+        enemyWidthAndHeight
+      );
+      if (hasCollided) {
         this.props.handleEnemyCollision();
       }
     }
@@ -68,15 +63,15 @@ class Enemy extends Component {
   };
 
   handleGenerateChiToken = () => {
-    const { chiTokens, position } = this.props;
-    /*
-    const zeroToNine = getRandomNumberToLimit(9);
-    if (zeroToNine === 0) {
-      console.warn("generate token in this position", position);
+    const { chiToken, position } = this.props;
+
+    if (!chiToken) {
+      const zeroToNine = getRandomNumberToLimit(1);
+      if (zeroToNine === 0) {
+        const newChiToken = getNewChiToken(position);
+        this.props.updateChiToken(newChiToken);
+      }
     }
-    */
-    const newChiToken = getNewChiToken(position);
-    this.props.updateChiTokens([...chiTokens, newChiToken]);
   };
 
   render() {
@@ -93,10 +88,10 @@ class Enemy extends Component {
             style={{
               transform: [{ rotate: interpolatedRotateAnimation }],
               position: "absolute",
-              top: `${position[1] - playerPositionOffset}%`,
-              left: `${position[0] - playerPositionOffset}%`,
-              width: `${playerWidthAndHeight}%`,
-              height: `${playerWidthAndHeight}%`,
+              top: `${position[1] - enemyPositionOffset}%`,
+              left: `${position[0] - enemyPositionOffset}%`,
+              width: `${enemyWidthAndHeight}%`,
+              height: `${enemyWidthAndHeight}%`,
               zIndex: 1
             }}
           >
@@ -114,10 +109,10 @@ class Enemy extends Component {
           <View
             style={{
               position: "absolute",
-              top: `${position[1] - playerPositionOffset}%`,
-              left: `${position[0] - playerPositionOffset}%`,
-              width: `${playerWidthAndHeight}%`,
-              height: `${playerWidthAndHeight}%`
+              top: `${position[1] - enemyPositionOffset}%`,
+              left: `${position[0] - enemyPositionOffset}%`,
+              width: `${enemyWidthAndHeight}%`,
+              height: `${enemyWidthAndHeight}%`
             }}
           >
             <Image
@@ -145,6 +140,6 @@ Enemy.propTypes = {
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  chiTokens: PropTypes.array.isRequired,
-  updateChiTokens: PropTypes.func.isRequired
+  chiToken: PropTypes.object,
+  updateChiToken: PropTypes.func.isRequired
 };

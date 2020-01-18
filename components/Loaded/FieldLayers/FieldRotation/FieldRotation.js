@@ -40,8 +40,7 @@ class FieldRotation extends Component {
       playerIsDead,
       playSound,
       increaseKarma,
-      chiTokens,
-      updateChiTokens,
+      chiToken,
       heading,
       coords
     } = this.props;
@@ -65,8 +64,7 @@ class FieldRotation extends Component {
           playerIsDead={playerIsDead}
           playSound={playSound}
           increaseKarma={increaseKarma}
-          chiTokens={chiTokens}
-          updateChiTokens={updateChiTokens}
+          chiToken={chiToken}
           heading={heading}
           coords={coords}
         />
@@ -84,8 +82,7 @@ FieldRotation.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
-  chiTokens: PropTypes.array.isRequired,
-  updateChiTokens: PropTypes.func.isRequired,
+  chiToken: PropTypes.object,
   coords: PropTypes.object.isRequired
 };
 
