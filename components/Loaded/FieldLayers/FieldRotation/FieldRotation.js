@@ -42,7 +42,8 @@ class FieldRotation extends Component {
       increaseKarma,
       chiToken,
       heading,
-      coords
+      coords,
+      handleChiTokenCollision
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -67,6 +68,7 @@ class FieldRotation extends Component {
           chiToken={chiToken}
           heading={heading}
           coords={coords}
+          handleChiTokenCollision={handleChiTokenCollision}
         />
       </Animated.View>
     );
@@ -83,7 +85,8 @@ FieldRotation.propTypes = {
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   chiToken: PropTypes.object,
-  coords: PropTypes.object.isRequired
+  coords: PropTypes.object.isRequired,
+  handleChiTokenCollision: PropTypes.func.isRequired
 };
 
 export default FieldRotation;

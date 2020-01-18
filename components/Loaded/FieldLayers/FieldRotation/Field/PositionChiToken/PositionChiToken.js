@@ -47,7 +47,8 @@ class PositionChiToken extends Component {
     const {
       chiToken: { position },
       playerPosition,
-      updateChiToken
+      updateChiToken,
+      handleChiTokenCollision
     } = this.props;
     const positionOffsetX = exactMath.sub(
       position[0],
@@ -98,6 +99,7 @@ class PositionChiToken extends Component {
         <ChiToken
           position={[finalPositionX, finalPositionY]}
           updateChiToken={updateChiToken}
+          handleChiTokenCollision={handleChiTokenCollision}
         />
       </Animated.View>
     );
@@ -110,5 +112,6 @@ PositionChiToken.propTypes = {
   chiToken: PropTypes.object.isRequired,
   heading: PropTypes.number.isRequired,
   playerPosition: PropTypes.array.isRequired,
-  updateChiToken: PropTypes.func.isRequired
+  updateChiToken: PropTypes.func.isRequired,
+  handleChiTokenCollision: PropTypes.func.isRequired
 };

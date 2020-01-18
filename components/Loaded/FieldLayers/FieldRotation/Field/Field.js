@@ -115,7 +115,8 @@ class Field extends Component {
       updateEnemies,
       handleEnemyCollision,
       playerIsDead,
-      heading
+      heading,
+      handleChiTokenCollision
     } = this.props;
 
     return (
@@ -131,6 +132,7 @@ class Field extends Component {
             heading={heading}
             playerPosition={playerPosition}
             updateChiToken={this.updateChiToken}
+            handleChiTokenCollision={handleChiTokenCollision}
           />
         )}
         {enemies.map(({ position, id, life }) => {
@@ -146,6 +148,7 @@ class Field extends Component {
               playerIsDead={playerIsDead}
               chiToken={chiToken}
               updateChiToken={this.updateChiToken}
+              handlePlayerRespawn={handleChiTokenCollision}
             />
           );
         })}
@@ -163,7 +166,8 @@ Field.propTypes = {
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
-  coords: PropTypes.object.isRequired
+  coords: PropTypes.object.isRequired,
+  handleChiTokenCollision: PropTypes.func.isRequired
 };
 
 export default Field;

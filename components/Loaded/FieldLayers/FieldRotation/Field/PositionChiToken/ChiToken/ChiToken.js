@@ -23,7 +23,8 @@ class ChiToken extends Component {
   }
 
   handlePlayerCollision = () => {
-    console.warn("handle collision");
+    this.props.updateChiToken(null);
+    this.props.handleChiTokenCollision();
   };
 
   render() {
@@ -43,5 +44,6 @@ export default ChiToken;
 
 ChiToken.propTypes = {
   position: PropTypes.array.isRequired,
-  updateChiToken: PropTypes.func.isRequired
+  updateChiToken: PropTypes.func.isRequired,
+  handleChiTokenCollision: PropTypes.func.isRequired
 };

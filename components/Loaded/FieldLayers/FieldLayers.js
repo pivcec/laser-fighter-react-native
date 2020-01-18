@@ -32,7 +32,8 @@ class FieldLayers extends Component {
       handleEnemyCollision,
       chi,
       karma,
-      playerIsDead
+      playerIsDead,
+      handleChiTokenCollision
     } = this.props;
     return (
       <>
@@ -59,6 +60,7 @@ class FieldLayers extends Component {
           playSound={this.props.playSound}
           increaseKarma={this.props.increaseKarma}
           coords={coords}
+          handleChiTokenCollision={handleChiTokenCollision}
         />
       </>
     );
@@ -75,7 +77,8 @@ FieldLayers.propTypes = {
   increaseKarma: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  coords: PropTypes.object.isRequired
+  coords: PropTypes.object.isRequired,
+  handleChiTokenCollision: PropTypes.func.isRequired
 };
 
 export default FieldLayers;

@@ -66,7 +66,7 @@ class Enemy extends Component {
     const { chiToken, position } = this.props;
 
     if (!chiToken) {
-      const zeroToNine = getRandomNumberToLimit(1);
+      const zeroToNine = getRandomNumberToLimit(4);
       if (zeroToNine === 0) {
         const newChiToken = getNewChiToken(position);
         this.props.updateChiToken(newChiToken);

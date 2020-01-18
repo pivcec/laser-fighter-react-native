@@ -18,7 +18,7 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 export default class Loaded extends Component {
   state = {
-    coords: { latitude: 43.5167427956572, longitude: 16.431551669773466 },
+    coords: {},
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
@@ -41,38 +41,14 @@ export default class Loaded extends Component {
 
   async componentDidMount() {
     this.lockScreenOrientation();
-    // this.watchLocation();
+    this.watchLocation();
     this.watchHeading();
     this.playSound(zenMusic);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { layoutWidth } = prevState;
-    if (!layoutWidth && this.state.layoutWidth) {
-      console.warn("this.props.layoutWidth", this.state.layoutWidth);
-    }
   }
 
   componentWillUnmount() {
     clearInterval(this.animateCoords);
   }
-
-  /*
-  animateLocationForDebug = () => {
-    this.setState({
-      coords: { latitude: 43.5167427956572, longitude: 16.431551669773466 }
-    });
-
-    this.animateCoords = setInterval(() => {
-      this.setState(prevState => ({
-        coords: {
-          latitude: prevState.coords.latitude + 0.00001,
-          longitude: prevState.coords.longitude + 0.00001
-        }
-      }));
-    }, 1000);
-  };
-  */
 
   lockScreenOrientation = async () => {
     await ScreenOrientation.lockAsync(
@@ -147,6 +123,13 @@ export default class Loaded extends Component {
     }));
   };
 
+  handleChiTokenCollision = () => {
+    const { chi } = this.state;
+    if (chi < 100) {
+      this.setState({ chi: 100 });
+    }
+  };
+
   render() {
     const {
       layoutWidth,
@@ -184,6 +167,7 @@ export default class Loaded extends Component {
                 chi={chi}
                 karma={karma}
                 playerIsDead={playerIsDead}
+                handleChiTokenCollision={this.handleChiTokenCollision}
               />
             </View>
 

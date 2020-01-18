@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
-// import MockMovement from "./MockMovement/MockMovement";
+import MockMovement from "./MockMovement/MockMovement";
 
 export default class Controls extends Component {
   state = {
@@ -68,13 +68,11 @@ export default class Controls extends Component {
             </TouchableOpacity>
           </View>
 
-          {/*
           <MockMovement
             coords={coords}
             updateLocation={updateLocation}
             heading={heading}
           />
-          */}
         </ImageBackground>
       </View>
     );
