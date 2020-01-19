@@ -42,7 +42,7 @@ class FieldRotation extends Component {
       increaseKarma,
       chiToken,
       heading,
-      coords,
+      touchCoords,
       handleChiTokenCollision
     } = this.props;
 
@@ -67,7 +67,7 @@ class FieldRotation extends Component {
           increaseKarma={increaseKarma}
           chiToken={chiToken}
           heading={heading}
-          coords={coords}
+          touchCoords={touchCoords}
           handleChiTokenCollision={handleChiTokenCollision}
         />
       </Animated.View>
@@ -85,7 +85,7 @@ FieldRotation.propTypes = {
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   chiToken: PropTypes.object,
-  coords: PropTypes.object.isRequired,
+  touchCoords: PropTypes.array.isRequired,
   handleChiTokenCollision: PropTypes.func.isRequired
 };
 

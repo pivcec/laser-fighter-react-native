@@ -18,7 +18,6 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 export default class Loaded extends Component {
   state = {
-    coords: { latitude: 0, longitude: 0 },
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
@@ -41,7 +40,6 @@ export default class Loaded extends Component {
 
   async componentDidMount() {
     this.lockScreenOrientation();
-    // this.watchLocation();
     this.watchHeading();
     this.playSound(zenMusic);
   }
@@ -54,28 +52,6 @@ export default class Loaded extends Component {
     await ScreenOrientation.lockAsync(
       ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
-  };
-
-  /*
-  watchLocation = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    const options = {
-      accuracy: Location.BestForNavigation,
-      timeInterval: 300,
-      distanceInterval: 1
-    };
-
-    if (status === "granted") {
-      Location.watchPositionAsync(options, this.updateLocation);
-    }
-  };
-  */
-
-  updateLocation = locationObject => {
-    this.setState({
-      coords: locationObject.coords
-    });
   };
 
   watchHeading = async () => {
@@ -135,7 +111,6 @@ export default class Loaded extends Component {
   render() {
     const {
       layoutWidth,
-      coords,
       heading,
       playerLaserCharge,
       playerLaserCharge: { isCharging },
@@ -161,7 +136,6 @@ export default class Loaded extends Component {
               <FieldLayers
                 layoutWidth={layoutWidth}
                 heading={heading}
-                coords={coords}
                 playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
                 increaseKarma={this.increaseKarma}
@@ -175,9 +149,7 @@ export default class Loaded extends Component {
 
             <View style={styles.controls}>
               <Controls
-                coords={coords}
-                updateLocation={this.updateLocation}
-                heading={heading}
+                // heading={heading}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

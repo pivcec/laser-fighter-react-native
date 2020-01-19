@@ -8,6 +8,8 @@ import {
   getNewEnemyData,
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
+import exactMath from "exact-math";
+import { exactMathConfig } from "../../../../../constants/constants";
 import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
 // import PositionChiToken from "./PositionChiToken/PositionChiToken";
@@ -32,16 +34,29 @@ class Field extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { playerIsDead, coords } = prevProps;
+    const { playerIsDead, touchCoords } = prevProps;
     const { playerPosition } = prevState;
 
-    if (JSON.stringify(coords) !== JSON.stringify(this.props.coords)) {
-      const updatedPlayerPosition = handleGetUpdatedPlayerPosition(
-        coords,
-        this.props.coords,
-        this.state.playerPosition
-      );
-      this.setState({ playerPosition: updatedPlayerPosition });
+    if (touchCoords.length > 0 && this.props.touchCoords.length > 0) {
+      if (
+        touchCoords[0] !== this.props.touchCoords[0] ||
+        touchCoords[1] !== this.props.touchCoords[1]
+      ) {
+        const touchMovementX = exactMath.sub(
+          touchCoords[0],
+          this.props.touchCoords[0],
+          exactMathConfig
+        );
+        const touchMovementY = exactMath.sub(
+          touchCoords[1],
+          this.props.touchCoords[1],
+          exactMathConfig
+        );
+        this.handleTouchMovement(
+          exactMath.div(touchMovementX, 5),
+          exactMath.div(touchMovementY, 5)
+        );
+      }
     }
 
     if (this.props.enemies.length === 1) {
@@ -64,6 +79,15 @@ class Field extends Component {
       this.props.updateEnemies(updatedEnemies);
     }
   }
+
+  handleTouchMovement = (touchMovementX, touchMovementY) => {
+    const { playerPosition } = this.state;
+    const newPlayerPosition = [
+      exactMath.add(playerPosition[0], touchMovementX, exactMathConfig),
+      exactMath.add(playerPosition[1], touchMovementY, exactMathConfig)
+    ];
+    this.setState({ playerPosition: newPlayerPosition });
+  };
 
   animateEnemies = () => {
     const { enemies } = this.props;
@@ -169,7 +193,7 @@ Field.propTypes = {
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
-  coords: PropTypes.object.isRequired,
+  touchCoords: PropTypes.array.isRequired,
   handleChiTokenCollision: PropTypes.func.isRequired
 };
 

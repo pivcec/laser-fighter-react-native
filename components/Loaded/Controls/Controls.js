@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
-import MockMovement from "./MockMovement/MockMovement";
+// import MockMovement from "./MockMovement/MockMovement";
 
 export default class Controls extends Component {
   state = {
@@ -43,12 +43,7 @@ export default class Controls extends Component {
   };
 
   render() {
-    const {
-      playerLaserIsCharging,
-      coords,
-      updateLocation,
-      heading
-    } = this.props;
+    const { playerLaserIsCharging, heading } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.chargerContainer}>
@@ -68,11 +63,10 @@ export default class Controls extends Component {
             </TouchableOpacity>
           </View>
 
+          {/*
           <MockMovement
-            coords={coords}
-            updateLocation={updateLocation}
             heading={heading}
-          />
+          />*/}
         </ImageBackground>
       </View>
     );
@@ -122,7 +116,5 @@ Controls.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerLaserIsCharging: PropTypes.bool.isRequired,
   togglePlayerLaserIsCharging: PropTypes.func.isRequired,
-  coords: PropTypes.object.isRequired,
-  updateLocation: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired
 };

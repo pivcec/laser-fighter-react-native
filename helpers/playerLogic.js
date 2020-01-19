@@ -94,9 +94,6 @@ const getUpdatedPlayerPosition = (
     );
   }
 
-  // console.log("playerPosition[0]", playerPosition[0]);
-  // console.log("playerMovement[0]", playerMovement[0]);
-  // console.log("newPlayerPositionX", newPlayerPositionX);
   return [newPlayerPositionX, newPlayerPositionY];
 };
 

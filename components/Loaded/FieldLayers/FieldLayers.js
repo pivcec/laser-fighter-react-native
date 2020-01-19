@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
+import { View } from "react-native";
 
 class FieldLayers extends Component {
   state = {
-    enemies: []
+    enemies: [],
+    touchCoords: []
   };
 
   updateEnemy = updatedEnemy => {
@@ -21,12 +23,31 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
+  handleTouchStart = event => {
+    /*
+    this.setState({
+      touchCoords: [event.locationX, event.locationY]
+    });
+    */
+  };
+
+  handleTouchMove = event => {
+    this.setState({
+      touchCoords: [event.locationX, event.locationY]
+    });
+  };
+
+  handleTouchEnd = event => {
+    this.setState({
+      touchCoords: []
+    });
+  };
+
   render() {
-    const { enemies } = this.state;
+    const { enemies, touchCoords } = this.state;
     const {
       layoutWidth,
       heading,
-      coords,
       playerLaserCharge,
       playSound,
       handleEnemyCollision,
@@ -50,18 +71,30 @@ class FieldLayers extends Component {
           karma={karma}
         />
 
-        <FieldRotation
-          heading={heading}
-          layoutWidth={layoutWidth}
-          enemies={enemies}
-          updateEnemies={this.updateEnemies}
-          handleEnemyCollision={handleEnemyCollision}
-          playerIsDead={playerIsDead}
-          playSound={this.props.playSound}
-          increaseKarma={this.props.increaseKarma}
-          coords={coords}
-          handleChiTokenCollision={handleChiTokenCollision}
-        />
+        <View
+          onTouchStart={e => {
+            this.handleTouchStart(e.nativeEvent);
+          }}
+          onTouchMove={e => {
+            this.handleTouchMove(e.nativeEvent);
+          }}
+          onTouchEnd={e => {
+            this.handleTouchEnd(e.nativeEvent);
+          }}
+        >
+          <FieldRotation
+            heading={heading}
+            layoutWidth={layoutWidth}
+            enemies={enemies}
+            updateEnemies={this.updateEnemies}
+            handleEnemyCollision={handleEnemyCollision}
+            playerIsDead={playerIsDead}
+            playSound={this.props.playSound}
+            increaseKarma={this.props.increaseKarma}
+            touchCoords={touchCoords}
+            handleChiTokenCollision={handleChiTokenCollision}
+          />
+        </View>
       </>
     );
   }
@@ -77,7 +110,6 @@ FieldLayers.propTypes = {
   increaseKarma: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  coords: PropTypes.object.isRequired,
   handleChiTokenCollision: PropTypes.func.isRequired
 };
 
