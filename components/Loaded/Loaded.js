@@ -149,7 +149,7 @@ export default class Loaded extends Component {
 
             <View style={styles.controls}>
               <Controls
-                // heading={heading}
+                heading={heading}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

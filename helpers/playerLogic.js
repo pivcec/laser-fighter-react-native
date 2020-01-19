@@ -49,6 +49,7 @@ export const checkForCollisionWithPlayer = (position, widthAndHeight) => {
   return false;
 };
 
+/*
 const getUpdatedPlayerPosition = (
   playerPosition,
   playerMovement,
@@ -123,3 +124,5 @@ export const handleGetUpdatedPlayerPosition = (start, end, playerPosition) => {
 
   return updatedPlayerPosition;
 };
+
+*/

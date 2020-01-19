@@ -23,14 +23,6 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  handleTouchStart = event => {
-    /*
-    this.setState({
-      touchCoords: [event.locationX, event.locationY]
-    });
-    */
-  };
-
   handleTouchMove = event => {
     this.setState({
       touchCoords: [event.locationX, event.locationY]
@@ -72,9 +64,6 @@ class FieldLayers extends Component {
         />
 
         <View
-          onTouchStart={e => {
-            this.handleTouchStart(e.nativeEvent);
-          }}
           onTouchMove={e => {
             this.handleTouchMove(e.nativeEvent);
           }}

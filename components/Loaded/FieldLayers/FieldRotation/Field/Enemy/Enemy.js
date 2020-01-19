@@ -36,7 +36,10 @@ class Enemy extends Component {
       !enemyIsDead
     ) {
       const hasCollided = checkForCollisionWithPlayer(
-        this.props.position,
+        [
+          this.props.position[0] - enemyPositionOffset,
+          this.props.position[1] - enemyPositionOffset
+        ],
         enemyWidthAndHeight
       );
       if (hasCollided) {
@@ -61,11 +64,12 @@ class Enemy extends Component {
   handleEnemyIsDead = () => {
     const { id } = this.props;
     setTimeout(() => {
-      this.handleGenerateChiToken();
+      // this.handleGenerateChiToken();
       this.props.removeEnemy(id);
     }, 1000);
   };
 
+  /*
   handleGenerateChiToken = () => {
     const { chiToken, position } = this.props;
 
@@ -77,6 +81,7 @@ class Enemy extends Component {
       }
     }
   };
+  */
 
   render() {
     const { position, enemyIsDead } = this.props;

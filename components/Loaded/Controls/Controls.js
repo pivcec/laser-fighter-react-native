@@ -63,10 +63,7 @@ export default class Controls extends Component {
             </TouchableOpacity>
           </View>
 
-          {/*
-          <MockMovement
-            heading={heading}
-          />*/}
+          {/*<MockMovement heading={heading} />*/}
         </ImageBackground>
       </View>
     );
