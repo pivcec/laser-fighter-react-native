@@ -25,8 +25,6 @@ export default class Loaded extends Component {
     karma: 0
   };
 
-  animateCoords = null;
-
   findDimensions = e => {
     const {
       nativeEvent: {
@@ -42,10 +40,6 @@ export default class Loaded extends Component {
     this.lockScreenOrientation();
     this.watchHeading();
     this.playSound(zenMusic);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.animateCoords);
   }
 
   lockScreenOrientation = async () => {

@@ -7,3 +7,15 @@ export const chiTokenWidthAndHeight = 14;
 export const playerLaserChargeTime = 5000;
 
 export const exactMathConfig = { returnString: false };
+
+export const lavaCellPositionPattern = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 0],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1]
+];

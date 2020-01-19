@@ -41,7 +41,7 @@ class FieldRotation extends Component {
       playSound,
       increaseKarma,
       chiToken,
-      heading,
+      // heading,
       touchCoords,
       handleChiTokenCollision
     } = this.props;
@@ -66,7 +66,7 @@ class FieldRotation extends Component {
           playSound={playSound}
           increaseKarma={increaseKarma}
           chiToken={chiToken}
-          heading={heading}
+          // heading={heading}
           touchCoords={touchCoords}
           handleChiTokenCollision={handleChiTokenCollision}
         />

@@ -8,7 +8,7 @@ const PlayAgainMenu = ({ handlePlayAgain }) => {
     <View style={styles.container}>
       <View style={styles.overlay}>
         <View style={styles.messageContainer}>
-          <Text style={styles.message}>you are dead</Text>
+          <Text style={styles.message}>you died, loser</Text>
         </View>
         <View style={styles.lotusContainer}>
           <Image
@@ -18,7 +18,7 @@ const PlayAgainMenu = ({ handlePlayAgain }) => {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handlePlayAgain}>
-            <Text style={styles.button}>reincarnate now</Text>
+            <Text style={styles.button}>reincarnate</Text>
           </TouchableOpacity>
         </View>
       </View>

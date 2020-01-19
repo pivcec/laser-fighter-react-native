@@ -58,12 +58,12 @@ export const getUpdatedEnemyPositions = (
   return (updatedEnemies = enemies.map(({ position, id, heading, life }) => {
     return {
       position: [
-        exactMath.add(
+        exactMath.sub(
           position[0],
           Math.round(playerMovementX).toFixed(2),
           config
         ),
-        exactMath.add(
+        exactMath.sub(
           position[1],
           Math.round(playerMovementY).toFixed(2),
           config

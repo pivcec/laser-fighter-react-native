@@ -10,8 +10,9 @@ import {
 } from "../../../../../helpers/enemiesLogic";
 import exactMath from "exact-math";
 import { exactMathConfig } from "../../../../../constants/constants";
-import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
+// import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
+import LavaLayer from "./LavaLayer/LavaLayer";
 // import PositionChiToken from "./PositionChiToken/PositionChiToken";
 
 const powerUp = Asset.fromModule(
@@ -20,8 +21,8 @@ const powerUp = Asset.fromModule(
 
 class Field extends Component {
   state = {
-    playerPosition: [50, 50],
-    chiToken: null
+    playerPosition: [50, 50]
+    // chiToken: null
   };
 
   componentDidMount() {
@@ -83,8 +84,8 @@ class Field extends Component {
   handleTouchMovement = (touchMovementX, touchMovementY) => {
     const { playerPosition } = this.state;
     const newPlayerPosition = [
-      exactMath.add(playerPosition[0], touchMovementX, exactMathConfig),
-      exactMath.add(playerPosition[1], touchMovementY, exactMathConfig)
+      exactMath.sub(playerPosition[0], touchMovementX, exactMathConfig),
+      exactMath.sub(playerPosition[1], touchMovementY, exactMathConfig)
     ];
     this.setState({ playerPosition: newPlayerPosition });
   };
@@ -110,7 +111,7 @@ class Field extends Component {
   handlePlayerRespawn = () => {
     const newEnemies = [getNewEnemyData(), getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
-    this.updateChiToken(null);
+    // this.updateChiToken(null);
   };
 
   createEnemy = () => {
@@ -127,9 +128,11 @@ class Field extends Component {
     this.props.updateEnemies(newEnemies);
   };
 
+  /*
   updateChiToken = newChiToken => {
     this.setState({ chiToken: newChiToken });
   };
+  */
 
   render() {
     const { playerPosition, chiToken } = this.state;
@@ -139,7 +142,7 @@ class Field extends Component {
       updateEnemies,
       handleEnemyCollision,
       playerIsDead,
-      heading,
+      // heading,
       handleChiTokenCollision
     } = this.props;
 
@@ -179,6 +182,7 @@ class Field extends Component {
             />
           );
         })}
+        <LavaLayer playerPosition={playerPosition} />
       </View>
     );
   }
@@ -192,7 +196,7 @@ Field.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
   increaseKarma: PropTypes.func.isRequired,
-  heading: PropTypes.number.isRequired,
+  // heading: PropTypes.number.isRequired,
   touchCoords: PropTypes.array.isRequired,
   handleChiTokenCollision: PropTypes.func.isRequired
 };

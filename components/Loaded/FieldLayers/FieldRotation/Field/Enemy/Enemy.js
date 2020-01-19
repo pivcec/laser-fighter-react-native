@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Image } from "react-native";
 import {
-  enemyWidthAndHeight,
-  exactMathConfig
+  enemyWidthAndHeight
+  // exactMathConfig
 } from "../../../../../../constants/constants";
-import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
-import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
+// import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
+// import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
 import { checkForCollisionWithPlayer } from "../../../../../../helpers/playerLogic";
 import { Animated } from "react-native";
 import exactMath from "exact-math";
@@ -148,7 +148,7 @@ Enemy.propTypes = {
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
-  playerIsDead: PropTypes.bool.isRequired,
-  chiToken: PropTypes.object,
-  updateChiToken: PropTypes.func.isRequired
+  playerIsDead: PropTypes.bool.isRequired
+  // chiToken: PropTypes.object,
+  // updateChiToken: PropTypes.func.isRequired
 };
