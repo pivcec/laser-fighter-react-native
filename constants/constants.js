@@ -8,7 +8,7 @@ export const playerLaserChargeTime = 5000;
 
 export const exactMathConfig = { returnString: false };
 
-export const lavaCellPositionPattern = [
+export const vortexCellsPositionPattern = [
   [-1, -1],
   [-1, 0],
   [-1, 1],

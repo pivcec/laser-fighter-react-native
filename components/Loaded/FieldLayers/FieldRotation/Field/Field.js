@@ -12,7 +12,7 @@ import exactMath from "exact-math";
 import { exactMathConfig } from "../../../../../constants/constants";
 // import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
-import LavaLayer from "./LavaLayer/LavaLayer";
+import VortexLayer from "./VortexLayer/VortexLayer";
 // import PositionChiToken from "./PositionChiToken/PositionChiToken";
 
 const powerUp = Asset.fromModule(
@@ -182,7 +182,10 @@ class Field extends Component {
             />
           );
         })}
-        <LavaLayer playerPosition={playerPosition} />
+        <VortexLayer
+          playerPosition={playerPosition}
+          layoutWidth={layoutWidth}
+        />
       </View>
     );
   }
