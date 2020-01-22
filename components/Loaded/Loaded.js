@@ -95,12 +95,14 @@ export default class Loaded extends Component {
     }));
   };
 
+  /*
   handleChiTokenCollision = () => {
     const { chi } = this.state;
     if (chi < 100) {
       this.setState({ chi: 100 });
     }
   };
+  */
 
   render() {
     const {
@@ -132,12 +134,11 @@ export default class Loaded extends Component {
                 heading={heading}
                 playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
-                increaseKarma={this.increaseKarma}
                 handleEnemyCollision={this.handleEnemyCollision}
+                increaseKarma={this.increaseKarma}
                 chi={chi}
                 karma={karma}
                 playerIsDead={playerIsDead}
-                handleChiTokenCollision={this.handleChiTokenCollision}
               />
             </View>
 

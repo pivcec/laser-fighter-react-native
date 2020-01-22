@@ -6,8 +6,7 @@ import FieldRotation from "./FieldRotation/FieldRotation";
 
 class FieldLayers extends Component {
   state = {
-    enemies: [],
-    touchCoords: []
+    enemies: []
   };
 
   updateEnemy = updatedEnemy => {
@@ -22,20 +21,8 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  handleTouchMove = nativeEvent => {
-    this.setState({
-      touchCoords: [nativeEvent.locationX, nativeEvent.locationY]
-    });
-  };
-
-  handleTouchEnd = () => {
-    this.setState({
-      touchCoords: []
-    });
-  };
-
   render() {
-    const { enemies, touchCoords } = this.state;
+    const { enemies } = this.state;
     const {
       layoutWidth,
       heading,
@@ -45,7 +32,7 @@ class FieldLayers extends Component {
       chi,
       karma,
       playerIsDead,
-      handleChiTokenCollision
+      increaseKarma
     } = this.props;
     return (
       <>
@@ -59,11 +46,7 @@ class FieldLayers extends Component {
           handleEnemyCollision={handleEnemyCollision}
           playerIsDead={playerIsDead}
           playSound={this.props.playSound}
-          increaseKarma={this.props.increaseKarma}
-          touchCoords={touchCoords}
-          handleChiTokenCollision={handleChiTokenCollision}
-          handleTouchMove={this.handleTouchMove}
-          handleTouchEnd={this.handleTouchEnd}
+          increaseKarma={increaseKarma}
         />
 
         <Player
@@ -88,10 +71,9 @@ FieldLayers.propTypes = {
   playSound: PropTypes.func.isRequired,
   chi: PropTypes.number.isRequired,
   karma: PropTypes.number.isRequired,
-  increaseKarma: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  handleChiTokenCollision: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired
 };
 
 export default FieldLayers;

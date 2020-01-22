@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  ImageBackground,
-  Image
-} from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
+import FireLaser from "./FireLaser/FireLaser";
+import Movement from "./Movement/Movement";
 // import MockMovement from "./MockMovement/MockMovement";
 
 export default class Controls extends Component {
@@ -34,12 +30,20 @@ export default class Controls extends Component {
     }
   }
 
-  handleOnPressIn = () => {
+  handleFireLaserOnPressIn = () => {
     this.setState({ buttonIsPressed: true });
   };
 
-  handleOnPressOut = () => {
+  handleFireLaserOnPressOut = () => {
     this.setState({ buttonIsPressed: false });
+  };
+
+  handleMovementOnPressIn = directionKey => {
+    console.warn(directionKey);
+  };
+
+  handleMovementOnPressOut = directionKey => {
+    console.warn(directionKey);
   };
 
   render() {
@@ -50,19 +54,14 @@ export default class Controls extends Component {
           <Charger playerLaserIsCharging={playerLaserIsCharging} />
         </View>
         <ImageBackground source={rustyMetal} style={styles.imageBackground}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPressIn={this.handleOnPressIn}
-              onPressOut={this.handleOnPressOut}
-            >
-              <Image
-                source={require("../../../assets/images/luck.png")}
-                style={styles.buttonImage}
-              />
-            </TouchableOpacity>
-          </View>
-
+          <FireLaser
+            handleOnPressIn={this.handleFireLaserOnPressIn}
+            handleOnPressOut={this.handleFireLaserOnPressOut}
+          />
+          <Movement
+            handleOnPressIn={this.handleMovementOnPressIn}
+            handleOnPressOut={this.handleMovementOnPressOut}
+          />
           {/*<MockMovement heading={heading} />*/}
         </ImageBackground>
       </View>
@@ -79,33 +78,9 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 3,
-    justifyContent: "center",
-    alignItems: "center",
     width: "100%",
-    height: "100%"
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#DAA520",
-    borderRadius: 60,
-    height: 60,
-    width: 60,
-    borderWidth: 1
-  },
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
-    borderRadius: 50,
-    height: 50,
-    width: 50
-  },
-  buttonImage: {
-    width: 45,
-    height: 45
+    height: "100%",
+    flexDirection: "row"
   }
 });
 

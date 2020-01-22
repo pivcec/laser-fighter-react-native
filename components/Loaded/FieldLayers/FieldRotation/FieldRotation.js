@@ -40,11 +40,8 @@ class FieldRotation extends Component {
       handleEnemyCollision,
       playerIsDead,
       playSound,
-      increaseKarma,
-      chiToken,
       // heading,
-      touchCoords,
-      handleChiTokenCollision
+      increaseKarma
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -59,14 +56,7 @@ class FieldRotation extends Component {
           zIndex: 3
         }}
       >
-        <View
-          onTouchMove={e => {
-            this.props.handleTouchMove(e.nativeEvent);
-          }}
-          onTouchEnd={e => {
-            this.props.handleTouchEnd(e.nativeEvent);
-          }}
-        >
+        <View>
           <Field
             enemies={enemies}
             layoutWidth={layoutWidth}
@@ -74,11 +64,8 @@ class FieldRotation extends Component {
             handleEnemyCollision={handleEnemyCollision}
             playerIsDead={playerIsDead}
             playSound={playSound}
-            increaseKarma={increaseKarma}
-            chiToken={chiToken}
             // heading={heading}
-            touchCoords={touchCoords}
-            handleChiTokenCollision={handleChiTokenCollision}
+            increaseKarma={increaseKarma}
           />
         </View>
       </Animated.View>
@@ -94,12 +81,7 @@ FieldRotation.propTypes = {
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
-  increaseKarma: PropTypes.func.isRequired,
-  chiToken: PropTypes.object,
-  touchCoords: PropTypes.array.isRequired,
-  handleChiTokenCollision: PropTypes.func.isRequired,
-  handleTouchMove: PropTypes.func.isRequired,
-  handleTouchEnd: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired
 };
 
 export default FieldRotation;

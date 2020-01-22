@@ -9,7 +9,7 @@ const playerPositionOffset = playerWidthAndHeight / 2;
 
 const getChiColor = chi => {
   if (chi >= 75) {
-    return "white";
+    return "pink";
   }
 
   if (chi >= 50 && chi < 75) {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    color: "white",
+    color: "pink",
     margin: 3,
     zIndex: 3
   }

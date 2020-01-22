@@ -33,30 +33,8 @@ class Field extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { playerIsDead, touchCoords } = prevProps;
+    const { playerIsDead } = prevProps;
     const { playerPosition } = prevState;
-
-    if (touchCoords.length > 0 && this.props.touchCoords.length > 0) {
-      if (
-        touchCoords[0] !== this.props.touchCoords[0] ||
-        touchCoords[1] !== this.props.touchCoords[1]
-      ) {
-        const touchMovementX = exactMath.sub(
-          touchCoords[0],
-          this.props.touchCoords[0],
-          exactMathConfig
-        );
-        const touchMovementY = exactMath.sub(
-          touchCoords[1],
-          this.props.touchCoords[1],
-          exactMathConfig
-        );
-        this.handleTouchMovement(
-          exactMath.div(touchMovementX, 5),
-          exactMath.div(touchMovementY, 5)
-        );
-      }
-    }
 
     if (this.props.enemies.length === 1) {
       this.createEnemy();
@@ -78,15 +56,6 @@ class Field extends Component {
       this.props.updateEnemies(updatedEnemies);
     }
   }
-
-  handleTouchMovement = (touchMovementX, touchMovementY) => {
-    const { playerPosition } = this.state;
-    const newPlayerPosition = [
-      exactMath.sub(playerPosition[0], touchMovementX, exactMathConfig),
-      exactMath.sub(playerPosition[1], touchMovementY, exactMathConfig)
-    ];
-    this.setState({ playerPosition: newPlayerPosition });
-  };
 
   animateEnemies = () => {
     const { enemies } = this.props;
@@ -173,10 +142,8 @@ Field.propTypes = {
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
-  increaseKarma: PropTypes.func.isRequired,
   // heading: PropTypes.number.isRequired,
-  touchCoords: PropTypes.array.isRequired,
-  handleChiTokenCollision: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired
 };
 
 export default Field;
