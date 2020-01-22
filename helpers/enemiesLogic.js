@@ -1,16 +1,15 @@
 import { v4 as uuid } from "uuid";
 import { getRandomNumberToLimit } from "./utils";
 import exactMath from "exact-math";
-
-const config = { returnString: false };
+import { exactMathConfig } from "../constants/constants";
 
 export const getNewPosition = (position, nextPosition) => {
   if (position > nextPosition) {
-    return exactMath.sub(position, 1, config);
+    return exactMath.sub(position, 1, exactMathConfig);
   }
 
   if (position < nextPosition) {
-    return exactMath.add(position, 1, config);
+    return exactMath.add(position, 1, exactMathConfig);
   }
 
   return position;
@@ -47,12 +46,12 @@ export const getUpdatedEnemyPositions = (
   const playerMovementX = exactMath.add(
     prevPlayerPosition[0],
     -newPlayerPosition[0],
-    config
+    exactMathConfig
   );
   const playerMovementY = exactMath.add(
     prevPlayerPosition[1],
     -newPlayerPosition[1],
-    config
+    exactMathConfig
   );
 
   return (updatedEnemies = enemies.map(({ position, id, heading, life }) => {
@@ -61,12 +60,12 @@ export const getUpdatedEnemyPositions = (
         exactMath.sub(
           position[0],
           Math.round(playerMovementX).toFixed(2),
-          config
+          exactMathConfig
         ),
         exactMath.sub(
           position[1],
           Math.round(playerMovementY).toFixed(2),
-          config
+          exactMathConfig
         )
       ],
       id,

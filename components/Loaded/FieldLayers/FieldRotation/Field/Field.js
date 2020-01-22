@@ -12,8 +12,7 @@ import exactMath from "exact-math";
 import { exactMathConfig } from "../../../../../constants/constants";
 // import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
-import VortexLayer from "./VortexLayer/VortexLayer";
-// import PositionChiToken from "./PositionChiToken/PositionChiToken";
+import MazeZone from "./MazeZone/MazeZone";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
@@ -22,7 +21,6 @@ const powerUp = Asset.fromModule(
 class Field extends Component {
   state = {
     playerPosition: [50, 50]
-    // chiToken: null
   };
 
   componentDidMount() {
@@ -111,7 +109,7 @@ class Field extends Component {
   handlePlayerRespawn = () => {
     const newEnemies = [getNewEnemyData(), getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
-    // this.updateChiToken(null);
+    this.setState({ playerPosition: [50, 50] });
   };
 
   createEnemy = () => {
@@ -128,22 +126,15 @@ class Field extends Component {
     this.props.updateEnemies(newEnemies);
   };
 
-  /*
-  updateChiToken = newChiToken => {
-    this.setState({ chiToken: newChiToken });
-  };
-  */
-
   render() {
-    const { playerPosition, chiToken } = this.state;
+    const { playerPosition } = this.state;
     const {
       enemies,
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
-      playerIsDead,
+      playerIsDead
       // heading,
-      handleChiTokenCollision
     } = this.props;
 
     return (
@@ -153,17 +144,8 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
-        {/*
-        {chiToken && (
-          <PositionChiToken
-            chiToken={chiToken}
-            heading={heading}
-            playerPosition={playerPosition}
-            updateChiToken={this.updateChiToken}
-            handleChiTokenCollision={handleChiTokenCollision}
-          />
-        )}
-        */}
+        <MazeZone playerPosition={playerPosition} layoutWidth={layoutWidth} />
+
         {enemies.map(({ position, id, life }) => {
           return (
             <Enemy
@@ -175,17 +157,10 @@ class Field extends Component {
               removeEnemy={this.removeEnemy}
               handleEnemyCollision={handleEnemyCollision}
               playerIsDead={playerIsDead}
-              chiToken={chiToken}
-              updateChiToken={this.updateChiToken}
-              handlePlayerRespawn={handleChiTokenCollision}
               playerPosition={playerPosition}
             />
           );
         })}
-        <VortexLayer
-          playerPosition={playerPosition}
-          layoutWidth={layoutWidth}
-        />
       </View>
     );
   }

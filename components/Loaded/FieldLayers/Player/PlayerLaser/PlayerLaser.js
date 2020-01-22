@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     width: vw(100),
-    height: vh(100)
+    height: vh(100),
+    zIndex: 2
   }
 });
 

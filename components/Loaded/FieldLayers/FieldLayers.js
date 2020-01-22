@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
-import { View } from "react-native";
 
 class FieldLayers extends Component {
   state = {
@@ -23,13 +22,13 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  handleTouchMove = event => {
+  handleTouchMove = nativeEvent => {
     this.setState({
-      touchCoords: [event.locationX, event.locationY]
+      touchCoords: [nativeEvent.locationX, nativeEvent.locationY]
     });
   };
 
-  handleTouchEnd = event => {
+  handleTouchEnd = () => {
     this.setState({
       touchCoords: []
     });
@@ -52,6 +51,21 @@ class FieldLayers extends Component {
       <>
         <Grid layoutWidth={layoutWidth} />
 
+        <FieldRotation
+          heading={heading}
+          layoutWidth={layoutWidth}
+          enemies={enemies}
+          updateEnemies={this.updateEnemies}
+          handleEnemyCollision={handleEnemyCollision}
+          playerIsDead={playerIsDead}
+          playSound={this.props.playSound}
+          increaseKarma={this.props.increaseKarma}
+          touchCoords={touchCoords}
+          handleChiTokenCollision={handleChiTokenCollision}
+          handleTouchMove={this.handleTouchMove}
+          handleTouchEnd={this.handleTouchEnd}
+        />
+
         <Player
           layoutWidth={layoutWidth}
           heading={heading}
@@ -62,28 +76,6 @@ class FieldLayers extends Component {
           chi={chi}
           karma={karma}
         />
-
-        <View
-          onTouchMove={e => {
-            this.handleTouchMove(e.nativeEvent);
-          }}
-          onTouchEnd={e => {
-            this.handleTouchEnd(e.nativeEvent);
-          }}
-        >
-          <FieldRotation
-            heading={heading}
-            layoutWidth={layoutWidth}
-            enemies={enemies}
-            updateEnemies={this.updateEnemies}
-            handleEnemyCollision={handleEnemyCollision}
-            playerIsDead={playerIsDead}
-            playSound={this.props.playSound}
-            increaseKarma={this.props.increaseKarma}
-            touchCoords={touchCoords}
-            handleChiTokenCollision={handleChiTokenCollision}
-          />
-        </View>
       </>
     );
   }

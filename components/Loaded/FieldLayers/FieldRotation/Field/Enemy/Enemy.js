@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Image } from "react-native";
-import {
-  enemyWidthAndHeight
-  // exactMathConfig
-} from "../../../../../../constants/constants";
-// import { getRandomNumberToLimit } from "../../../../../../helpers/utils";
-// import { getNewChiToken } from "../../../../../../helpers/chiTokenLogic";
+import { enemyWidthAndHeight } from "../../../../../../constants/constants";
 import { checkForCollisionWithPlayer } from "../../../../../../helpers/playerLogic";
 import { Animated } from "react-native";
 import exactMath from "exact-math";
@@ -64,24 +59,9 @@ class Enemy extends Component {
   handleEnemyIsDead = () => {
     const { id } = this.props;
     setTimeout(() => {
-      // this.handleGenerateChiToken();
       this.props.removeEnemy(id);
     }, 1000);
   };
-
-  /*
-  handleGenerateChiToken = () => {
-    const { chiToken, position } = this.props;
-
-    if (!chiToken) {
-      const zeroToNine = getRandomNumberToLimit(4);
-      if (zeroToNine === 0) {
-        const newChiToken = getNewChiToken(position);
-        this.props.updateChiToken(newChiToken);
-      }
-    }
-  };
-  */
 
   render() {
     const { position, enemyIsDead } = this.props;
@@ -101,7 +81,7 @@ class Enemy extends Component {
               left: `${position[0] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
               height: `${enemyWidthAndHeight}%`,
-              zIndex: 1
+              zIndex: 2
             }}
           >
             <Image
@@ -121,7 +101,8 @@ class Enemy extends Component {
               top: `${position[1] - enemyPositionOffset}%`,
               left: `${position[0] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
-              height: `${enemyWidthAndHeight}%`
+              height: `${enemyWidthAndHeight}%`,
+              zIndex: 2
             }}
           >
             <Image
@@ -149,6 +130,4 @@ Enemy.propTypes = {
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired
-  // chiToken: PropTypes.object,
-  // updateChiToken: PropTypes.func.isRequired
 };

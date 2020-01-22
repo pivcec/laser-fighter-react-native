@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Animated } from "react-native";
+import { View, PanResponder } from "react-native";
 import Field from "./Field/Field";
 
 class FieldRotation extends Component {
@@ -54,22 +55,32 @@ class FieldRotation extends Component {
     return (
       <Animated.View
         style={{
-          transform: [{ rotate: interpolatedRotateAnimation }]
+          transform: [{ rotate: interpolatedRotateAnimation }],
+          zIndex: 3
         }}
       >
-        <Field
-          enemies={enemies}
-          layoutWidth={layoutWidth}
-          updateEnemies={updateEnemies}
-          handleEnemyCollision={handleEnemyCollision}
-          playerIsDead={playerIsDead}
-          playSound={playSound}
-          increaseKarma={increaseKarma}
-          chiToken={chiToken}
-          // heading={heading}
-          touchCoords={touchCoords}
-          handleChiTokenCollision={handleChiTokenCollision}
-        />
+        <View
+          onTouchMove={e => {
+            this.props.handleTouchMove(e.nativeEvent);
+          }}
+          onTouchEnd={e => {
+            this.props.handleTouchEnd(e.nativeEvent);
+          }}
+        >
+          <Field
+            enemies={enemies}
+            layoutWidth={layoutWidth}
+            updateEnemies={updateEnemies}
+            handleEnemyCollision={handleEnemyCollision}
+            playerIsDead={playerIsDead}
+            playSound={playSound}
+            increaseKarma={increaseKarma}
+            chiToken={chiToken}
+            // heading={heading}
+            touchCoords={touchCoords}
+            handleChiTokenCollision={handleChiTokenCollision}
+          />
+        </View>
       </Animated.View>
     );
   }
@@ -86,7 +97,9 @@ FieldRotation.propTypes = {
   increaseKarma: PropTypes.func.isRequired,
   chiToken: PropTypes.object,
   touchCoords: PropTypes.array.isRequired,
-  handleChiTokenCollision: PropTypes.func.isRequired
+  handleChiTokenCollision: PropTypes.func.isRequired,
+  handleTouchMove: PropTypes.func.isRequired,
+  handleTouchEnd: PropTypes.func.isRequired
 };
 
 export default FieldRotation;

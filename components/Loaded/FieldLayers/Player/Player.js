@@ -98,18 +98,20 @@ class Player extends Component {
 const styles = StyleSheet.create({
   playerContainer: {
     position: "absolute",
-    zIndex: 1
+    zIndex: 3
   },
   player: {
     width: "100%",
-    height: "100%"
+    height: "100%",
+    position: "absolute",
+    zIndex: 3
   },
   chi: {
     position: "absolute",
     top: 0,
     left: 0,
     margin: 3,
-    zIndex: 1
+    zIndex: 3
   },
   karma: {
     position: "absolute",
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
     right: 0,
     color: "white",
     margin: 3,
-    zIndex: 1
+    zIndex: 3
   }
 });
 
