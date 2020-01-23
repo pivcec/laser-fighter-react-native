@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import { getRandomNumberToLimit } from "./utils";
 import exactMath from "exact-math";
+import { getPositionRotatedAroundPrevious } from "./coordsCalculations";
 import { exactMathConfig } from "../constants/constants";
 
 export const getNewPosition = (position, nextPosition) => {
@@ -43,26 +44,18 @@ export const getUpdatedEnemyPositions = (
   prevPlayerPosition,
   newPlayerPosition
 ) => {
-  const playerMovementX = exactMath.add(
-    prevPlayerPosition[0],
-    -newPlayerPosition[0],
-    exactMathConfig
-  );
-  const playerMovementY = exactMath.add(
-    prevPlayerPosition[1],
-    -newPlayerPosition[1],
-    exactMathConfig
-  );
+  const playerMovementX = newPlayerPosition[0] - prevPlayerPosition[0];
+  const playerMovementY = newPlayerPosition[1] - prevPlayerPosition[1];
 
   return (updatedEnemies = enemies.map(({ position, id, heading, life }) => {
     return {
       position: [
-        exactMath.sub(
+        exactMath.add(
           position[0],
-          Math.round(playerMovementX).toFixed(2),
+          Math.round(-playerMovementX).toFixed(2),
           exactMathConfig
         ),
-        exactMath.sub(
+        exactMath.add(
           position[1],
           Math.round(playerMovementY).toFixed(2),
           exactMathConfig
@@ -73,4 +66,20 @@ export const getUpdatedEnemyPositions = (
       life
     };
   }));
+};
+
+export const getEnemiesWithRotatedPositions = (heading, enemies) => {
+  return enemies.map(enemy => {
+    const { position } = enemy;
+    return {
+      ...enemy,
+      position: getPositionRotatedAroundPrevious(
+        50,
+        50,
+        position[0],
+        position[1],
+        heading
+      )
+    };
+  });
 };

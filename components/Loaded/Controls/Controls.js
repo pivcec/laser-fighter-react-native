@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
-import {
-  getRotatedPosition,
-  getRotatedPositionAroundPrevious
-} from "../../../helpers/coordsCalculations";
+import { getPositionRotatedAroundPrevious } from "../../../helpers/coordsCalculations";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 import FireLaser from "./FireLaser/FireLaser";
@@ -49,7 +46,7 @@ export default class Controls extends Component {
       directionKey
     );
 
-    const rotatedNewPlayerPosition = getRotatedPositionAroundPrevious(
+    const rotatedNewPlayerPosition = getPositionRotatedAroundPrevious(
       playerPosition[0],
       playerPosition[1],
       newPlayerPosition[0],
@@ -95,7 +92,7 @@ export default class Controls extends Component {
           />
           <Movement handleOnPressIn={this.handleMovementOnPressIn} />
         </ImageBackground>
-        <Text style={{ color: "white" }}>{heading}</Text>
+        {/* <Text style={{ color: "white" }}>{heading}</Text> */}
       </View>
     );
   }

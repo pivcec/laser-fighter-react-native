@@ -46,26 +46,7 @@ export const getDirectionKey = bearing => {
   return Math.round(((bearing %= 360) < 0 ? bearing + 360 : bearing) / 45) % 8;
 };
 
-export const getRotatedEnemyPosition = (heading, enemies) => {
-  return enemies.map(enemy => {
-    const { position } = enemy;
-    return {
-      ...enemy,
-      position: getRotatedPosition(position[0], position[1], heading)
-    };
-  });
-};
-
-export const getRotatedPosition = (x, y, angle) => {
-  const radians = (Math.PI / 180) * angle;
-  const cos = Math.cos(radians);
-  const sin = Math.sin(radians);
-  const nx = cos * (x - 50) + sin * (y - 50) + 50;
-  const ny = cos * (y - 50) - sin * (x - 50) + 50;
-  return [nx, ny];
-};
-
-export const getRotatedPositionAroundPrevious = (prevX, prevY, x, y, angle) => {
+export const getPositionRotatedAroundPrevious = (prevX, prevY, x, y, angle) => {
   const radians = (Math.PI / 180) * angle;
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);

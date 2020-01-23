@@ -8,8 +8,8 @@ import {
   getNewEnemyData,
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
-import exactMath from "exact-math";
-import { exactMathConfig } from "../../../../../constants/constants";
+// import exactMath from "exact-math";
+// import { exactMathConfig } from "../../../../../constants/constants";
 // import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
 import MazeZone from "./MazeZone/MazeZone";
@@ -40,15 +40,15 @@ class Field extends Component {
     }
 
     if (
-      JSON.stringify(playerPosition) !==
-      JSON.stringify(this.props.playerPosition)
+      playerPosition[0] !== this.props.playerPosition[0] ||
+      playerPosition[1] !== this.props.playerPosition[1]
     ) {
       const updatedEnemies = getUpdatedEnemyPositions(
         this.props.enemies,
         playerPosition,
         this.props.playerPosition
       );
-      // this.props.updateEnemies(updatedEnemies);
+      this.props.updateEnemies(updatedEnemies);
     }
   }
 

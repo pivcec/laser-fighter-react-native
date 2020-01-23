@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Animated } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getRotatedEnemyPosition } from "../../../../../helpers/coordsCalculations";
+import { getEnemiesWithRotatedPositions } from "../../../../../helpers/enemiesLogic";
 import {
   playerWidthAndHeight,
   playerLaserChargeTime
@@ -38,7 +38,10 @@ export default class PlayerLaser extends Component {
       const timeDiff = this.props.playerLaserCharge.timestamp - timestamp;
       const chargePercentage = (timeDiff / playerLaserChargeTime) * 100;
       const laserPower = chargePercentage > 100 ? 100 : chargePercentage;
-      const rotatedEnemyPosition = getRotatedEnemyPosition(heading, enemies);
+      const rotatedEnemyPosition = getEnemiesWithRotatedPositions(
+        heading,
+        enemies
+      );
       const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
         rotatedEnemyPosition
       );
@@ -121,13 +124,11 @@ export default class PlayerLaser extends Component {
 
   checkIfEnemyIsWithinPathOfLaser = enemy => {
     const { position } = enemy;
-    const x = position[0];
-    const y = position[1];
-    const leftEdge = x - playerPositionOffset;
-    const rightEdge = x + playerPositionOffset;
-    const topEdge = y - playerPositionOffset;
+    const enemyLeftEdge = position[0] - playerPositionOffset;
+    const enemyRightEdge = position[0] + playerPositionOffset;
+    const enemyTopEdge = position[1] - playerPositionOffset;
 
-    if (topEdge < 50 && leftEdge <= 50 && rightEdge >= 50) {
+    if (enemyTopEdge < 50 && enemyLeftEdge <= 50 && enemyRightEdge >= 50) {
       return true;
     }
     return false;
