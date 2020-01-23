@@ -30,13 +30,10 @@ class Enemy extends Component {
       !playerIsDead &&
       !enemyIsDead
     ) {
-      const hasCollided = checkForCollisionWithPlayer(
-        [
-          this.props.position[0] - enemyPositionOffset,
-          this.props.position[1] - enemyPositionOffset
-        ],
-        enemyWidthAndHeight
-      );
+      const hasCollided = checkForCollisionWithPlayer([
+        this.props.position[0] - enemyPositionOffset,
+        this.props.position[1] - enemyPositionOffset
+      ]);
       if (hasCollided) {
         this.props.handleEnemyCollision();
       }

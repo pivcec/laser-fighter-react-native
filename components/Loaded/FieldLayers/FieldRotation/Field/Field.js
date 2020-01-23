@@ -8,9 +8,6 @@ import {
   getNewEnemyData,
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
-// import exactMath from "exact-math";
-// import { exactMathConfig } from "../../../../../constants/constants";
-// import { handleGetUpdatedPlayerPosition } from "../../../../../helpers/playerLogic";
 import Enemy from "./Enemy/Enemy";
 import MazeZone from "./MazeZone/MazeZone";
 
@@ -21,7 +18,6 @@ const powerUp = Asset.fromModule(
 class Field extends Component {
   componentDidMount() {
     this.createEnemy();
-    this.createEnemy();
 
     this.intervalId = setInterval(() => {
       this.animateEnemies();
@@ -31,7 +27,7 @@ class Field extends Component {
   componentDidUpdate(prevProps) {
     const { playerIsDead, playerPosition } = prevProps;
 
-    if (this.props.enemies.length === 1) {
+    if (this.props.enemies.length === 0) {
       this.createEnemy();
     }
 
