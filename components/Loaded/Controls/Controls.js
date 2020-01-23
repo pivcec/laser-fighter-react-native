@@ -9,37 +9,58 @@ import Movement from "./Movement/Movement";
 
 export default class Controls extends Component {
   state = {
-    buttonIsPressed: false
+    fireLaserButtonIsPressed: false,
+    directionKey: null
   };
 
-  chargingInterval = null;
+  movePlayerInterval = null;
 
   componentDidUpdate(prevProps, prevState) {
-    const { buttonIsPressed } = prevState;
+    const { fireLaserButtonIsPressed, directionKey } = prevState;
 
-    if (!buttonIsPressed && this.state.buttonIsPressed) {
+    if (!fireLaserButtonIsPressed && this.state.fireLaserButtonIsPressed) {
       this.props.togglePlayerLaserIsCharging(true);
     }
 
-    if (buttonIsPressed && !this.state.buttonIsPressed) {
+    if (fireLaserButtonIsPressed && !this.state.fireLaserButtonIsPressed) {
       this.props.togglePlayerLaserIsCharging(false);
     }
 
-    if (this.state.buttonIsPressed && this.props.playerIsDead) {
+    if (this.state.fireLaserButtonIsPressed && this.props.playerIsDead) {
       this.handleFireLaserOnPressOut();
+    }
+
+    if (directionKey === null && this.state.directionKey !== null) {
+      this.handleMovePlayer();
     }
   }
 
   handleFireLaserOnPressIn = () => {
-    this.setState({ buttonIsPressed: true });
+    this.setState({ fireLaserButtonIsPressed: true });
   };
 
   handleFireLaserOnPressOut = () => {
-    this.setState({ buttonIsPressed: false });
+    this.setState({ fireLaserButtonIsPressed: false });
   };
 
   handleMovementOnPressIn = directionKey => {
+    this.setState({ directionKey });
+  };
+
+  handleMovementOnPressOut = () => {
+    this.setState({ directionKey: null });
+    clearInterval(this.movePlayerInterval);
+  };
+
+  handleMovePlayer = () => {
+    this.movePlayerInterval = setInterval(() => {
+      this.movePlayer();
+    }, 100);
+  };
+
+  movePlayer = () => {
     const { playerPosition, heading } = this.props;
+    const { directionKey } = this.state;
 
     const newPlayerPosition = this.getNewPlayerPosition(
       playerPosition,
@@ -90,7 +111,10 @@ export default class Controls extends Component {
             handleOnPressIn={this.handleFireLaserOnPressIn}
             handleOnPressOut={this.handleFireLaserOnPressOut}
           />
-          <Movement handleOnPressIn={this.handleMovementOnPressIn} />
+          <Movement
+            handleOnPressIn={this.handleMovementOnPressIn}
+            handleOnPressOut={this.handleMovementOnPressOut}
+          />
         </ImageBackground>
         {/* <Text style={{ color: "white" }}>{heading}</Text> */}
       </View>

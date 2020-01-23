@@ -27,7 +27,7 @@ class Field extends Component {
   componentDidUpdate(prevProps) {
     const { playerIsDead, playerPosition } = prevProps;
 
-    if (this.props.enemies.length === 0) {
+    if (this.props.enemies.length < 1) {
       this.createEnemy();
     }
 
