@@ -26,6 +26,8 @@ class FieldLayers extends Component {
     const {
       layoutWidth,
       heading,
+      playerPosition,
+      updatePlayerPosition,
       playerLaserCharge,
       playSound,
       handleEnemyCollision,
@@ -40,6 +42,8 @@ class FieldLayers extends Component {
 
         <FieldRotation
           heading={heading}
+          playerPosition={playerPosition}
+          updatePlayerPosition={updatePlayerPosition}
           layoutWidth={layoutWidth}
           enemies={enemies}
           updateEnemies={this.updateEnemies}
@@ -66,6 +70,8 @@ class FieldLayers extends Component {
 
 FieldLayers.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
+  playerPosition: PropTypes.array.isRequired,
+  updatePlayerPosition: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
   playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired,

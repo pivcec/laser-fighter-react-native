@@ -21,24 +21,33 @@ const movementData = [
   ]
 ];
 
-const Movement = ({ handleOnPressIn, handleOnPressOut }) => {
+const Cell = ({ directionKey, iconName, handleOnPressIn }) => (
+  <View style={styles.cell}>
+    <TouchableOpacity onPressIn={() => handleOnPressIn(directionKey)}>
+      <Feather name={iconName} size={32} color="black" />
+    </TouchableOpacity>
+  </View>
+);
+
+const Movement = ({ handleOnPressIn }) => {
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
-        {movementData.map(row => {
+        {movementData.map((row, i) => {
           return (
-            <View style={styles.row}>
+            <View style={styles.row} key={row[i].directionKey}>
               {row.map(({ directionKey, iconName }) => {
-                return (
-                  <View key={directionKey} style={styles.cell}>
-                    <TouchableOpacity
-                      onPressIn={() => handleOnPressIn(directionKey)}
-                      onPressOut={() => handleOnPressOut(directionKey)}
-                    >
-                      <Feather name={iconName} size={32} color="black" />
-                    </TouchableOpacity>
-                  </View>
-                );
+                if (directionKey !== null) {
+                  return (
+                    <Cell
+                      key={directionKey}
+                      directionKey={directionKey}
+                      iconName={iconName}
+                      handleOnPressIn={handleOnPressIn}
+                    />
+                  );
+                }
+                return <View key={directionKey} style={styles.emptyCell} />;
               })}
             </View>
           );
@@ -71,13 +80,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 50,
     height: 50,
-    backgroundColor: "red"
+    backgroundColor: "red",
+    borderWidth: 1,
+    borderColor: "black"
+  },
+  emptyCell: {
+    width: 50,
+    height: 50,
+    borderWidth: 1,
+    borderColor: "black",
+    backgroundColor: "black"
   }
 });
 
 Movement.protTypes = {
-  handleOnPressIn: PropTypes.func.isRequired,
-  handleOnPressOut: PropTypes.func.isRequired
+  handleOnPressIn: PropTypes.func.isRequired
 };
 
 export default Movement;

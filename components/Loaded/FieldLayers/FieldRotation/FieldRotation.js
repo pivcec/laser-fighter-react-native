@@ -34,6 +34,8 @@ class FieldRotation extends Component {
   render() {
     const { animatedValue } = this.state;
     const {
+      playerPosition,
+      updatePlayerPosition,
       enemies,
       layoutWidth,
       updateEnemies,
@@ -58,6 +60,8 @@ class FieldRotation extends Component {
       >
         <View>
           <Field
+            playerPosition={playerPosition}
+            updatePlayerPosition={updatePlayerPosition}
             enemies={enemies}
             layoutWidth={layoutWidth}
             updateEnemies={updateEnemies}
@@ -75,6 +79,8 @@ class FieldRotation extends Component {
 
 FieldRotation.propTypes = {
   heading: PropTypes.number.isRequired,
+  playerPosition: PropTypes.array.isRequired,
+  updatePlayerPosition: PropTypes.func.isRequired,
   layoutWidth: PropTypes.number.isRequired,
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,

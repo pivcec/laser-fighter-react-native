@@ -1,10 +1,7 @@
 import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
-import {
-  getMazeData,
-  getUpdatedMazePosition
-} from "../../../../../../helpers/mazeLogic";
+import { getMazeData } from "../../../../../../helpers/mazeLogic";
 import Maze from "./Maze/Maze";
 
 const mazeData = getMazeData();
@@ -15,17 +12,21 @@ class MazeZone extends Component {
     mazePosition: [0, 0]
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { playerPosition } = prevProps;
+    const { mazePosition } = this.state;
     if (
       playerPosition[0] !== this.props.playerPosition[0] ||
-      playerPosition[1] !== playerPosition[1]
+      playerPosition[1] !== this.props.playerPosition[1]
     ) {
-      const updatedMazePosition = getUpdatedMazePosition(
-        this.state.mazePosition,
-        playerPosition,
-        this.props.playerPosition
-      );
+      const playerMovementX = this.props.playerPosition[0] - playerPosition[0];
+      const playerMovementY = this.props.playerPosition[1] - playerPosition[1];
+
+      const updatedMazePosition = [
+        mazePosition[0] + -playerMovementX,
+        mazePosition[1] + -playerMovementY
+      ];
+
       this.setState({
         mazePosition: updatedMazePosition
       });

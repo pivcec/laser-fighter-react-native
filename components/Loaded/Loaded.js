@@ -4,6 +4,7 @@ import { ScreenOrientation } from "expo";
 import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
 import throttle from "lodash.throttle";
+import debounce from "lodash.debounce";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import PlayAgainMenu from "./PlayAgainMenu/PlayAgainMenu";
@@ -18,6 +19,7 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 export default class Loaded extends Component {
   state = {
+    playerPosition: [50, 50],
     heading: 0,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
@@ -51,7 +53,7 @@ export default class Loaded extends Component {
   watchHeading = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status === "granted") {
-      Location.watchHeadingAsync(this.throttledUpdateHeading);
+      Location.watchHeadingAsync(this.debouncedUpdateHeading);
     }
   };
 
@@ -59,7 +61,13 @@ export default class Loaded extends Component {
     this.setState({ heading: headingObject.trueHeading });
   };
 
-  throttledUpdateHeading = throttle(this.updateHeading, 64);
+  updatePlayerPosition = newPlayerPosition => {
+    this.setState({
+      playerPosition: newPlayerPosition
+    });
+  };
+
+  debouncedUpdateHeading = debounce(this.updateHeading, 0);
 
   togglePlayerLaserIsCharging = toggle => {
     const timestamp = Date.now();
@@ -107,6 +115,7 @@ export default class Loaded extends Component {
   render() {
     const {
       layoutWidth,
+      playerPosition,
       heading,
       playerLaserCharge,
       playerLaserCharge: { isCharging },
@@ -131,6 +140,8 @@ export default class Loaded extends Component {
             <View style={{ height: layoutWidth }}>
               <FieldLayers
                 layoutWidth={layoutWidth}
+                playerPosition={playerPosition}
+                updatePlayerPosition={this.updatePlayerPosition}
                 heading={heading}
                 playerLaserCharge={playerLaserCharge}
                 playSound={this.playSound}
@@ -145,6 +156,8 @@ export default class Loaded extends Component {
             <View style={styles.controls}>
               <Controls
                 heading={heading}
+                playerPosition={playerPosition}
+                updatePlayerPosition={this.updatePlayerPosition}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

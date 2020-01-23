@@ -34,35 +34,6 @@ export const hasBottomWall = cell => {
   return [15, 14, 13, 12, 7, 6, 5, 4].includes(cell);
 };
 
-export const getUpdatedMazePosition = (
-  mazePosition,
-  prevPlayerPosition,
-  newPlayerPosition
-) => {
-  const playerMovementX = exactMath.add(
-    prevPlayerPosition[0],
-    -newPlayerPosition[0],
-    exactMathConfig
-  );
-  const playerMovementY = exactMath.add(
-    prevPlayerPosition[1],
-    newPlayerPosition[1],
-    exactMathConfig
-  );
-  return [
-    exactMath.sub(
-      mazePosition[0],
-      Math.round(playerMovementX).toFixed(2),
-      exactMathConfig
-    ),
-    exactMath.sub(
-      mazePosition[1],
-      Math.round(playerMovementY).toFixed(2),
-      exactMathConfig
-    )
-  ];
-};
-
 /*
 0, 0
 

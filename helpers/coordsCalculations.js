@@ -56,11 +56,20 @@ export const getRotatedEnemyPosition = (heading, enemies) => {
   });
 };
 
-const getRotatedPosition = (x, y, angle) => {
-  const radians = (Math.PI / 180) * angle,
-    cos = Math.cos(radians),
-    sin = Math.sin(radians),
-    nx = cos * (x - 50) + sin * (y - 50) + 50,
-    ny = cos * (y - 50) - sin * (x - 50) + 50;
+export const getRotatedPosition = (x, y, angle) => {
+  const radians = (Math.PI / 180) * angle;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const nx = cos * (x - 50) + sin * (y - 50) + 50;
+  const ny = cos * (y - 50) - sin * (x - 50) + 50;
+  return [nx, ny];
+};
+
+export const getRotatedPositionAroundPrevious = (prevX, prevY, x, y, angle) => {
+  const radians = (Math.PI / 180) * angle;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const nx = cos * (x - prevX) + sin * (y - prevY) + prevX;
+  const ny = cos * (y - prevY) - sin * (x - prevX) + prevY;
   return [nx, ny];
 };

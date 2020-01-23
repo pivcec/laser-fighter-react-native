@@ -19,10 +19,6 @@ const powerUp = Asset.fromModule(
 );
 
 class Field extends Component {
-  state = {
-    playerPosition: [50, 50]
-  };
-
   componentDidMount() {
     this.createEnemy();
     this.createEnemy();
@@ -32,9 +28,8 @@ class Field extends Component {
     }, 100);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { playerIsDead } = prevProps;
-    const { playerPosition } = prevState;
+  componentDidUpdate(prevProps) {
+    const { playerIsDead, playerPosition } = prevProps;
 
     if (this.props.enemies.length === 1) {
       this.createEnemy();
@@ -46,14 +41,14 @@ class Field extends Component {
 
     if (
       JSON.stringify(playerPosition) !==
-      JSON.stringify(this.state.playerPosition)
+      JSON.stringify(this.props.playerPosition)
     ) {
       const updatedEnemies = getUpdatedEnemyPositions(
         this.props.enemies,
         playerPosition,
-        this.state.playerPosition
+        this.props.playerPosition
       );
-      this.props.updateEnemies(updatedEnemies);
+      // this.props.updateEnemies(updatedEnemies);
     }
   }
 
@@ -78,7 +73,7 @@ class Field extends Component {
   handlePlayerRespawn = () => {
     const newEnemies = [getNewEnemyData(), getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
-    this.setState({ playerPosition: [50, 50] });
+    this.props.updatePlayerPosition([50, 50]);
   };
 
   createEnemy = () => {
@@ -96,8 +91,8 @@ class Field extends Component {
   };
 
   render() {
-    const { playerPosition } = this.state;
     const {
+      playerPosition,
       enemies,
       layoutWidth,
       updateEnemies,
@@ -137,6 +132,8 @@ class Field extends Component {
 
 Field.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
+  playerPosition: PropTypes.array.isRequired,
+  updatePlayerPosition: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
