@@ -8,6 +8,7 @@ import { vh, vw } from "react-native-expo-viewport-units";
 import { getEnemiesWithRotatedPositions } from "../../../../../helpers/enemiesLogic";
 import {
   playerWidthAndHeight,
+  enemyWidthAndHeight,
   playerLaserChargeTime
 } from "../../../../../constants/constants";
 
@@ -19,6 +20,7 @@ const enemyPain = Asset.fromModule(
   require("../../../../../assets/sounds/enemyPain.wav")
 );
 const playerPositionOffset = playerWidthAndHeight / 2;
+const enemyPositionOffset = enemyWidthAndHeight / 2;
 
 export default class PlayerLaser extends Component {
   state = {
@@ -124,9 +126,9 @@ export default class PlayerLaser extends Component {
 
   checkIfEnemyIsWithinPathOfLaser = enemy => {
     const { position } = enemy;
-    const enemyLeftEdge = position[0] - playerPositionOffset;
-    const enemyRightEdge = position[0] + playerPositionOffset;
-    const enemyTopEdge = position[1] - playerPositionOffset;
+    const enemyLeftEdge = position[0] - enemyPositionOffset;
+    const enemyRightEdge = position[0] + enemyPositionOffset;
+    const enemyTopEdge = position[1] - enemyPositionOffset;
 
     if (enemyTopEdge < 50 && enemyLeftEdge <= 50 && enemyRightEdge >= 50) {
       return true;
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     top: 0,
     width: vw(100),
     height: vh(100),
-    zIndex: 2
+    zIndex: 3
   }
 });
 

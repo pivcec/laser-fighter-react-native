@@ -11,7 +11,9 @@ const Maze = memo(({ mazeData, layoutWidth }) => {
         flexDirection: "column",
         position: "absolute",
         bottom: 0,
-        left: 0
+        left: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        zIndex: 1
       }}
     >
       {mazeData.map((row, i) => (

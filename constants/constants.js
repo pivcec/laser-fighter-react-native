@@ -1,6 +1,6 @@
 export const playerWidthAndHeight = 7;
 
-export const enemyWidthAndHeight = 7;
+export const enemyWidthAndHeight = 15;
 
 // export const vortexWidthAndHeight = 300;
 

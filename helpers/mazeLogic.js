@@ -1,6 +1,3 @@
-import exactMath from "exact-math";
-import { exactMathConfig } from "../constants/constants";
-
 const mazeData = [
   [11, 9, 5, 5, 5, 5, 7, 9, 5, 7],
   [10, 10, 9, 1, 5, 5, 5, 4, 1, 7],

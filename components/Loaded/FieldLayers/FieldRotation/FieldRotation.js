@@ -6,26 +6,72 @@ import Field from "./Field/Field";
 
 class FieldRotation extends Component {
   state = {
-    animatedValue: new Animated.Value(0)
+    animatedValue: new Animated.Value(0),
+    currentOrientation: null,
+    lastLockedDegreeDiff: null,
+    rotationIsLocked: false
   };
 
-  componentDidMount() {
-    this.rotateField();
-  }
-
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { heading } = prevProps;
+    const { rotationIsLocked } = this.state;
 
-    if (heading !== this.props.heading) {
-      this.rotateField();
+    if (!heading && this.props.heading) {
+      this.setCurrentOrientation();
+    }
+
+    if (heading && heading !== this.props.heading && !rotationIsLocked) {
+      this.rotateOrLock();
+    }
+
+    if (heading && heading !== this.props.heading && rotationIsLocked) {
+      this.handleIsLocked();
     }
   }
 
-  rotateField = () => {
+  setCurrentOrientation = () => {
+    const { heading } = this.props;
+    this.setState({
+      currentOrientation: heading
+    });
+  };
+
+  handleIsLocked = () => {
+    const { currentOrientation } = this.state;
+    const { heading } = this.props;
+    if (heading > currentOrientation - 5 && heading < currentOrientation + 5) {
+      this.setState({
+        rotationIsLocked: false
+      });
+    }
+  };
+
+  rotateOrLock = () => {
+    const { currentOrientation, lastLockedDegreeDiff } = this.state;
+    const { heading } = this.props;
+
+    const differenceInDegrees = lastLockedDegreeDiff
+      ? lastLockedDegreeDiff + (currentOrientation - heading)
+      : currentOrientation - heading;
+
+    if (
+      heading < currentOrientation + 45 &&
+      heading > currentOrientation - 45
+    ) {
+      this.rotateField(-differenceInDegrees);
+    } else {
+      this.setState({
+        rotationIsLocked: true,
+        lastLockedDegreeDiff: differenceInDegrees
+      });
+    }
+  };
+
+  rotateField = rotationTarget => {
     const { animatedValue } = this.state;
 
     Animated.timing(animatedValue, {
-      toValue: this.props.heading,
+      toValue: rotationTarget,
       duration: 0,
       useNativeDriver: true
     }).start();

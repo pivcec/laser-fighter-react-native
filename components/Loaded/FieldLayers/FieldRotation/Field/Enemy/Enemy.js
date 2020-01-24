@@ -78,7 +78,7 @@ class Enemy extends Component {
               left: `${position[0] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
               height: `${enemyWidthAndHeight}%`,
-              zIndex: 2
+              zIndex: 4
             }}
           >
             <Image
@@ -99,7 +99,7 @@ class Enemy extends Component {
               left: `${position[0] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
               height: `${enemyWidthAndHeight}%`,
-              zIndex: 2
+              zIndex: 4
             }}
           >
             <Image

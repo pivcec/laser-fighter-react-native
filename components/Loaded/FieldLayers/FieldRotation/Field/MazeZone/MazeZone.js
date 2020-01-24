@@ -41,7 +41,8 @@ class MazeZone extends Component {
         style={{
           position: "absolute",
           left: mazePosition[0],
-          bottom: mazePosition[1]
+          bottom: mazePosition[1],
+          zIndex: 1
         }}
       >
         <Maze mazeData={mazeData} layoutWidth={layoutWidth} />

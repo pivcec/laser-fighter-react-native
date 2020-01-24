@@ -103,15 +103,6 @@ export default class Loaded extends Component {
     }));
   };
 
-  /*
-  handleChiTokenCollision = () => {
-    const { chi } = this.state;
-    if (chi < 100) {
-      this.setState({ chi: 100 });
-    }
-  };
-  */
-
   render() {
     const {
       layoutWidth,
@@ -137,7 +128,7 @@ export default class Loaded extends Component {
             {playerIsDead && (
               <PlayAgainMenu handlePlayAgain={this.handlePlayAgain} />
             )}
-            <View style={{ height: layoutWidth }}>
+            <View style={{ height: layoutWidth, backgroundColor: "blue" }}>
               <FieldLayers
                 layoutWidth={layoutWidth}
                 playerPosition={playerPosition}
