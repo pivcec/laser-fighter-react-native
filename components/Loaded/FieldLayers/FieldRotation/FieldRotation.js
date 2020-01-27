@@ -4,15 +4,10 @@ import { Animated } from "react-native";
 import { View } from "react-native";
 import Field from "./Field/Field";
 
-// rotate to heading within 45 degrees
-// animate rotation past 45 degress
-// stick to last rotated position after leaving animation threthhold
-// resume normal rotation when you get back to 15 degrees
-
 class FieldRotation extends Component {
   state = {
     animatedValue: new Animated.Value(0),
-    orientationHeading: null, // used to determin what actual physical "straight ahead" means
+    orientationHeading: null,
     rotateTo: 0,
     lastAnimatedRotateTo: 0,
     rotationMode: null
@@ -100,8 +95,6 @@ class FieldRotation extends Component {
     const { orientationHeading } = this.state;
     const degreesFromOrientationHeading = orientationHeading - heading;
 
-    //  console.warn("use this to create offset value", lastAnimatedRotateTo);
-
     this.setState(prevState => ({
       rotateTo: degreesFromOrientationHeading + prevState.lastAnimatedRotateTo
     }));
@@ -120,15 +113,23 @@ class FieldRotation extends Component {
     return rotateTo;
   };
 
+  // orientationHeading: 62
+  // heading right:
+  // heading left: 349
+
   handleAnimateRotation = () => {
     const { heading } = this.props;
     const { orientationHeading } = this.state;
-    const rotateClockwise = orientationHeading - heading < 0;
+    const normalizeDiff = 180 - orientationHeading;
+    const normalizedOrientationHeading = orientationHeading + normalizeDiff;
+    const normalizedHeading = heading + normalizeDiff;
+    const rotateClockwise =
+      normalizedHeading % 360 < normalizedOrientationHeading;
 
     this.setState(prevState => ({
       rotateTo: rotateClockwise
-        ? this.rotateToOrZero(prevState.rotateTo - 5)
-        : this.rotateToOrZero(prevState.rotateTo + 5)
+        ? this.rotateToOrZero(prevState.rotateTo + 5)
+        : this.rotateToOrZero(prevState.rotateTo - 5)
     }));
   };
 
