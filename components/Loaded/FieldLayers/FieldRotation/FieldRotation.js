@@ -1,77 +1,149 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Animated } from "react-native";
-import { View, PanResponder } from "react-native";
+import { View } from "react-native";
 import Field from "./Field/Field";
+
+// rotate to heading within 45 degrees
+// animate rotation past 45 degress
+// stick to last rotated position after leaving animation threthhold
+// resume normal rotation when you get back to 15 degrees
 
 class FieldRotation extends Component {
   state = {
     animatedValue: new Animated.Value(0),
-    currentOrientation: null,
-    lastLockedDegreeDiff: null,
-    rotationIsLocked: false
+    orientationHeading: null, // used to determin what actual physical "straight ahead" means
+    rotateTo: 0,
+    lastAnimatedRotateTo: 0,
+    rotationMode: null
   };
+
+  animationInterval = null;
+
+  componentDidMount() {
+    this.setState({
+      rotationMode: "NORMAL"
+    });
+  }
 
   componentDidUpdate(prevProps, prevState) {
     const { heading } = prevProps;
-    const { rotationIsLocked } = this.state;
+    const { rotationMode, rotateTo } = prevState;
 
     if (!heading && this.props.heading) {
-      this.setCurrentOrientation();
+      this.setState({
+        orientationHeading: this.props.heading
+      });
     }
 
-    if (heading && heading !== this.props.heading && !rotationIsLocked) {
-      this.rotateOrLock();
+    if (heading && heading !== this.props.heading) {
+      this.handleSetRotationMode();
     }
 
-    if (heading && heading !== this.props.heading && rotationIsLocked) {
-      this.handleIsLocked();
+    if (
+      heading &&
+      heading !== this.props.heading &&
+      this.state.rotationMode === "NORMAL"
+    ) {
+      this.handleNormalMovement();
+    }
+
+    if (
+      (rotationMode === "NORMAL" && this.state.rotationMode === "ANIMATED") ||
+      (rotationMode === "LOCKED_AT_POINT" &&
+        this.state.rotationMode === "ANIMATED")
+    ) {
+      this.handleIsAnimated();
+    }
+
+    if (
+      rotationMode === "ANIMATED" &&
+      this.state.rotationMode === "LOCKED_AT_POINT"
+    ) {
+      this.handleIsLockedAtPoint();
+    }
+
+    if (rotateTo !== this.state.rotateTo) {
+      this.rotateField(this.state.rotateTo);
     }
   }
 
-  setCurrentOrientation = () => {
+  handleSetRotationMode = () => {
     const { heading } = this.props;
-    this.setState({
-      currentOrientation: heading
-    });
-  };
+    const { orientationHeading, rotationMode } = this.state;
+    const degreesFromOrientationHeading = orientationHeading - heading;
+    const isWithinRegularRotationRange =
+      degreesFromOrientationHeading > -35 && degreesFromOrientationHeading < 35;
+    const isPointingAtOrientationHeading =
+      degreesFromOrientationHeading > -5 && degreesFromOrientationHeading < 5;
 
-  handleIsLocked = () => {
-    const { currentOrientation } = this.state;
-    const { heading } = this.props;
-    if (heading > currentOrientation - 5 && heading < currentOrientation + 5) {
-      this.setState({
-        rotationIsLocked: false
-      });
+    if (rotationMode === "NORMAL" && !isWithinRegularRotationRange) {
+      this.setState({ rotationMode: "ANIMATED" });
     }
-  };
 
-  rotateOrLock = () => {
-    const { currentOrientation, lastLockedDegreeDiff } = this.state;
-    const { heading } = this.props;
+    if (rotationMode === "ANIMATED" && isWithinRegularRotationRange) {
+      this.setState({ rotationMode: "LOCKED_AT_POINT" });
+    }
 
-    const differenceInDegrees = lastLockedDegreeDiff
-      ? lastLockedDegreeDiff + (currentOrientation - heading)
-      : currentOrientation - heading;
-
-    if (
-      heading < currentOrientation + 45 &&
-      heading > currentOrientation - 45
+    if (rotationMode === "LOCKED_AT_POINT" && isPointingAtOrientationHeading) {
+      this.setState({ rotationMode: "NORMAL" });
+    } else if (
+      rotationMode === "LOCKED_AT_POINT" &&
+      !isWithinRegularRotationRange
     ) {
-      this.rotateField(-differenceInDegrees);
-    } else {
-      this.setState({
-        rotationIsLocked: true,
-        lastLockedDegreeDiff: differenceInDegrees
-      });
+      this.setState({ rotationMode: "ANIMATED" });
     }
   };
 
-  rotateField = rotationTarget => {
+  handleNormalMovement = () => {
+    const { heading } = this.props;
+    const { orientationHeading } = this.state;
+    const degreesFromOrientationHeading = orientationHeading - heading;
+
+    //  console.warn("use this to create offset value", lastAnimatedRotateTo);
+
+    this.setState(prevState => ({
+      rotateTo: degreesFromOrientationHeading + prevState.lastAnimatedRotateTo
+    }));
+  };
+
+  handleIsAnimated = () => {
+    this.animationInterval = setInterval(() => {
+      this.handleAnimateRotation();
+    }, 125);
+  };
+
+  rotateToOrZero = rotateTo => {
+    if (rotateTo >= 360 || rotateTo <= -360) {
+      return 0;
+    }
+    return rotateTo;
+  };
+
+  handleAnimateRotation = () => {
+    const { heading } = this.props;
+    const { orientationHeading } = this.state;
+    const rotateClockwise = orientationHeading - heading < 0;
+
+    this.setState(prevState => ({
+      rotateTo: rotateClockwise
+        ? this.rotateToOrZero(prevState.rotateTo - 5)
+        : this.rotateToOrZero(prevState.rotateTo + 5)
+    }));
+  };
+
+  handleIsLockedAtPoint = () => {
+    clearInterval(this.animationInterval);
+    this.setState(prevState => ({
+      lastAnimatedRotateTo: prevState.rotateTo
+    }));
+  };
+
+  rotateField = rotateTo => {
     const { animatedValue } = this.state;
 
     Animated.timing(animatedValue, {
-      toValue: rotationTarget,
+      toValue: -rotateTo,
       duration: 0,
       useNativeDriver: true
     }).start();
