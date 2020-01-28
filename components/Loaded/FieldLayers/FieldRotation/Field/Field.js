@@ -93,7 +93,8 @@ class Field extends Component {
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
-      playerIsDead
+      playerIsDead,
+      rotateTo
       // heading,
     } = this.props;
 
@@ -104,7 +105,11 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
-        <MazeZone playerPosition={playerPosition} layoutWidth={layoutWidth} />
+        <MazeZone
+          playerPosition={playerPosition}
+          layoutWidth={layoutWidth}
+          rotateTo={rotateTo}
+        />
 
         {enemies.map(({ position, id, life }) => {
           return (
@@ -136,7 +141,8 @@ Field.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
   // heading: PropTypes.number.isRequired,
-  increaseKarma: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired,
+  rotateTo: PropTypes.number.isRequired
 };
 
 export default Field;

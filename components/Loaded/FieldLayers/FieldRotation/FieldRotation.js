@@ -113,10 +113,6 @@ class FieldRotation extends Component {
     return rotateTo;
   };
 
-  // orientationHeading: 62
-  // heading right:
-  // heading left: 349
-
   handleAnimateRotation = () => {
     const { heading } = this.props;
     const { orientationHeading } = this.state;
@@ -151,7 +147,7 @@ class FieldRotation extends Component {
   };
 
   render() {
-    const { animatedValue } = this.state;
+    const { animatedValue, rotateTo } = this.state;
     const {
       playerPosition,
       updatePlayerPosition,
@@ -189,6 +185,7 @@ class FieldRotation extends Component {
             playSound={playSound}
             // heading={heading}
             increaseKarma={increaseKarma}
+            rotateTo={rotateTo}
           />
         </View>
       </Animated.View>

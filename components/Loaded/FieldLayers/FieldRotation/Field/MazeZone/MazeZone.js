@@ -2,6 +2,7 @@ import React, { Component, memo } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
 import { getMazeData } from "../../../../../../helpers/mazeLogic";
+import { getPositionRotatedAroundPrevious } from "../../../../../../helpers/coordsCalculations";
 import Maze from "./Maze/Maze";
 
 const mazeData = getMazeData();
@@ -14,24 +15,38 @@ class MazeZone extends Component {
 
   componentDidUpdate(prevProps) {
     const { playerPosition } = prevProps;
-    const { mazePosition } = this.state;
     if (
       playerPosition[0] !== this.props.playerPosition[0] ||
       playerPosition[1] !== this.props.playerPosition[1]
     ) {
-      const playerMovementX = this.props.playerPosition[0] - playerPosition[0];
-      const playerMovementY = this.props.playerPosition[1] - playerPosition[1];
-
-      const updatedMazePosition = [
-        mazePosition[0] + -playerMovementX,
-        mazePosition[1] + -playerMovementY
-      ];
-
-      this.setState({
-        mazePosition: updatedMazePosition
-      });
+      this.handleUpdatedPlayerPosition(playerPosition);
     }
   }
+
+  handleUpdatedPlayerPosition = playerPosition => {
+    const { mazePosition } = this.state;
+    const { rotateTo } = this.props;
+
+    const rotatedPlayerPosition = getPositionRotatedAroundPrevious(
+      playerPosition[0],
+      playerPosition[1],
+      this.props.playerPosition[0],
+      this.props.playerPosition[1],
+      -rotateTo
+    );
+
+    const playerMovementX = rotatedPlayerPosition[0] - playerPosition[0];
+    const playerMovementY = rotatedPlayerPosition[1] - playerPosition[1];
+
+    const updatedMazePosition = [
+      mazePosition[0] + -playerMovementX,
+      mazePosition[1] + -playerMovementY
+    ];
+
+    this.setState({
+      mazePosition: updatedMazePosition
+    });
+  };
 
   render() {
     const { layoutWidth } = this.props;
@@ -53,7 +68,8 @@ class MazeZone extends Component {
 
 MazeZone.propTypes = {
   playerPosition: PropTypes.array.isRequired,
-  layoutWidth: PropTypes.number.isRequired
+  layoutWidth: PropTypes.number.isRequired,
+  rotateTo: PropTypes.number.isRequired
 };
 
 export default MazeZone;

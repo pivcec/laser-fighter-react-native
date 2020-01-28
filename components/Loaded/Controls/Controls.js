@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
-import { getPositionRotatedAroundPrevious } from "../../../helpers/coordsCalculations";
+// import { getPositionRotatedAroundPrevious } from "../../../helpers/coordsCalculations";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 import FireLaser from "./FireLaser/FireLaser";
@@ -67,6 +67,7 @@ export default class Controls extends Component {
       directionKey
     );
 
+    /*
     const rotatedNewPlayerPosition = getPositionRotatedAroundPrevious(
       playerPosition[0],
       playerPosition[1],
@@ -75,7 +76,11 @@ export default class Controls extends Component {
       heading
     );
 
-    this.props.updatePlayerPosition(rotatedNewPlayerPosition);
+    console.warn("newPlayerPosition", newPlayerPosition);
+    console.warn("rotatedNewPlayerPosition", rotatedNewPlayerPosition);
+    */
+
+    this.props.updatePlayerPosition(newPlayerPosition);
   };
 
   getNewPlayerPosition = (playerPosition, directionKey) => {
