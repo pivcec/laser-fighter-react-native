@@ -5,7 +5,7 @@ import {
   hasRightWall,
   hasTopWall,
   hasBottomWall
-} from "../../../../../../../../../helpers/mazeLogic";
+} from "../../../../../../../../helpers/mazeLogic";
 import { View } from "react-native";
 import Svg, { Line } from "react-native-svg";
 

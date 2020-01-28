@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
+import { getPositionRotatedAroundPrevious } from "../../helpers/coordsCalculations";
 import { ScreenOrientation } from "expo";
 import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
@@ -62,9 +63,13 @@ export default class Loaded extends Component {
   };
 
   updatePlayerPosition = newPlayerPosition => {
-    this.setState({
-      playerPosition: newPlayerPosition
-    });
+    this.setState(prevState => ({
+      playerPosition: getPositionRotatedAroundPrevious(
+        prevState.playerPosition,
+        newPlayerPosition,
+        this.state.heading
+      )
+    }));
   };
 
   debouncedUpdateHeading = debounce(this.updateHeading, 0);

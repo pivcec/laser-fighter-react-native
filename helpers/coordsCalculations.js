@@ -46,11 +46,21 @@ export const getDirectionKey = bearing => {
   return Math.round(((bearing %= 360) < 0 ? bearing + 360 : bearing) / 45) % 8;
 };
 
-export const getPositionRotatedAroundPrevious = (prevX, prevY, x, y, angle) => {
+export const getPositionRotatedAroundPrevious = (
+  previousPosition,
+  newPosition,
+  angle
+) => {
   const radians = (Math.PI / 180) * angle;
   const cos = Math.cos(radians);
   const sin = Math.sin(radians);
-  const nx = cos * (x - prevX) + sin * (y - prevY) + prevX;
-  const ny = cos * (y - prevY) - sin * (x - prevX) + prevY;
+  const nx =
+    cos * (newPosition[0] - previousPosition[0]) +
+    sin * (newPosition[1] - previousPosition[1]) +
+    previousPosition[0];
+  const ny =
+    cos * (newPosition[1] - previousPosition[1]) -
+    sin * (newPosition[0] - previousPosition[0]) +
+    previousPosition[1];
   return [nx, ny];
 };

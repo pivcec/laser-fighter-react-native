@@ -9,7 +9,6 @@ import {
   getUpdatedEnemyPositions
 } from "../../../../../helpers/enemiesLogic";
 import Enemy from "./Enemy/Enemy";
-import MazeZone from "./MazeZone/MazeZone";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
@@ -17,7 +16,7 @@ const powerUp = Asset.fromModule(
 
 class Field extends Component {
   componentDidMount() {
-    // this.createEnemy();
+    this.createEnemy();
 
     this.intervalId = setInterval(() => {
       this.animateEnemies();
@@ -25,10 +24,10 @@ class Field extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { playerIsDead, playerPosition } = prevProps;
+    const { playerIsDead, playerPosition, enemies } = prevProps;
 
-    if (this.props.enemies.length < 1) {
-      // this.createEnemy();
+    if (enemies.length > 0 && this.props.enemies.length < 1) {
+      this.startCreateEnemyTimeout();
     }
 
     if (playerIsDead && !this.props.playerIsDead) {
@@ -39,14 +38,19 @@ class Field extends Component {
       playerPosition[0] !== this.props.playerPosition[0] ||
       playerPosition[1] !== this.props.playerPosition[1]
     ) {
-      const updatedEnemies = getUpdatedEnemyPositions(
-        this.props.enemies,
-        playerPosition,
-        this.props.playerPosition
-      );
-      this.props.updateEnemies(updatedEnemies);
+      this.handleUpdatedPlayerPosition(playerPosition);
     }
   }
+
+  handleUpdatedPlayerPosition = playerPosition => {
+    const { enemies } = this.props;
+    const updatedEnemies = getUpdatedEnemyPositions(
+      enemies,
+      playerPosition,
+      this.props.playerPosition
+    );
+    this.props.updateEnemies(updatedEnemies);
+  };
 
   animateEnemies = () => {
     const { enemies } = this.props;
@@ -67,9 +71,16 @@ class Field extends Component {
   };
 
   handlePlayerRespawn = () => {
-    const newEnemies = [getNewEnemyData(), getNewEnemyData()];
+    const newEnemies = [getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
     this.props.updatePlayerPosition([50, 50]);
+  };
+
+  startCreateEnemyTimeout = () => {
+    const createEnemyTimeout = setTimeout(() => {
+      this.createEnemy();
+      clearTimeout(createEnemyTimeout);
+    }, 15000);
   };
 
   createEnemy = () => {
@@ -88,14 +99,11 @@ class Field extends Component {
 
   render() {
     const {
-      playerPosition,
       enemies,
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
-      playerIsDead,
-      rotateTo
-      // heading,
+      playerIsDead
     } = this.props;
 
     return (
@@ -105,12 +113,6 @@ class Field extends Component {
           width: layoutWidth
         }}
       >
-        <MazeZone
-          playerPosition={playerPosition}
-          layoutWidth={layoutWidth}
-          rotateTo={rotateTo}
-        />
-
         {enemies.map(({ position, id, life }) => {
           return (
             <Enemy
@@ -122,7 +124,6 @@ class Field extends Component {
               removeEnemy={this.removeEnemy}
               handleEnemyCollision={handleEnemyCollision}
               playerIsDead={playerIsDead}
-              playerPosition={playerPosition}
             />
           );
         })}
@@ -132,17 +133,15 @@ class Field extends Component {
 }
 
 Field.propTypes = {
-  layoutWidth: PropTypes.number.isRequired,
   playerPosition: PropTypes.array.isRequired,
+  layoutWidth: PropTypes.number.isRequired,
   updatePlayerPosition: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
-  // heading: PropTypes.number.isRequired,
-  increaseKarma: PropTypes.func.isRequired,
-  rotateTo: PropTypes.number.isRequired
+  increaseKarma: PropTypes.func.isRequired
 };
 
 export default Field;

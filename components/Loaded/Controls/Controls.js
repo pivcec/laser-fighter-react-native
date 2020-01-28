@@ -15,6 +15,7 @@ export default class Controls extends Component {
   movePlayerInterval = null;
 
   componentDidUpdate(prevProps, prevState) {
+    const { playerPosition } = prevProps;
     const { fireLaserButtonIsPressed, directionKey } = prevState;
 
     if (!fireLaserButtonIsPressed && this.state.fireLaserButtonIsPressed) {
@@ -58,11 +59,10 @@ export default class Controls extends Component {
   };
 
   movePlayer = () => {
-    const { playerPosition, heading } = this.props;
     const { directionKey } = this.state;
 
     const newPlayerPosition = this.getNewPlayerPosition(
-      playerPosition,
+      this.props.playerPosition,
       directionKey
     );
 
@@ -72,21 +72,21 @@ export default class Controls extends Component {
   getNewPlayerPosition = (playerPosition, directionKey) => {
     switch (directionKey) {
       case 0:
-        return [playerPosition[0] - 10, playerPosition[1] + 10];
+        return [playerPosition[0] - 5, playerPosition[1] + 5];
       case 1:
-        return [playerPosition[0], playerPosition[1] + 10];
+        return [playerPosition[0], playerPosition[1] + 5];
       case 2:
-        return [playerPosition[0] + 10, playerPosition[1] + 10];
+        return [playerPosition[0] + 5, playerPosition[1] + 5];
       case 3:
-        return [playerPosition[0] - 10, playerPosition[1]];
+        return [playerPosition[0] - 5, playerPosition[1]];
       case 4:
-        return [playerPosition[0] + 10, playerPosition[1]];
+        return [playerPosition[0] + 5, playerPosition[1]];
       case 5:
-        return [playerPosition[0] - 10, playerPosition[1] - 10];
+        return [playerPosition[0] - 5, playerPosition[1] - 5];
       case 6:
-        return [playerPosition[0], playerPosition[1] - 10];
+        return [playerPosition[0], playerPosition[1] - 5];
       case 7:
-        return [playerPosition[0] + 10, playerPosition[1] - 10];
+        return [playerPosition[0] + 5, playerPosition[1] - 5];
     }
   };
 

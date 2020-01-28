@@ -40,12 +40,12 @@ export default class PlayerLaser extends Component {
       const timeDiff = this.props.playerLaserCharge.timestamp - timestamp;
       const chargePercentage = (timeDiff / playerLaserChargeTime) * 100;
       const laserPower = chargePercentage > 100 ? 100 : chargePercentage;
-      const rotatedEnemyPosition = getEnemiesWithRotatedPositions(
+      const enemiesWithRotatedPositions = getEnemiesWithRotatedPositions(
         heading,
         enemies
       );
       const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
-        rotatedEnemyPosition
+        enemiesWithRotatedPositions
       );
       const firstEnemyWithinPathOfLaser =
         enemiesWithinPathOfLaser.length > 0

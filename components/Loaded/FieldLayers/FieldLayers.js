@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { View } from "react-native";
 import PropTypes from "prop-types";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
+import MazeRotation from "./MazeRotation/MazeRotation";
 
 class FieldLayers extends Component {
   state = {
@@ -40,17 +42,10 @@ class FieldLayers extends Component {
       <>
         <Grid layoutWidth={layoutWidth} />
 
-        <FieldRotation
+        <MazeRotation
           heading={heading}
           playerPosition={playerPosition}
-          updatePlayerPosition={updatePlayerPosition}
           layoutWidth={layoutWidth}
-          enemies={enemies}
-          updateEnemies={this.updateEnemies}
-          handleEnemyCollision={handleEnemyCollision}
-          playerIsDead={playerIsDead}
-          playSound={this.props.playSound}
-          increaseKarma={increaseKarma}
         />
 
         <Player
@@ -63,6 +58,21 @@ class FieldLayers extends Component {
           chi={chi}
           karma={karma}
         />
+
+        <View style={{ position: "absolute", zIndex: 100 }}>
+          <FieldRotation
+            heading={heading}
+            playerPosition={playerPosition}
+            updatePlayerPosition={updatePlayerPosition}
+            layoutWidth={layoutWidth}
+            enemies={enemies}
+            updateEnemies={this.updateEnemies}
+            handleEnemyCollision={handleEnemyCollision}
+            playerIsDead={playerIsDead}
+            playSound={this.props.playSound}
+            increaseKarma={increaseKarma}
+          />
+        </View>
       </>
     );
   }

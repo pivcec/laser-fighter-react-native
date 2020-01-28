@@ -52,12 +52,12 @@ export const getUpdatedEnemyPositions = (
       position: [
         exactMath.add(
           position[0],
-          Math.round(-playerMovementX).toFixed(2),
+          Math.round(-(playerMovementX / 2)).toFixed(2),
           exactMathConfig
         ),
         exactMath.add(
           position[1],
-          Math.round(playerMovementY).toFixed(2),
+          Math.round(playerMovementY / 2).toFixed(2),
           exactMathConfig
         )
       ],
@@ -74,10 +74,8 @@ export const getEnemiesWithRotatedPositions = (heading, enemies) => {
     return {
       ...enemy,
       position: getPositionRotatedAroundPrevious(
-        50,
-        50,
-        position[0],
-        position[1],
+        [50, 50],
+        [position[0], position[1]],
         heading
       )
     };
