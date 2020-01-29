@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
+import { playerMovementDistance } from "../../../constants/constants";
 import rustyMetal from "../../../assets/images/rusty.jpg";
 import Charger from "./Charger/Charger";
 import FireLaser from "./FireLaser/FireLaser";
@@ -8,8 +9,7 @@ import Movement from "./Movement/Movement";
 
 export default class Controls extends Component {
   state = {
-    fireLaserButtonIsPressed: false,
-    directionKey: null
+    fireLaserButtonIsPressed: false
   };
 
   movePlayerInterval = null;
@@ -42,24 +42,7 @@ export default class Controls extends Component {
     this.setState({ fireLaserButtonIsPressed: false });
   };
 
-  handleMovementOnPressIn = directionKey => {
-    this.setState({ directionKey });
-  };
-
-  handleMovementOnPressOut = () => {
-    this.setState({ directionKey: null });
-    clearInterval(this.movePlayerInterval);
-  };
-
-  handleMovePlayer = () => {
-    this.movePlayerInterval = setInterval(() => {
-      this.movePlayer();
-    }, 100);
-  };
-
-  movePlayer = () => {
-    const { directionKey } = this.state;
-
+  movePlayer = directionKey => {
     const newPlayerPosition = this.getNewPlayerPosition(
       this.props.playerPosition,
       directionKey
@@ -71,21 +54,33 @@ export default class Controls extends Component {
   getNewPlayerPosition = (playerPosition, directionKey) => {
     switch (directionKey) {
       case 0:
-        return [playerPosition[0] - 5, playerPosition[1] + 5];
+        return [
+          playerPosition[0] - playerMovementDistance,
+          playerPosition[1] + playerMovementDistance
+        ];
       case 1:
-        return [playerPosition[0], playerPosition[1] + 5];
+        return [playerPosition[0], playerPosition[1] + playerMovementDistance];
       case 2:
-        return [playerPosition[0] + 5, playerPosition[1] + 5];
+        return [
+          playerPosition[0] + playerMovementDistance,
+          playerPosition[1] + playerMovementDistance
+        ];
       case 3:
-        return [playerPosition[0] - 5, playerPosition[1]];
+        return [playerPosition[0] - playerMovementDistance, playerPosition[1]];
       case 4:
-        return [playerPosition[0] + 5, playerPosition[1]];
+        return [playerPosition[0] + playerMovementDistance, playerPosition[1]];
       case 5:
-        return [playerPosition[0] - 5, playerPosition[1] - 5];
+        return [
+          playerPosition[0] - playerMovementDistance,
+          playerPosition[1] - playerMovementDistance
+        ];
       case 6:
-        return [playerPosition[0], playerPosition[1] - 5];
+        return [playerPosition[0], playerPosition[1] - playerMovementDistance];
       case 7:
-        return [playerPosition[0] + 5, playerPosition[1] - 5];
+        return [
+          playerPosition[0] + playerMovementDistance,
+          playerPosition[1] - playerMovementDistance
+        ];
     }
   };
 
@@ -101,10 +96,7 @@ export default class Controls extends Component {
             handleOnPressIn={this.handleFireLaserOnPressIn}
             handleOnPressOut={this.handleFireLaserOnPressOut}
           />
-          <Movement
-            handleOnPressIn={this.handleMovementOnPressIn}
-            handleOnPressOut={this.handleMovementOnPressOut}
-          />
+          <Movement handleOnPressIn={this.movePlayer} />
         </ImageBackground>
         {/* <Text style={{ color: "white" }}>{heading}</Text> */}
       </View>

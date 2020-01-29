@@ -119,6 +119,24 @@ class Loaded extends Component {
     }));
   };
 
+  valueOrZero = value => {
+    if (value <= 0) {
+      return 360;
+    }
+    if (value >= 360) {
+      return 10;
+    }
+    return value;
+  };
+
+  updateOffsetHeading = rotateClockwise => {
+    this.setState(prevState => ({
+      offsetHeading: rotateClockwise
+        ? this.valueOrZero(prevState.offsetHeading + 10)
+        : this.valueOrZero(prevState.offsetHeading - 10)
+    }));
+  };
+
   render() {
     const {
       layoutWidth,
@@ -159,6 +177,7 @@ class Loaded extends Component {
                 karma={karma}
                 playerIsDead={playerIsDead}
                 offsetHeading={offsetHeading}
+                updateOffsetHeading={this.updateOffsetHeading}
               />
             </View>
 

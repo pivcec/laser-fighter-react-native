@@ -1,21 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 
 const FireLaser = ({ handleOnPressIn, handleOnPressOut }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonBackground}>
-        <TouchableOpacity
+        <View
           style={styles.button}
-          onPressIn={handleOnPressIn}
-          onPressOut={handleOnPressOut}
+          onTouchStart={handleOnPressIn}
+          onTouchEnd={handleOnPressOut}
         >
           <Image
             source={require("../../../../assets/images/luck.png")}
             style={styles.buttonImage}
           />
-        </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

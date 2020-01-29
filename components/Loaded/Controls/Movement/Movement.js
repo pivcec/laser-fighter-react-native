@@ -21,23 +21,15 @@ const movementData = [
   ]
 ];
 
-const Cell = ({
-  directionKey,
-  iconName,
-  handleOnPressIn,
-  handleOnPressOut
-}) => (
+const Cell = ({ directionKey, iconName, handleOnPressIn }) => (
   <View style={styles.cell}>
-    <TouchableOpacity
-      onPressIn={() => handleOnPressIn(directionKey)}
-      onPressOut={() => handleOnPressOut()}
-    >
+    <TouchableOpacity onPressIn={() => handleOnPressIn(directionKey)}>
       <Feather name={iconName} size={32} color="black" />
     </TouchableOpacity>
   </View>
 );
 
-const Movement = ({ handleOnPressIn, handleOnPressOut }) => {
+const Movement = ({ handleOnPressIn }) => {
   return (
     <View style={styles.container}>
       <View style={styles.controls}>
@@ -52,7 +44,6 @@ const Movement = ({ handleOnPressIn, handleOnPressOut }) => {
                       directionKey={directionKey}
                       iconName={iconName}
                       handleOnPressIn={handleOnPressIn}
-                      handleOnPressOut={handleOnPressOut}
                     />
                   );
                 }
@@ -103,8 +94,7 @@ const styles = StyleSheet.create({
 });
 
 Movement.protTypes = {
-  handleOnPressIn: PropTypes.func.isRequired,
-  handleOnPressOut: PropTypes.func.isRequired
+  handleOnPressIn: PropTypes.func.isRequired
 };
 
 export default Movement;

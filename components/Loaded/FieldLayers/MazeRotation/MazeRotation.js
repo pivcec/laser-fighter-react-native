@@ -9,9 +9,12 @@ class MazeRotation extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    const { heading } = prevProps;
+    const { heading, offsetHeading } = prevProps;
 
-    if (heading && heading !== this.props.heading && this.props.offsetHeading) {
+    if (
+      heading !== this.props.heading ||
+      offsetHeading !== this.props.offsetHeading
+    ) {
       this.handleRotateView(this.props.heading);
     }
   }
