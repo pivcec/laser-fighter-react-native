@@ -5,6 +5,7 @@ import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
 import MazeRotation from "./MazeRotation/MazeRotation";
+import PlayerInfo from "./PlayerInfo/PlayerInfo";
 
 class FieldLayers extends Component {
   state = {
@@ -59,7 +60,7 @@ class FieldLayers extends Component {
           karma={karma}
         />
 
-        <View style={{ position: "absolute", zIndex: 100 }}>
+        <View style={{ position: "absolute", zIndex: 5 }}>
           <FieldRotation
             heading={heading}
             playerPosition={playerPosition}
@@ -72,6 +73,10 @@ class FieldLayers extends Component {
             playSound={this.props.playSound}
             increaseKarma={increaseKarma}
           />
+        </View>
+
+        <View style={{ position: "absolute", zIndex: 6 }}>
+          <PlayerInfo karma={karma} chi={chi} layoutWidth={layoutWidth} />
         </View>
       </>
     );
