@@ -11,12 +11,18 @@ class MazeRotation extends Component {
   componentDidUpdate(prevProps) {
     const { heading } = prevProps;
 
-    if (heading && heading !== this.props.heading) {
-      this.rotateField(heading);
+    if (heading && heading !== this.props.heading && this.props.offsetHeading) {
+      this.handleRotateView(this.props.heading);
     }
   }
 
-  rotateField = rotateTo => {
+  handleRotateView = heading => {
+    const { offsetHeading } = this.props;
+    const differenceFromOffset = offsetHeading - heading;
+    this.rotateView(-differenceFromOffset);
+  };
+
+  rotateView = rotateTo => {
     const { animatedValue } = this.state;
 
     Animated.timing(animatedValue, {
@@ -52,6 +58,7 @@ class MazeRotation extends Component {
 
 MazeRotation.propTypes = {
   heading: PropTypes.number.isRequired,
+  offsetHeading: PropTypes.number.isRequired,
   playerPosition: PropTypes.array.isRequired,
   layoutWidth: PropTypes.number.isRequired
 };

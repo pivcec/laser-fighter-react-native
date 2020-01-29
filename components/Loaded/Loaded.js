@@ -18,15 +18,24 @@ const playerPain = Asset.fromModule(
 
 const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
-export default class Loaded extends Component {
+class Loaded extends Component {
   state = {
     playerPosition: [50, 50],
-    heading: 0,
+    heading: null,
+    offsetHeading: null,
     layoutWidth: null,
     playerLaserCharge: { isCharging: false, timestamp: null },
     chi: 100,
     karma: 0
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { heading } = prevState;
+
+    if (!heading && this.state.heading) {
+      this.setState({ offsetHeading: this.state.heading });
+    }
+  }
 
   findDimensions = e => {
     const {
@@ -63,11 +72,13 @@ export default class Loaded extends Component {
   };
 
   updatePlayerPosition = newPlayerPosition => {
+    const { heading, offsetHeading } = this.state;
+    const differenceFromOffset = offsetHeading - heading;
     this.setState(prevState => ({
       playerPosition: getPositionRotatedAroundPrevious(
         prevState.playerPosition,
         newPlayerPosition,
-        this.state.heading
+        -differenceFromOffset
       )
     }));
   };
@@ -116,7 +127,8 @@ export default class Loaded extends Component {
       playerLaserCharge,
       playerLaserCharge: { isCharging },
       chi,
-      karma
+      karma,
+      offsetHeading
     } = this.state;
     const playerIsDead = chi < 1;
 
@@ -127,7 +139,7 @@ export default class Loaded extends Component {
           this.findDimensions(e);
         }}
       >
-        {layoutWidth && (
+        {layoutWidth && offsetHeading && (
           <>
             <StatusBar hidden />
             {playerIsDead && (
@@ -146,6 +158,7 @@ export default class Loaded extends Component {
                 chi={chi}
                 karma={karma}
                 playerIsDead={playerIsDead}
+                offsetHeading={offsetHeading}
               />
             </View>
 
@@ -174,3 +187,5 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+export default Loaded;

@@ -15,7 +15,6 @@ export default class Controls extends Component {
   movePlayerInterval = null;
 
   componentDidUpdate(prevProps, prevState) {
-    const { playerPosition } = prevProps;
     const { fireLaserButtonIsPressed, directionKey } = prevState;
 
     if (!fireLaserButtonIsPressed && this.state.fireLaserButtonIsPressed) {

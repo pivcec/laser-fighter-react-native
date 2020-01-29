@@ -1,12 +1,13 @@
 const initialState = {
-  refsToPlayers: []
+  offsetHeading: null
 };
 
 export default function players(state = initialState, action) {
   switch (action.type) {
-    case "CREATE_REF_TO_PLAYER":
+    case "CREATE_OFFSET_HEADING":
       return {
-        ...state
+        ...state,
+        offsetHeading: action.payload.offsetHeading
       };
     default:
       return state;

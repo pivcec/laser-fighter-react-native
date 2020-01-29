@@ -1,5 +1,5 @@
-const CREATE_REF_TO_PLAYER = "CREATE_REF_TO_PLAYER";
+const CREATE_OFFSET_HEADING = "CREATE_OFFSET_HEADING";
 
-export function createRefToPlayer(payload) {
-  return { type: CREATE_REF_TO_PLAYER, payload };
+export function createOffsetHeading(payload) {
+  return { type: CREATE_OFFSET_HEADING, payload };
 }

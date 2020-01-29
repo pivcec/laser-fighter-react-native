@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import players from "./players";
+import rotateView from "./rotateView";
 
 export default combineReducers({
-  players
+  rotateView
 });

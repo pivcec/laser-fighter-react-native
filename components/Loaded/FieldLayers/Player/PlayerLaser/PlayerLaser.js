@@ -36,25 +36,7 @@ export default class PlayerLaser extends Component {
     const { laserPower } = prevState;
 
     if (isCharging && !this.props.playerLaserCharge.isCharging) {
-      const { heading, enemies } = this.props;
-      const timeDiff = this.props.playerLaserCharge.timestamp - timestamp;
-      const chargePercentage = (timeDiff / playerLaserChargeTime) * 100;
-      const laserPower = chargePercentage > 100 ? 100 : chargePercentage;
-      const enemiesWithRotatedPositions = getEnemiesWithRotatedPositions(
-        heading,
-        enemies
-      );
-      const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
-        enemiesWithRotatedPositions
-      );
-      const firstEnemyWithinPathOfLaser =
-        enemiesWithinPathOfLaser.length > 0
-          ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
-          : null;
-      this.setState({
-        laserPower: Math.floor(laserPower),
-        firstEnemyWithinPathOfLaser
-      });
+      this.handleLaserDischarge(timestamp);
     }
 
     if (!laserPower && this.state.laserPower) {
@@ -65,6 +47,29 @@ export default class PlayerLaser extends Component {
       this.animatePlayerLaser();
     }
   }
+
+  handleLaserDischarge = timestamp => {
+    const { heading, offsetHeading, enemies } = this.props;
+    const differenceFromOffset = offsetHeading - heading;
+    const timeDiff = this.props.playerLaserCharge.timestamp - timestamp;
+    const chargePercentage = (timeDiff / playerLaserChargeTime) * 100;
+    const laserPower = chargePercentage > 100 ? 100 : chargePercentage;
+    const enemiesWithRotatedPositions = getEnemiesWithRotatedPositions(
+      -differenceFromOffset,
+      enemies
+    );
+    const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
+      enemiesWithRotatedPositions
+    );
+    const firstEnemyWithinPathOfLaser =
+      enemiesWithinPathOfLaser.length > 0
+        ? this.getFirstEnemyWithinPathOfLaser(enemiesWithinPathOfLaser)
+        : null;
+    this.setState({
+      laserPower: Math.floor(laserPower),
+      firstEnemyWithinPathOfLaser
+    });
+  };
 
   handlePlayerLaserFire = () => {
     const { laserPower, firstEnemyWithinPathOfLaser } = this.state;
@@ -185,6 +190,7 @@ const styles = StyleSheet.create({
 PlayerLaser.propTypes = {
   playerLaserCharge: PropTypes.object.isRequired,
   heading: PropTypes.number.isRequired,
+  offsetHeading: PropTypes.number.isRequired,
   updateEnemy: PropTypes.func.isRequired,
   playSound: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired
