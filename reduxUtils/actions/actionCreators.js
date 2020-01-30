@@ -1,5 +1,5 @@
-const CREATE_OFFSET_HEADING = "CREATE_OFFSET_HEADING";
+const UPDATE_ACTIVE_MAZE_ZONE_DATA = "UPDATE_ACTIVE_MAZE_ZONE_DATA";
 
-export function createOffsetHeading(payload) {
-  return { type: CREATE_OFFSET_HEADING, payload };
+export function updateActiveMazeZoneData(payload) {
+  return { type: UPDATE_ACTIVE_MAZE_ZONE_DATA, payload };
 }

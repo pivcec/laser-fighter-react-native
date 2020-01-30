@@ -1,13 +1,13 @@
 const initialState = {
-  offsetHeading: null
+  activeMazeZoneData: null
 };
 
 export default function players(state = initialState, action) {
   switch (action.type) {
-    case "CREATE_OFFSET_HEADING":
+    case "UPDATE_ACTIVE_MAZE_ZONE_DATA":
       return {
         ...state,
-        offsetHeading: action.payload.offsetHeading
+        activeMazeZoneData: action.payload.activeMazeZoneData
       };
     default:
       return state;

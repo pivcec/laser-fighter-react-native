@@ -124,7 +124,7 @@ class Loaded extends Component {
       return 360;
     }
     if (value >= 360) {
-      return 10;
+      return 1;
     }
     return value;
   };
@@ -132,8 +132,8 @@ class Loaded extends Component {
   updateOffsetHeading = rotateClockwise => {
     this.setState(prevState => ({
       offsetHeading: rotateClockwise
-        ? this.valueOrZero(prevState.offsetHeading + 10)
-        : this.valueOrZero(prevState.offsetHeading - 10)
+        ? this.valueOrZero(prevState.offsetHeading + 30)
+        : this.valueOrZero(prevState.offsetHeading - 30)
     }));
   };
 

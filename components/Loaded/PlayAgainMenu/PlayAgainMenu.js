@@ -24,9 +24,11 @@ class PlayAgainMenu extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.overlay}>
+          {/*
           <View style={styles.messageContainer}>
             <Text style={styles.message}>you died, loser</Text>
           </View>
+          */}
           <View style={styles.lotusContainer}>
             <Animated.Image
               source={require("../../../assets/images/lotus.png")}
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative"
   },
+  /*
   message: {
     color: "white"
   },
@@ -99,6 +102,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0
   },
+  */
   lotusContainer: {
     display: "flex",
     flexDirection: "column",

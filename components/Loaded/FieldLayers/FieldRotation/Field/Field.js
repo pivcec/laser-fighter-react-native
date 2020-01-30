@@ -16,7 +16,7 @@ const powerUp = Asset.fromModule(
 
 class Field extends Component {
   componentDidMount() {
-    this.createEnemy();
+    // this.createEnemy();
 
     this.intervalId = setInterval(() => {
       this.animateEnemies();

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import rotateView from "./rotateView";
+import mazeZone from "./mazeZone";
 
 export default combineReducers({
-  rotateView
+  mazeZone
 });

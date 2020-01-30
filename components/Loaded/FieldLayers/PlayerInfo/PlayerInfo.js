@@ -40,13 +40,7 @@ class PlayerInfo extends Component {
 
   render() {
     const { showKarma } = this.state;
-    const {
-      chi,
-      karma,
-      layoutWidth,
-      offsetHeading,
-      updateOffsetHeading
-    } = this.props;
+    const { chi, karma, layoutWidth, updateOffsetHeading } = this.props;
     const chiColor = this.getChiColor(chi);
 
     return (
