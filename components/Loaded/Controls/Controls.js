@@ -48,7 +48,7 @@ export default class Controls extends Component {
       directionKey
     );
 
-    this.props.updatePlayerPosition(newPlayerPosition);
+    this.props.updatePlayerPositionRotated(newPlayerPosition);
   };
 
   getNewPlayerPosition = (playerPosition, directionKey) => {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
 Controls.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerPosition: PropTypes.array.isRequired,
-  updatePlayerPosition: PropTypes.func.isRequired,
+  updatePlayerPositionRotated: PropTypes.func.isRequired,
   playerLaserIsCharging: PropTypes.bool.isRequired,
   togglePlayerLaserIsCharging: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired

@@ -72,6 +72,12 @@ class Loaded extends Component {
   };
 
   updatePlayerPosition = newPlayerPosition => {
+    this.setState({
+      playerPosition: newPlayerPosition
+    });
+  };
+
+  updatePlayerPositionRotated = newPlayerPosition => {
     const { heading, offsetHeading } = this.state;
     const differenceFromOffset = offsetHeading - heading;
     this.setState(prevState => ({
@@ -185,7 +191,7 @@ class Loaded extends Component {
               <Controls
                 heading={heading}
                 playerPosition={playerPosition}
-                updatePlayerPosition={this.updatePlayerPosition}
+                updatePlayerPositionRotated={this.updatePlayerPositionRotated}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

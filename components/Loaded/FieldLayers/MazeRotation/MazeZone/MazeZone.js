@@ -40,11 +40,7 @@ class MazeZone extends Component {
       mazeZoneColumnIndex !== this.state.mazeZoneColumnIndex ||
       mazeZoneRowIndex !== this.state.mazeZoneRowIndex
     ) {
-      const newActiveMazeZoneData =
-        mazeData[this.state.mazeZoneRowIndex][this.state.mazeZoneColumnIndex];
-      this.props.updateActiveMazeZoneData({
-        activeMazeZoneData: newActiveMazeZoneData
-      });
+      this.handleMazeZoneUpdate();
     }
   }
 
@@ -103,6 +99,15 @@ class MazeZone extends Component {
         mazeZoneRowIndex: newMazeZoneRowIndex
       });
     }
+  };
+
+  handleMazeZoneUpdate = () => {
+    const { mazeZoneRowIndex, mazeZoneColumnIndex } = this.state;
+    const newActiveMazeZoneData =
+      mazeData[mazeZoneRowIndex][mazeZoneColumnIndex];
+    this.props.updateActiveMazeZoneData({
+      activeMazeZoneData: newActiveMazeZoneData
+    });
   };
 
   multiplesOfCellWidthOutsideZone = playerPosition => {
