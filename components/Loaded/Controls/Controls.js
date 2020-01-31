@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
 import { playerMovementDistance } from "../../../constants/constants";
@@ -7,7 +8,7 @@ import Charger from "./Charger/Charger";
 import FireLaser from "./FireLaser/FireLaser";
 import Movement from "./Movement/Movement";
 
-export default class Controls extends Component {
+class Controls extends Component {
   state = {
     fireLaserButtonIsPressed: false
   };
@@ -127,3 +128,11 @@ Controls.propTypes = {
   togglePlayerLaserIsCharging: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired
 };
+
+const mapStateToProps = state => {
+  return {
+    activeMazeZoneData: state.mazeZone.activeMazeZoneData
+  };
+};
+
+export default connect(mapStateToProps)(Controls);
