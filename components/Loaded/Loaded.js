@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
+import exactMath from "exact-math";
+import { exactMathConfig } from "../../constants/constants";
 import { getPositionRotatedAroundPrevious } from "../../helpers/coordsCalculations";
 import { ScreenOrientation } from "expo";
 import { Asset } from "expo-asset";
@@ -75,6 +77,15 @@ class Loaded extends Component {
     this.setState({
       playerPosition: newPlayerPosition
     });
+  };
+
+  handleTouchMovement = (touchMovementX, touchMovementY) => {
+    const { playerPosition } = this.state;
+    const newPlayerPosition = [
+      exactMath.add(playerPosition[0], touchMovementX, exactMathConfig),
+      exactMath.sub(playerPosition[1], touchMovementY, exactMathConfig)
+    ];
+    this.updatePlayerPositionRotated(newPlayerPosition);
   };
 
   updatePlayerPositionRotated = newPlayerPosition => {
@@ -184,6 +195,7 @@ class Loaded extends Component {
                 playerIsDead={playerIsDead}
                 offsetHeading={offsetHeading}
                 updateOffsetHeading={this.updateOffsetHeading}
+                handleTouchMovement={this.handleTouchMovement}
               />
             </View>
 
@@ -191,7 +203,7 @@ class Loaded extends Component {
               <Controls
                 heading={heading}
                 playerPosition={playerPosition}
-                updatePlayerPositionRotated={this.updatePlayerPositionRotated}
+                // updatePlayerPositionRotated={this.updatePlayerPositionRotated}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

@@ -19,10 +19,10 @@ class Player extends Component {
       offsetHeading
     } = this.props;
     return (
-      <>
+      <View style={styles.container}>
         <View
           style={[
-            styles.container,
+            styles.playerIconContainer,
             {
               top: `${50 - playerPositionOffset}%`,
               left: `${50 - playerPositionOffset}%`,
@@ -33,7 +33,7 @@ class Player extends Component {
         >
           <Image
             source={require("../../../../assets/images/yinyang.png")}
-            style={styles.player}
+            style={styles.playerIcon}
           />
         </View>
         <PlayerLaser
@@ -45,21 +45,25 @@ class Player extends Component {
           playSound={playSound}
           enemies={enemies}
         />
-      </>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
+    zIndex: 4,
+    height: "100%",
+    width: "100%"
+  },
+  playerIconContainer: {
     position: "absolute",
     zIndex: 4
   },
-  player: {
+  playerIcon: {
     width: "100%",
-    height: "100%",
-    position: "absolute",
-    zIndex: 4
+    height: "100%"
   }
 });
 

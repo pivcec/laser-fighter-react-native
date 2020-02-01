@@ -41,7 +41,7 @@ class MazeZone extends Component {
       playerPosition,
       layoutWidth
     );
-    console.warn("activeMazeZoneData", activeMazeZoneData);
+    // console.warn("activeMazeZoneData", activeMazeZoneData);
 
     // this.props.updateActiveMazeZoneData(activeMazeZoneData);
   };

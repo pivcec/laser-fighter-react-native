@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { View } from "react-native";
 import PropTypes from "prop-types";
+import exactMath from "exact-math";
+import { exactMathConfig } from "../../../constants/constants";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
@@ -9,8 +11,21 @@ import PlayerInfo from "./PlayerInfo/PlayerInfo";
 
 class FieldLayers extends Component {
   state = {
-    enemies: []
+    enemies: [],
+    touchCoords: null
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { touchCoords } = prevState;
+    if (touchCoords && this.state.touchCoords) {
+      if (
+        touchCoords[0] !== this.state.touchCoords[0] ||
+        touchCoords[1] !== this.state.touchCoords[1]
+      ) {
+        this.handleTouchCoordsUpdate(touchCoords);
+      }
+    }
+  }
 
   updateEnemy = updatedEnemy => {
     this.setState(prevState => ({
@@ -22,6 +37,35 @@ class FieldLayers extends Component {
 
   updateEnemies = updatedEnemies => {
     this.setState({ enemies: updatedEnemies });
+  };
+
+  handleTouchCoordsUpdate = touchCoords => {
+    const touchMovementX = exactMath.sub(
+      touchCoords[0],
+      this.state.touchCoords[0],
+      exactMathConfig
+    );
+    const touchMovementY = exactMath.sub(
+      touchCoords[1],
+      this.state.touchCoords[1],
+      exactMathConfig
+    );
+    this.props.handleTouchMovement(
+      exactMath.div(touchMovementX, 5),
+      exactMath.div(touchMovementY, 5)
+    );
+  };
+
+  handleTouchMove = event => {
+    this.setState({
+      touchCoords: [event.locationX, event.locationY]
+    });
+  };
+
+  handleTouchEnd = () => {
+    this.setState({
+      touchCoords: null
+    });
   };
 
   render() {
@@ -42,7 +86,14 @@ class FieldLayers extends Component {
       updateOffsetHeading
     } = this.props;
     return (
-      <>
+      <View
+        onTouchMove={e => {
+          this.handleTouchMove(e.nativeEvent);
+        }}
+        onTouchEnd={e => {
+          this.handleTouchEnd(e.nativeEvent);
+        }}
+      >
         <Grid layoutWidth={layoutWidth} />
 
         <MazeRotation
@@ -64,7 +115,7 @@ class FieldLayers extends Component {
           karma={karma}
         />
 
-        <View style={{ position: "absolute", zIndex: 5 }}>
+        <View style={{ position: "absolute", zIndex: 4 }}>
           <FieldRotation
             heading={heading}
             offsetHeading={offsetHeading}
@@ -80,7 +131,7 @@ class FieldLayers extends Component {
           />
         </View>
 
-        <View style={{ position: "absolute", zIndex: 6 }}>
+        <View style={{ position: "absolute", zIndex: 5 }}>
           <PlayerInfo
             karma={karma}
             chi={chi}
@@ -88,7 +139,7 @@ class FieldLayers extends Component {
             updateOffsetHeading={updateOffsetHeading}
           />
         </View>
-      </>
+      </View>
     );
   }
 }
@@ -106,7 +157,8 @@ FieldLayers.propTypes = {
   karma: PropTypes.number.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
-  increaseKarma: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired,
+  handleTouchMovement: PropTypes.func.isRequired
 };
 
 export default FieldLayers;
