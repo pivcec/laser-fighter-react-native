@@ -1,13 +1,13 @@
 const initialState = {
-  activeMazeZoneData: null
+  activeCellData: null
 };
 
 export default function players(state = initialState, action) {
   switch (action.type) {
-    case "UPDATE_ACTIVE_MAZE_ZONE_DATA":
+    case "UPDATE_ACTIVE_CELL_DATA":
       return {
         ...state,
-        activeMazeZoneData: action.payload.activeMazeZoneData
+        activeCellData: action.payload
       };
     default:
       return state;

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { View } from "react-native";
 import PropTypes from "prop-types";
 import exactMath from "exact-math";
@@ -45,15 +46,84 @@ class FieldLayers extends Component {
       this.state.touchCoords[0],
       exactMathConfig
     );
+
     const touchMovementY = exactMath.sub(
       touchCoords[1],
       this.state.touchCoords[1],
       exactMathConfig
     );
+
+    const touchMovementData = [
+      this.checkWallDistanceX(touchMovementX),
+      this.checkWallDistanceY(touchMovementY)
+    ];
+
     this.props.handleTouchMovement(
-      exactMath.div(touchMovementX, 5),
-      exactMath.div(touchMovementY, 5)
+      exactMath.div(touchMovementData[0], 2.5),
+      exactMath.div(touchMovementData[1], 2.5)
     );
+  };
+
+  checkWallDistanceX = distance => {
+    const {
+      activeCellData: { west, east }
+    } = this.props;
+
+    if (distance > 0) {
+      if (east) {
+        if (east > distance) {
+          return distance;
+        } else {
+          return east;
+        }
+      } else {
+        return distance;
+      }
+    }
+
+    if (distance < 0) {
+      if (west) {
+        if (west > Math.abs(distance)) {
+          return distance;
+        } else {
+          return -west;
+        }
+      }
+      return distance;
+    }
+
+    return distance;
+  };
+
+  checkWallDistanceY = distance => {
+    const {
+      activeCellData: { north, south }
+    } = this.props;
+
+    if (distance > 0) {
+      if (south) {
+        if (south > distance) {
+          return distance;
+        } else {
+          return south;
+        }
+      } else {
+        return distance;
+      }
+    }
+
+    if (distance < 0) {
+      if (north) {
+        if (north > Math.abs(distance)) {
+          return distance;
+        } else {
+          return -north;
+        }
+      }
+      return distance;
+    }
+
+    return distance;
   };
 
   handleTouchMove = event => {
@@ -161,4 +231,10 @@ FieldLayers.propTypes = {
   handleTouchMovement: PropTypes.func.isRequired
 };
 
-export default FieldLayers;
+const mapStateToProps = state => {
+  return {
+    activeCellData: state.mazePosition.activeCellData
+  };
+};
+
+export default connect(mapStateToProps)(FieldLayers);

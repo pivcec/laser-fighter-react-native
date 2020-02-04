@@ -203,7 +203,6 @@ class Loaded extends Component {
               <Controls
                 heading={heading}
                 playerPosition={playerPosition}
-                // updatePlayerPositionRotated={this.updatePlayerPositionRotated}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}
                 togglePlayerLaserIsCharging={this.togglePlayerLaserIsCharging}

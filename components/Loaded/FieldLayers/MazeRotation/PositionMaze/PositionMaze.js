@@ -1,24 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updateActiveMazeZoneData } from "../../../../../reduxUtils/actions/actionCreators";
+import { updateActiveCellData } from "../../../../../reduxUtils/actions/actionCreators";
 import PropTypes from "prop-types";
 import { View } from "react-native";
 import {
   getMazeData,
-  getActiveMazeZoneData
+  getActiveCellData
 } from "../../../../../helpers/mazeLogic";
 import Maze from "./Maze/Maze";
 
 const mazeData = getMazeData();
 
-class MazeZone extends Component {
+class PositionMaze extends Component {
   state = {
     mazePosition: [0, 0]
   };
 
+  componentDidMount() {
+    this.updateActiveCellData();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { playerPosition } = prevProps;
-    const { mazePosition, mazeZoneColumnIndex, mazeZoneRowIndex } = prevState;
+    const { mazePosition } = prevState;
 
     if (
       playerPosition[0] !== this.props.playerPosition[0] ||
@@ -31,19 +35,19 @@ class MazeZone extends Component {
       mazePosition[0] !== this.state.mazePosition[0] ||
       mazePosition[1] !== this.state.mazePosition[1]
     ) {
-      this.handleMazePositionUpdate();
+      this.updateActiveCellData();
     }
   }
 
-  handleMazePositionUpdate = () => {
-    const { playerPosition, layoutWidth } = this.props;
-    const activeMazeZoneData = getActiveMazeZoneData(
-      playerPosition,
-      layoutWidth
+  updateActiveCellData = () => {
+    const { layoutWidth } = this.props;
+    const { mazePosition } = this.state;
+    const activeCellData = getActiveCellData(
+      mazePosition,
+      layoutWidth,
+      mazeData
     );
-    // console.warn("activeMazeZoneData", activeMazeZoneData);
-
-    // this.props.updateActiveMazeZoneData(activeMazeZoneData);
+    this.props.updateActiveCellData(activeCellData);
   };
 
   handlePlayerPositionUpdate = playerPosition => {
@@ -78,13 +82,13 @@ class MazeZone extends Component {
   }
 }
 
-MazeZone.propTypes = {
+PositionMaze.propTypes = {
   playerPosition: PropTypes.array.isRequired,
   layoutWidth: PropTypes.number.isRequired
 };
 
 const mapDispatchToProps = {
-  updateActiveMazeZoneData
+  updateActiveCellData
 };
 
-export default connect(null, mapDispatchToProps)(MazeZone);
+export default connect(null, mapDispatchToProps)(PositionMaze);

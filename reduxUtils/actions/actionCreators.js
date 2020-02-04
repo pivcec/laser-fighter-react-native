@@ -1,5 +1,5 @@
-const UPDATE_ACTIVE_MAZE_ZONE_DATA = "UPDATE_ACTIVE_MAZE_ZONE_DATA";
+const UPDATE_ACTIVE_CELL_DATA = "UPDATE_ACTIVE_CELL_DATA";
 
-export function updateActiveMazeZoneData(payload) {
-  return { type: UPDATE_ACTIVE_MAZE_ZONE_DATA, payload };
+export function updateActiveCellData(payload) {
+  return { type: UPDATE_ACTIVE_CELL_DATA, payload };
 }

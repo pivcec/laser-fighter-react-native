@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import mazeZone from "./mazeZone";
+import mazePosition from "./mazePosition";
 
 export default combineReducers({
-  mazeZone
+  mazePosition
 });

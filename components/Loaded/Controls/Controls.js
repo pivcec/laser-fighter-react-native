@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
 Controls.propTypes = {
   playerIsDead: PropTypes.bool.isRequired,
   playerPosition: PropTypes.array.isRequired,
-  // updatePlayerPositionRotated: PropTypes.func.isRequired,
   playerLaserIsCharging: PropTypes.bool.isRequired,
   togglePlayerLaserIsCharging: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired
@@ -80,7 +79,7 @@ Controls.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    activeMazeZoneData: state.mazeZone.activeMazeZoneData
+    activeCellData: state.mazePosition.activeCellData
   };
 };
 

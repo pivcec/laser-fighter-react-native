@@ -1,19 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-  hasLeftWall,
-  hasRightWall,
-  hasTopWall,
-  hasBottomWall
+  hasWestWall,
+  hasEastWall,
+  hasNorthWall,
+  hasSouthWall
 } from "../../../../../../../../helpers/mazeLogic";
 import { View } from "react-native";
 import Svg, { Line } from "react-native-svg";
 
 const Cell = ({ cell, layoutWidth }) => {
-  const leftWall = hasLeftWall(cell);
-  const rightWall = hasRightWall(cell);
-  const topWall = hasTopWall(cell);
-  const bottomWall = hasBottomWall(cell);
+  const westWall = hasWestWall(cell);
+  const eastWall = hasEastWall(cell);
+  const northWall = hasNorthWall(cell);
+  const southWall = hasSouthWall(cell);
   const strokeWidth = 10;
   const cellWidthAndHeight = layoutWidth / 3;
   const mazeWallStyle = {
@@ -27,7 +27,7 @@ const Cell = ({ cell, layoutWidth }) => {
         width={cellWidthAndHeight}
         height={cellWidthAndHeight}
       >
-        {leftWall && (
+        {westWall && (
           <Line
             x1={0}
             y1={-(strokeWidth / 2)}
@@ -36,7 +36,7 @@ const Cell = ({ cell, layoutWidth }) => {
             style={mazeWallStyle}
           />
         )}
-        {rightWall && (
+        {eastWall && (
           <Line
             x1={cellWidthAndHeight}
             y1={-(strokeWidth / 2)}
@@ -45,7 +45,7 @@ const Cell = ({ cell, layoutWidth }) => {
             style={mazeWallStyle}
           />
         )}
-        {topWall && (
+        {northWall && (
           <Line
             x1={-(strokeWidth / 2)}
             y1={0}
@@ -54,7 +54,7 @@ const Cell = ({ cell, layoutWidth }) => {
             style={mazeWallStyle}
           />
         )}
-        {bottomWall && (
+        {southWall && (
           <Line
             x1={-(strokeWidth / 2)}
             y1={cellWidthAndHeight}

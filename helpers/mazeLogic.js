@@ -19,108 +19,168 @@ export const getMazeData = () => {
   return mazeData;
 };
 
-export const hasLeftWall = cell => {
+export const hasWestWall = cell => {
   return [15, 14, 13, 12, 11, 10, 9, 8].includes(cell);
 };
 
-export const hasRightWall = cell => {
+export const hasEastWall = cell => {
   return [15, 14, 11, 10, 7, 6, 3, 2].includes(cell);
 };
 
-export const hasTopWall = cell => {
+export const hasNorthWall = cell => {
   return [15, 13, 11, 9, 7, 5, 3, 1].includes(cell);
 };
 
-export const hasBottomWall = cell => {
+export const hasSouthWall = cell => {
   return [15, 14, 13, 12, 7, 6, 5, 4].includes(cell);
 };
 
-const getDistance = (multiple, subtract, cellWidth) => {
-  const fraction = Math.abs(multiple) % 1;
-  if (subtract) {
-    return cellWidth - fraction * cellWidth;
+const getRowIndex = (north, south, initialRowIndex) => {
+  if (north) {
+    return initialRowIndex - north;
   }
-  return fraction * cellWidth;
-};
 
-const getIndex = (multiples, subtract, initial) => {
-  if (subtract) {
-    return initial - Math.ceil(multiples);
+  if (south) {
+    return initialRowIndex + south;
   }
-  return initial + Math.ceil(multiples);
+
+  return initialRowIndex;
 };
 
-const getMultiplesOfCellWidthOutsideZone = (playerPosition, layoutWidth) => {
-  const cellWidth = layoutWidth / 3;
-  const movementIsPositive = playerPosition > 0;
-  const normalizedPlayerPosition = movementIsPositive
-    ? playerPosition - cellWidth
-    : Math.abs(playerPosition);
-  return normalizedPlayerPosition / cellWidth;
+const getColumnIndex = (east, west, initialColumnIndex) => {
+  if (east) {
+    return initialColumnIndex + east;
+  }
+
+  if (west) {
+    return initialColumnIndex - west;
+  }
+
+  return initialColumnIndex;
 };
 
-export const getActiveMazeZoneData = (playerPosition, layoutWidth) => {
+const getPlayerMovement = mazePosition => {
+  const mazeMovementX = 0 - mazePosition[0];
+  const mazeMovementY = 0 - mazePosition[1];
+
+  return {
+    west: mazeMovementX > 0 ? null : Math.abs(mazeMovementX),
+    east: mazeMovementX < 0 ? null : mazeMovementX,
+    south: mazeMovementY > 0 ? null : Math.abs(mazeMovementY),
+    north: mazeMovementY < 0 ? null : mazeMovementY
+  };
+};
+
+const getCellMovementFactor = (distance, cellWidth) => {
+  const multiples = distance / cellWidth;
+  const normalizedMultiples = multiples > 0.5 ? multiples - 0.5 : 0;
+  return Math.ceil(normalizedMultiples);
+};
+
+const getPositionInCellX = (movementFactor, isEast, distance, cellWidth) => {
+  const multiples = distance / cellWidth;
+  if (isEast) {
+    if (movementFactor === 0) {
+      return multiples + 0.5;
+    } else {
+      return (multiples - 0.5) % 1;
+    }
+  }
+
+  if (!isEast) {
+    if (movementFactor === 0) {
+      return 1 - (multiples + 0.5);
+    } else {
+      return 1 - ((multiples + 0.5) % 1);
+    }
+  }
+};
+
+const getPositionInCellY = (movementFactor, isNorth, distance, cellWidth) => {
+  const multiples = distance / cellWidth;
+  if (isNorth) {
+    if (movementFactor === 0) {
+      return 1 - (multiples + 0.5);
+    } else {
+      return 1 - ((multiples + 0.5) % 1);
+    }
+  }
+
+  if (!isNorth) {
+    if (movementFactor === 0) {
+      return multiples + 0.5;
+    } else {
+      return multiples - 0.5;
+    }
+  }
+};
+
+const getDistanceToWall = (position, direction, cellWidth) => {
+  if (direction === "east" || direction === "south") {
+    return (1 - position) * cellWidth;
+  }
+  return position * cellWidth;
+};
+
+export const getActiveCellData = (mazePosition, layoutWidth, mazeData) => {
   const cellWidth = layoutWidth / 3;
 
-  const halfOfCellWidth = cellWidth / 2;
+  const playerMovement = getPlayerMovement(mazePosition, cellWidth);
 
-  const initialZone = {
-    right: 50 + halfOfCellWidth,
-    left: 50 - halfOfCellWidth,
-    top: 50 + halfOfCellWidth,
-    bottom: 50 - halfOfCellWidth
+  const cellMovementFactor = {
+    west: getCellMovementFactor(playerMovement.west, cellWidth),
+    east: getCellMovementFactor(playerMovement.east, cellWidth),
+    south: getCellMovementFactor(playerMovement.south, cellWidth),
+    north: getCellMovementFactor(playerMovement.north, cellWidth)
   };
 
-  const isInsideInitialZoneX =
-    playerPosition[0] < initialZone.right &&
-    playerPosition[0] > initialZone.left;
-
-  const isInsideInitialZoneY =
-    playerPosition[1] < initialZone.top &&
-    playerPosition[1] > initialZone.bottom;
-
-  const isLeftOfInitialZone = playerPosition[0] < initialZone.left;
-
-  const isRightOfInitialZone = playerPosition[0] > initialZone.right;
-
-  const isAboveInitialZone = playerPosition[1] > initialZone.top;
-
-  const multiplesX = getMultiplesOfCellWidthOutsideZone(
-    playerPosition[0],
+  const rowIndex = getRowIndex(
+    cellMovementFactor.north,
+    cellMovementFactor.south,
+    initialRowIndex,
     layoutWidth
   );
 
-  const multiplesY = getMultiplesOfCellWidthOutsideZone(
-    playerPosition[1],
+  const columnIndex = getColumnIndex(
+    cellMovementFactor.east,
+    cellMovementFactor.west,
+    initialColumnIndex,
     layoutWidth
   );
 
-  const mazeZoneColumnIndex = isInsideInitialZoneX
-    ? initialColumnIndex
-    : getIndex(multiplesX, isLeftOfInitialZone, initialColumnIndex);
+  const cell = mazeData[rowIndex][columnIndex];
 
-  const mazeZoneRowIndex = isInsideInitialZoneY
-    ? initialRowIndex
-    : getIndex(multiplesY, isAboveInitialZone, initialRowIndex);
+  const { east, west, north, south } = playerMovement;
+  const isEast = east ? true : false;
+  const isNorth = north ? true : false;
+  const movementX = isEast ? east : west;
+  const movementY = isNorth ? north : south;
+  const movementFactorX = cellMovementFactor.east
+    ? cellMovementFactor.east
+    : cellMovementFactor.west;
+  const movementFactorY = cellMovementFactor.north
+    ? cellMovementFactor.north
+    : cellMovementFactor.south;
 
-  const cell = mazeData[mazeZoneRowIndex][mazeZoneColumnIndex];
+  const positionInCell = [
+    getPositionInCellX(movementFactorX, isEast, movementX, cellWidth),
+    getPositionInCellY(movementFactorY, isNorth, movementY, cellWidth)
+  ];
 
-  const distanceToTop = getDistance(multiplesY, isAboveInitialZone, cellWidth);
-
-  const distanceToRight = getDistance(
-    multiplesX,
-    isRightOfInitialZone,
-    cellWidth
-  );
-
-  const activeMazeZoneData = {
-    distanceToTopWall: hasTopWall(cell) ? distanceToTop : null,
-    distanceToBottomWall: hasBottomWall(cell)
-      ? cellWidth - distanceToTop
+  const activeCellData = {
+    east: hasEastWall(cell)
+      ? getDistanceToWall(positionInCell[0], "east", cellWidth)
       : null,
-    distanceToRightWall: hasRightWall(cell) ? distanceToRight : null,
-    distanceToLeftWall: hasLeftWall(cell) ? cellWidth - distanceToRight : null
+    west: hasWestWall(cell)
+      ? getDistanceToWall(positionInCell[0], "west", cellWidth)
+      : null,
+    south: hasSouthWall(cell)
+      ? getDistanceToWall(positionInCell[1], "south", cellWidth)
+      : null,
+    north: hasNorthWall(cell)
+      ? getDistanceToWall(positionInCell[1], "north", cellWidth)
+      : null
   };
 
-  return activeMazeZoneData;
+  return activeCellData;
 };

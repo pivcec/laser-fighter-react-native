@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Animated } from "react-native";
-import MazeZone from "./MazeZone/MazeZone";
+import PositionMaze from "./PositionMaze/PositionMaze";
 
 class MazeRotation extends Component {
   state = {
@@ -53,7 +53,10 @@ class MazeRotation extends Component {
           position: "absolute"
         }}
       >
-        <MazeZone playerPosition={playerPosition} layoutWidth={layoutWidth} />
+        <PositionMaze
+          playerPosition={playerPosition}
+          layoutWidth={layoutWidth}
+        />
       </Animated.View>
     );
   }
