@@ -1,8 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { View, StyleSheet, StatusBar } from "react-native";
 import exactMath from "exact-math";
 import { exactMathConfig } from "../../constants/constants";
 import { getPositionRotatedAroundPrevious } from "../../helpers/coordsCalculations";
+import {
+  checkWallDistanceX,
+  checkWallDistanceY
+} from "../../helpers/playerLogic";
 import { ScreenOrientation } from "expo";
 import { Asset } from "expo-asset";
 import { Audio } from "expo-av";
@@ -80,24 +85,40 @@ class Loaded extends Component {
   };
 
   handleTouchMovement = (touchMovementX, touchMovementY) => {
+    const { activeCellData } = this.props;
     const { playerPosition } = this.state;
     const newPlayerPosition = [
       exactMath.add(playerPosition[0], touchMovementX, exactMathConfig),
       exactMath.sub(playerPosition[1], touchMovementY, exactMathConfig)
     ];
-    this.updatePlayerPositionRotated(newPlayerPosition);
+    const rotatedNewPosition = this.getRotatedNewPosition(newPlayerPosition);
+
+    const movement = [
+      playerPosition[0] - rotatedNewPosition[0],
+      playerPosition[1] - rotatedNewPosition[1]
+    ];
+
+    const wallDistanceAdjusted = [
+      checkWallDistanceX(movement[0], activeCellData),
+      checkWallDistanceY(movement[1], activeCellData)
+    ];
+
+    this.setState(prevState => ({
+      playerPosition: [
+        prevState.playerPosition[0] - wallDistanceAdjusted[0],
+        prevState.playerPosition[1] - wallDistanceAdjusted[1]
+      ]
+    }));
   };
 
-  updatePlayerPositionRotated = newPlayerPosition => {
-    const { heading, offsetHeading } = this.state;
+  getRotatedNewPosition = newPlayerPosition => {
+    const { heading, offsetHeading, playerPosition } = this.state;
     const differenceFromOffset = offsetHeading - heading;
-    this.setState(prevState => ({
-      playerPosition: getPositionRotatedAroundPrevious(
-        prevState.playerPosition,
-        newPlayerPosition,
-        -differenceFromOffset
-      )
-    }));
+    return getPositionRotatedAroundPrevious(
+      playerPosition,
+      newPlayerPosition,
+      -differenceFromOffset
+    );
   };
 
   debouncedUpdateHeading = debounce(this.updateHeading, 0);
@@ -224,4 +245,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Loaded;
+const mapStateToProps = state => {
+  return {
+    activeCellData: state.mazePosition.activeCellData
+  };
+};
+
+export default connect(mapStateToProps)(Loaded);

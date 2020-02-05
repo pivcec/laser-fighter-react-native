@@ -50,3 +50,41 @@ export const checkForCollisionWithPlayer = position => {
   }
   return false;
 };
+
+export const checkWallDistanceX = (distance, activeCellData) => {
+  const { west, east } = activeCellData;
+  if (distance > 0) {
+    if (east) {
+      return distance > east ? east - 10 : distance;
+    }
+    return distance;
+  }
+
+  if (distance < 0) {
+    if (west) {
+      return Math.abs(distance) > west ? west : distance;
+    }
+    return distance;
+  }
+
+  return distance;
+};
+
+export const checkWallDistanceY = (distance, activeCellData) => {
+  const { north, south } = activeCellData;
+  if (distance > 0) {
+    if (north) {
+      return distance > north ? north - 10 : distance;
+    }
+    return distance;
+  }
+
+  if (distance < 0) {
+    if (south) {
+      return Math.abs(distance) > south ? south : distance;
+    }
+    return distance;
+  }
+
+  return distance;
+};

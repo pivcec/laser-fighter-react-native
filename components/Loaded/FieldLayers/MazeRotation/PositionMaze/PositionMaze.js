@@ -39,6 +39,21 @@ class PositionMaze extends Component {
     }
   }
 
+  handlePlayerPositionUpdate = playerPosition => {
+    const { mazePosition } = this.state;
+    const playerMovementX = this.props.playerPosition[0] - playerPosition[0];
+    const playerMovementY = this.props.playerPosition[1] - playerPosition[1];
+
+    const updatedMazePosition = [
+      mazePosition[0] + playerMovementX,
+      mazePosition[1] + playerMovementY
+    ];
+
+    this.setState({
+      mazePosition: updatedMazePosition
+    });
+  };
+
   updateActiveCellData = () => {
     const { layoutWidth } = this.props;
     const { mazePosition } = this.state;
@@ -47,22 +62,8 @@ class PositionMaze extends Component {
       layoutWidth,
       mazeData
     );
+
     this.props.updateActiveCellData(activeCellData);
-  };
-
-  handlePlayerPositionUpdate = playerPosition => {
-    const { mazePosition } = this.state;
-    const playerMovementX = this.props.playerPosition[0] - playerPosition[0];
-    const playerMovementY = this.props.playerPosition[1] - playerPosition[1];
-
-    const updatedMazePosition = [
-      mazePosition[0] + -playerMovementX,
-      mazePosition[1] + -playerMovementY
-    ];
-
-    this.setState({
-      mazePosition: updatedMazePosition
-    });
   };
 
   render() {
