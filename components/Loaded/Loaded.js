@@ -27,7 +27,7 @@ const zenMusic = Asset.fromModule(require("../../assets/sounds/zenMusic.mp3"));
 
 class Loaded extends Component {
   state = {
-    playerPosition: [50, 50],
+    playerPosition: [],
     heading: null,
     offsetHeading: null,
     layoutWidth: null,
@@ -37,12 +37,22 @@ class Loaded extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { heading } = prevState;
+    const { heading, layoutWidth } = prevState;
 
     if (!heading && this.state.heading) {
       this.setState({ offsetHeading: this.state.heading });
     }
+
+    if (!layoutWidth && this.state.layoutWidth) {
+      this.setPlayerPosition(this.state.layoutWidth);
+    }
   }
+
+  setPlayerPosition = layoutWidth => {
+    this.setState({
+      playerPosition: [layoutWidth / 2, layoutWidth / 2]
+    });
+  };
 
   findDimensions = e => {
     const {
@@ -84,20 +94,20 @@ class Loaded extends Component {
     });
   };
 
-  handleTouchMovement = (touchMovementX, touchMovementY) => {
+  handleTouchMovement = movement => {
     const { activeCellData } = this.props;
     const { playerPosition } = this.state;
-    const newPlayerPosition = [
-      exactMath.add(playerPosition[0], touchMovementX, exactMathConfig),
-      exactMath.sub(playerPosition[1], touchMovementY, exactMathConfig)
-    ];
-    const rotatedNewPosition = this.getRotatedNewPosition(newPlayerPosition);
 
-    const movement = [
-      playerPosition[0] - rotatedNewPosition[0],
-      playerPosition[1] - rotatedNewPosition[1]
+    const intendedPlayerPosition = [
+      playerPosition[0] + movement[0],
+      playerPosition[1] + movement[1]
     ];
 
+    const intendedPositionRotated = this.getRotatedPosition(
+      intendedPlayerPosition
+    );
+
+    /*
     const wallDistanceAdjusted = [
       checkWallDistanceX(movement[0], activeCellData),
       checkWallDistanceY(movement[1], activeCellData)
@@ -109,15 +119,20 @@ class Loaded extends Component {
         prevState.playerPosition[1] - wallDistanceAdjusted[1]
       ]
     }));
+    */
+
+    this.setState({
+      playerPosition: intendedPositionRotated
+    });
   };
 
-  getRotatedNewPosition = newPlayerPosition => {
+  getRotatedPosition = intendedPlayerPosition => {
     const { heading, offsetHeading, playerPosition } = this.state;
     const differenceFromOffset = offsetHeading - heading;
     return getPositionRotatedAroundPrevious(
       playerPosition,
-      newPlayerPosition,
-      -differenceFromOffset
+      intendedPlayerPosition,
+      differenceFromOffset
     );
   };
 

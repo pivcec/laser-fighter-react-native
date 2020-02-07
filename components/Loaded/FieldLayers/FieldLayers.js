@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { View } from "react-native";
 import PropTypes from "prop-types";
-import exactMath from "exact-math";
-import { exactMathConfig } from "../../../constants/constants";
 import Grid from "./Grid/Grid";
 import Player from "./Player/Player";
 import FieldRotation from "./FieldRotation/FieldRotation";
@@ -17,13 +15,8 @@ class FieldLayers extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { touchCoords } = prevState;
-    if (touchCoords && this.state.touchCoords) {
-      if (
-        touchCoords[0] !== this.state.touchCoords[0] ||
-        touchCoords[1] !== this.state.touchCoords[1]
-      ) {
-        this.handleTouchCoordsUpdate(touchCoords);
-      }
+    if (!touchCoords && this.state.touchCoords) {
+      this.handleTouchCoordsUpdate();
     }
   }
 
@@ -39,23 +32,31 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
-  handleTouchCoordsUpdate = touchCoords => {
-    const touchMovementX = exactMath.sub(
-      touchCoords[0],
-      this.state.touchCoords[0],
-      exactMathConfig
-    );
+  handleTouchCoordsUpdate = () => {
+    const { layoutWidth, playerPosition } = this.props;
+    const { touchCoords } = this.state;
 
-    const touchMovementY = exactMath.sub(
-      touchCoords[1],
-      this.state.touchCoords[1],
-      exactMathConfig
-    );
+    const halfOfLayoutWidth = layoutWidth / 2;
 
-    this.props.handleTouchMovement(touchMovementX, touchMovementY);
+    let distanceFromCenterX;
+    let distanceFromCenterY;
+
+    if (touchCoords[0] > halfOfLayoutWidth) {
+      distanceFromCenterX = -(touchCoords[0] - halfOfLayoutWidth);
+    } else {
+      distanceFromCenterX = halfOfLayoutWidth - touchCoords[0];
+    }
+
+    if (touchCoords[1] > halfOfLayoutWidth) {
+      distanceFromCenterY = -(touchCoords[1] - halfOfLayoutWidth);
+    } else {
+      distanceFromCenterY = halfOfLayoutWidth - touchCoords[1];
+    }
+
+    this.props.handleTouchMovement([distanceFromCenterX, distanceFromCenterY]);
   };
 
-  handleTouchMove = event => {
+  handleTouchStart = event => {
     this.setState({
       touchCoords: [event.locationX, event.locationY]
     });
@@ -86,8 +87,8 @@ class FieldLayers extends Component {
     } = this.props;
     return (
       <View
-        onTouchMove={e => {
-          this.handleTouchMove(e.nativeEvent);
+        onTouchStart={e => {
+          this.handleTouchStart(e.nativeEvent);
         }}
         onTouchEnd={e => {
           this.handleTouchEnd(e.nativeEvent);
