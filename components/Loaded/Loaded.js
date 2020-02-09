@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { View, StyleSheet, StatusBar } from "react-native";
-import exactMath from "exact-math";
-import { exactMathConfig } from "../../constants/constants";
 import { getPositionRotatedAroundPrevious } from "../../helpers/coordsCalculations";
 import {
   checkWallDistanceX,
@@ -99,7 +97,7 @@ class Loaded extends Component {
     const { playerPosition } = this.state;
 
     const intendedPlayerPosition = [
-      playerPosition[0] + movement[0],
+      playerPosition[0] + -movement[0],
       playerPosition[1] + movement[1]
     ];
 
@@ -107,23 +105,22 @@ class Loaded extends Component {
       intendedPlayerPosition
     );
 
-    /*
+    const rotatedMovement = [
+      intendedPositionRotated[0] - playerPosition[0],
+      intendedPositionRotated[1] - playerPosition[1]
+    ];
+
     const wallDistanceAdjusted = [
-      checkWallDistanceX(movement[0], activeCellData),
-      checkWallDistanceY(movement[1], activeCellData)
+      checkWallDistanceX(rotatedMovement[0], activeCellData),
+      checkWallDistanceY(rotatedMovement[1], activeCellData)
     ];
 
     this.setState(prevState => ({
       playerPosition: [
-        prevState.playerPosition[0] - wallDistanceAdjusted[0],
-        prevState.playerPosition[1] - wallDistanceAdjusted[1]
+        prevState.playerPosition[0] + wallDistanceAdjusted[0],
+        prevState.playerPosition[1] + wallDistanceAdjusted[1]
       ]
     }));
-    */
-
-    this.setState({
-      playerPosition: intendedPositionRotated
-    });
   };
 
   getRotatedPosition = intendedPlayerPosition => {
@@ -132,7 +129,7 @@ class Loaded extends Component {
     return getPositionRotatedAroundPrevious(
       playerPosition,
       intendedPlayerPosition,
-      differenceFromOffset
+      -differenceFromOffset
     );
   };
 
@@ -230,7 +227,6 @@ class Loaded extends Component {
                 karma={karma}
                 playerIsDead={playerIsDead}
                 offsetHeading={offsetHeading}
-                updateOffsetHeading={this.updateOffsetHeading}
                 handleTouchMovement={this.handleTouchMovement}
               />
             </View>
@@ -238,6 +234,7 @@ class Loaded extends Component {
             <View style={styles.controls}>
               <Controls
                 heading={heading}
+                updateOffsetHeading={this.updateOffsetHeading}
                 playerPosition={playerPosition}
                 playerIsDead={playerIsDead}
                 playerLaserIsCharging={isCharging}

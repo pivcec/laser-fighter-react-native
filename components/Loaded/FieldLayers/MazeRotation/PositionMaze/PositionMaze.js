@@ -24,11 +24,7 @@ class PositionMaze extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { playerPosition } = prevProps;
-    const {
-      mazePosition,
-      animatedMazePositionX,
-      animatedMazePositionY
-    } = prevState;
+    const { mazePosition } = prevState;
 
     if (
       playerPosition[0] !== this.props.playerPosition[0] ||
@@ -42,13 +38,6 @@ class PositionMaze extends Component {
       mazePosition[1] !== this.state.mazePosition[1]
     ) {
       this.handleMazePositionUpdate();
-    }
-
-    if (
-      animatedMazePositionX !== this.state.animatedMazePositionX ||
-      animatedMazePositionY !== this.state.animatedMazePositionY
-    ) {
-      // this.updateActiveCellData();
     }
   }
 
@@ -66,26 +55,20 @@ class PositionMaze extends Component {
     const { animatedMazePositionY } = this.state;
 
     Animated.timing(animatedMazePositionY, {
-      toValue: moveTo,
+      toValue: -moveTo,
       duration: 100,
       useNativeDriver: true
     }).start();
   };
 
   handlePlayerPositionUpdate = playerPosition => {
-    const { layoutWidth } = this.props;
-    const {
-      mazePosition,
-      animatedMazePositionX,
-      animatedMazePositionY
-    } = this.state;
     const movementX = this.props.playerPosition[0] - playerPosition[0];
     const movementY = this.props.playerPosition[1] - playerPosition[1];
 
     this.setState(prevState => ({
       mazePosition: [
-        prevState.mazePosition[0] + movementX,
-        prevState.mazePosition[1] + movementY
+        prevState.mazePosition[0] + -movementX,
+        prevState.mazePosition[1] + -movementY
       ]
     }));
   };
@@ -94,20 +77,19 @@ class PositionMaze extends Component {
     const { mazePosition } = this.state;
     this.moveMazePositionX(mazePosition[0]);
     this.moveMazePositionY(mazePosition[1]);
+    this.updateActiveCellData();
   };
 
   updateActiveCellData = () => {
-    const { layoutWidth } = this.props;
-    const { mazePosition } = this.state;
-    /*
+    const { layoutWidth, playerPosition } = this.props;
+
     const activeCellData = getActiveCellData(
-      mazePosition,
+      playerPosition,
       layoutWidth,
       mazeData
     );
-    */
 
-    //this.props.updateActiveCellData(activeCellData);
+    this.props.updateActiveCellData(activeCellData);
   };
 
   render() {

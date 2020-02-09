@@ -62,7 +62,7 @@ export const checkWallDistanceX = (distance, activeCellData) => {
 
   if (distance < 0) {
     if (west) {
-      return Math.abs(distance) > west ? west : distance;
+      return Math.abs(distance) > west ? -west + 10 : distance;
     }
     return distance;
   }
@@ -81,7 +81,7 @@ export const checkWallDistanceY = (distance, activeCellData) => {
 
   if (distance < 0) {
     if (south) {
-      return Math.abs(distance) > south ? south : distance;
+      return Math.abs(distance) > south ? -south + 10 : distance;
     }
     return distance;
   }

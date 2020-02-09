@@ -82,8 +82,7 @@ class FieldLayers extends Component {
       karma,
       playerIsDead,
       increaseKarma,
-      offsetHeading,
-      updateOffsetHeading
+      offsetHeading
     } = this.props;
     return (
       <View
@@ -132,12 +131,7 @@ class FieldLayers extends Component {
         </View>
 
         <View style={{ position: "absolute", zIndex: 5 }}>
-          <PlayerInfo
-            karma={karma}
-            chi={chi}
-            layoutWidth={layoutWidth}
-            updateOffsetHeading={updateOffsetHeading}
-          />
+          <PlayerInfo karma={karma} chi={chi} layoutWidth={layoutWidth} />
         </View>
       </View>
     );
@@ -149,7 +143,6 @@ FieldLayers.propTypes = {
   playerPosition: PropTypes.array.isRequired,
   updatePlayerPosition: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
-  offsetHeading: PropTypes.number.isRequired,
   updateOffsetHeading: PropTypes.func.isRequired,
   playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired,
