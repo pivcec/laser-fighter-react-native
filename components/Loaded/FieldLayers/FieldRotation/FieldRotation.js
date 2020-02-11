@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Animated } from "react-native";
-import Field from "./Field/Field";
+import PositionField from "./PositionField/PositionField";
 
 class FieldRotation extends Component {
   state = {
@@ -40,13 +40,15 @@ class FieldRotation extends Component {
     const {
       playerPosition,
       updatePlayerPosition,
+      fieldPosition,
       enemies,
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
       playerIsDead,
       playSound,
-      increaseKarma
+      increaseKarma,
+      updateFieldPosition
     } = this.props;
 
     const interpolatedRotateAnimation = animatedValue.interpolate({
@@ -57,10 +59,13 @@ class FieldRotation extends Component {
     return (
       <Animated.View
         style={{
-          transform: [{ rotate: interpolatedRotateAnimation }]
+          transform: [{ rotate: interpolatedRotateAnimation }],
+          height: layoutWidth,
+          width: layoutWidth,
+          position: "absolute"
         }}
       >
-        <Field
+        <PositionField
           playerPosition={playerPosition}
           updatePlayerPosition={updatePlayerPosition}
           enemies={enemies}
@@ -70,6 +75,8 @@ class FieldRotation extends Component {
           playerIsDead={playerIsDead}
           playSound={playSound}
           increaseKarma={increaseKarma}
+          updateFieldPosition={updateFieldPosition}
+          fieldPosition={fieldPosition}
         />
       </Animated.View>
     );
@@ -84,6 +91,8 @@ FieldRotation.propTypes = {
   layoutWidth: PropTypes.number.isRequired,
   enemies: PropTypes.array.isRequired,
   updateEnemies: PropTypes.func.isRequired,
+  updateFieldPosition: PropTypes.func.isRequired,
+  fieldPosition: PropTypes.array.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,

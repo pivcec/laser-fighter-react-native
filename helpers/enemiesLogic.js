@@ -81,3 +81,14 @@ export const getEnemiesWithRotatedPositions = (heading, enemies) => {
     };
   });
 };
+
+export const getEnemiesWithAdjustedPositions = (fieldMovement, enemies) => {
+  return enemies.map(enemy => {
+    const { position } = enemy;
+
+    return {
+      ...enemy,
+      position: [position[0] + fieldMovement[0], position[1] + fieldMovement[1]]
+    };
+  });
+};

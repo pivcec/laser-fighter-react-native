@@ -16,7 +16,8 @@ class Player extends Component {
       updateEnemy,
       playSound,
       enemies,
-      offsetHeading
+      offsetHeading,
+      fieldPosition
     } = this.props;
     return (
       <View style={styles.container}>
@@ -44,6 +45,7 @@ class Player extends Component {
           updateEnemy={updateEnemy}
           playSound={playSound}
           enemies={enemies}
+          fieldPosition={fieldPosition}
         />
       </View>
     );
@@ -73,7 +75,8 @@ Player.propTypes = {
   updateEnemy: PropTypes.func.isRequired,
   playSound: PropTypes.func.isRequired,
   enemies: PropTypes.array.isRequired,
-  offsetHeading: PropTypes.number.isRequired
+  offsetHeading: PropTypes.number.isRequired,
+  fieldPosition: PropTypes.array.isRequired
 };
 
 export default Player;

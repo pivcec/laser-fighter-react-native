@@ -7,19 +7,9 @@ import {
 
 const playerPositionOffset = exactMath.div(playerWidthAndHeight, 2);
 
-export const checkForCollisionWithPlayer = position => {
-  const enemyLeftEdge = position[0];
-  const enemyRightEdge = exactMath.add(
-    enemyLeftEdge,
-    enemyWidthAndHeight,
-    exactMathConfig
-  );
-  const enemyTopEdge = position[1];
-  const enemyBottomEdge = exactMath.add(
-    enemyTopEdge,
-    enemyWidthAndHeight,
-    exactMathConfig
-  );
+export const checkForCollisionWithPlayer = (fieldMovement, enemyPosition) => {
+  const enemyPositionX = enemyPosition[0] + fieldMovement[0];
+  const enemyPositionY = enemyPosition[1] + fieldMovement[1];
   const playerLeftEdge = exactMath.sub(
     50,
     playerPositionOffset,
@@ -40,6 +30,20 @@ export const checkForCollisionWithPlayer = position => {
     playerPositionOffset,
     exactMathConfig
   );
+
+  const enemyLeftEdge = enemyPositionX;
+  const enemyRightEdge = exactMath.add(
+    enemyLeftEdge,
+    enemyWidthAndHeight,
+    exactMathConfig
+  );
+  const enemyTopEdge = enemyPositionY;
+  const enemyBottomEdge = exactMath.add(
+    enemyTopEdge,
+    enemyWidthAndHeight,
+    exactMathConfig
+  );
+
   if (
     enemyBottomEdge > playerTopEdge &&
     enemyTopEdge < playerBottomEdge &&

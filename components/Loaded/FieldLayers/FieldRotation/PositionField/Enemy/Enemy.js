@@ -30,19 +30,33 @@ class Enemy extends Component {
       !playerIsDead &&
       !enemyIsDead
     ) {
-      const hasCollided = checkForCollisionWithPlayer([
-        this.props.position[0] - enemyPositionOffset,
-        this.props.position[1] - enemyPositionOffset
-      ]);
-      if (hasCollided) {
-        this.props.handleEnemyCollision();
-      }
+      this.checkForCollisionWithPlayer();
     }
 
     if (!enemyIsDead && this.props.enemyIsDead) {
       this.handleEnemyIsDead();
     }
   }
+
+  checkForCollisionWithPlayer = () => {
+    const { layoutWidth, fieldPosition } = this.props;
+    const fieldMovement = [
+      (fieldPosition[0] / layoutWidth) * 100,
+      (fieldPosition[1] / layoutWidth) * 100
+    ];
+    const enemyPosition = [
+      this.props.position[0] - enemyPositionOffset,
+      this.props.position[1] - enemyPositionOffset
+    ];
+
+    const hasCollided = checkForCollisionWithPlayer(
+      fieldMovement,
+      enemyPosition
+    );
+    if (hasCollided) {
+      this.props.handleEnemyCollision();
+    }
+  };
 
   rotateEnemy = () => {
     this.state.animatedValue.setValue(0);
@@ -74,8 +88,8 @@ class Enemy extends Component {
             style={{
               transform: [{ rotate: interpolatedRotateAnimation }],
               position: "absolute",
-              top: `${position[1] - enemyPositionOffset}%`,
               left: `${position[0] - enemyPositionOffset}%`,
+              bottom: `${position[1] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
               height: `${enemyWidthAndHeight}%`
             }}
@@ -94,8 +108,8 @@ class Enemy extends Component {
           <View
             style={{
               position: "absolute",
-              top: `${position[1] - enemyPositionOffset}%`,
               left: `${position[0] - enemyPositionOffset}%`,
+              bottom: `${position[1] - enemyPositionOffset}%`,
               width: `${enemyWidthAndHeight}%`,
               height: `${enemyWidthAndHeight}%`
             }}
@@ -124,5 +138,6 @@ Enemy.propTypes = {
   updateEnemies: PropTypes.func.isRequired,
   removeEnemy: PropTypes.func.isRequired,
   handleEnemyCollision: PropTypes.func.isRequired,
-  playerIsDead: PropTypes.bool.isRequired
+  playerIsDead: PropTypes.bool.isRequired,
+  layoutWidth: PropTypes.number.isRequired
 };

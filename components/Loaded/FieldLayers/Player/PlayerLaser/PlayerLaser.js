@@ -5,7 +5,10 @@ import PropTypes from "prop-types";
 import { Animated } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import { vh, vw } from "react-native-expo-viewport-units";
-import { getEnemiesWithRotatedPositions } from "../../../../../helpers/enemiesLogic";
+import {
+  getEnemiesWithAdjustedPositions,
+  getEnemiesWithRotatedPositions
+} from "../../../../../helpers/enemiesLogic";
 import {
   playerWidthAndHeight,
   enemyWidthAndHeight,
@@ -49,14 +52,28 @@ export default class PlayerLaser extends Component {
   }
 
   handleLaserDischarge = timestamp => {
-    const { heading, offsetHeading, enemies } = this.props;
+    const {
+      heading,
+      offsetHeading,
+      enemies,
+      fieldPosition,
+      layoutWidth
+    } = this.props;
     const differenceFromOffset = offsetHeading - heading;
     const timeDiff = this.props.playerLaserCharge.timestamp - timestamp;
     const chargePercentage = (timeDiff / playerLaserChargeTime) * 100;
     const laserPower = chargePercentage > 100 ? 100 : chargePercentage;
-    const enemiesWithRotatedPositions = getEnemiesWithRotatedPositions(
-      -differenceFromOffset,
+    const fieldMovement = [
+      (fieldPosition[0] / layoutWidth) * 100,
+      (fieldPosition[1] / layoutWidth) * 100
+    ];
+    const enemiesWithAdjustedPositions = getEnemiesWithAdjustedPositions(
+      fieldMovement,
       enemies
+    );
+    const enemiesWithRotatedPositions = getEnemiesWithRotatedPositions(
+      differenceFromOffset,
+      enemiesWithAdjustedPositions
     );
     const enemiesWithinPathOfLaser = this.getEnemiesWithinPathOfLaser(
       enemiesWithRotatedPositions
@@ -133,9 +150,9 @@ export default class PlayerLaser extends Component {
     const { position } = enemy;
     const enemyLeftEdge = position[0] - enemyPositionOffset;
     const enemyRightEdge = position[0] + enemyPositionOffset;
-    const enemyTopEdge = position[1] - enemyPositionOffset;
+    const enemyTopEdge = position[1] + enemyPositionOffset;
 
-    if (enemyTopEdge < 50 && enemyLeftEdge <= 50 && enemyRightEdge >= 50) {
+    if (enemyTopEdge > 50 && enemyLeftEdge <= 50 && enemyRightEdge >= 50) {
       return true;
     }
     return false;
@@ -149,7 +166,7 @@ export default class PlayerLaser extends Component {
       animatedValue
     } = this.state;
     const y2 = firstEnemyWithinPathOfLaser
-      ? firstEnemyWithinPathOfLaser.position[1]
+      ? 100 - firstEnemyWithinPathOfLaser.position[1]
       : 0;
     const animatedStyle = {
       opacity: animatedValue.interpolate({
@@ -193,5 +210,7 @@ PlayerLaser.propTypes = {
   offsetHeading: PropTypes.number.isRequired,
   updateEnemy: PropTypes.func.isRequired,
   playSound: PropTypes.func.isRequired,
-  enemies: PropTypes.array.isRequired
+  enemies: PropTypes.array.isRequired,
+  fieldPosition: PropTypes.array.isRequired,
+  layoutWidth: PropTypes.number.isRequired
 };

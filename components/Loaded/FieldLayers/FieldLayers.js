@@ -10,7 +10,8 @@ import PlayerInfo from "./PlayerInfo/PlayerInfo";
 class FieldLayers extends Component {
   state = {
     enemies: [],
-    touchCoords: null
+    touchCoords: null,
+    fieldPosition: [0, 0]
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,8 +33,17 @@ class FieldLayers extends Component {
     this.setState({ enemies: updatedEnemies });
   };
 
+  updateFieldPosition = (movementX, movementY) => {
+    this.setState(prevState => ({
+      fieldPosition: [
+        prevState.fieldPosition[0] + -movementX,
+        prevState.fieldPosition[1] + -movementY
+      ]
+    }));
+  };
+
   handleTouchCoordsUpdate = () => {
-    const { layoutWidth, playerPosition } = this.props;
+    const { layoutWidth } = this.props;
     const { touchCoords } = this.state;
 
     const halfOfLayoutWidth = layoutWidth / 2;
@@ -69,7 +79,7 @@ class FieldLayers extends Component {
   };
 
   render() {
-    const { enemies } = this.state;
+    const { enemies, fieldPosition } = this.state;
     const {
       layoutWidth,
       heading,
@@ -112,6 +122,7 @@ class FieldLayers extends Component {
           enemies={enemies}
           chi={chi}
           karma={karma}
+          fieldPosition={fieldPosition}
         />
 
         <View style={{ position: "absolute", zIndex: 4 }}>
@@ -127,6 +138,8 @@ class FieldLayers extends Component {
             playerIsDead={playerIsDead}
             playSound={this.props.playSound}
             increaseKarma={increaseKarma}
+            updateFieldPosition={this.updateFieldPosition}
+            fieldPosition={fieldPosition}
           />
         </View>
 
@@ -143,7 +156,6 @@ FieldLayers.propTypes = {
   playerPosition: PropTypes.array.isRequired,
   updatePlayerPosition: PropTypes.func.isRequired,
   heading: PropTypes.number.isRequired,
-  updateOffsetHeading: PropTypes.func.isRequired,
   playerLaserCharge: PropTypes.object.isRequired,
   playSound: PropTypes.func.isRequired,
   chi: PropTypes.number.isRequired,

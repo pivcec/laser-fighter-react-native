@@ -1,20 +1,24 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Asset } from "expo-asset";
-import { View } from "react-native";
 import {
   getNewPosition,
   checkIfEnemyHasReachedHeading,
-  getNewEnemyData,
-  getUpdatedEnemyPositions
+  getNewEnemyData
 } from "../../../../../helpers/enemiesLogic";
+import { Animated } from "react-native";
 import Enemy from "./Enemy/Enemy";
 
 const powerUp = Asset.fromModule(
   require("../../../../../assets/sounds/powerUp.wav")
 );
 
-class Field extends Component {
+class PositionField extends Component {
+  state = {
+    animatedFieldPositionX: new Animated.Value(0),
+    animatedFieldPositionY: new Animated.Value(0)
+  };
+
   componentDidMount() {
     this.createEnemy();
 
@@ -24,7 +28,7 @@ class Field extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { playerIsDead, playerPosition, enemies } = prevProps;
+    const { playerIsDead, playerPosition, enemies, fieldPosition } = prevProps;
 
     if (enemies.length > 0 && this.props.enemies.length < 1) {
       this.startCreateEnemyTimeout();
@@ -40,16 +44,45 @@ class Field extends Component {
     ) {
       this.handleUpdatedPlayerPosition(playerPosition);
     }
+
+    if (
+      fieldPosition[0] !== this.props.fieldPosition[0] ||
+      fieldPosition[1] !== this.props.fieldPosition[1]
+    ) {
+      this.handleFieldPositionUpdate();
+    }
   }
 
   handleUpdatedPlayerPosition = playerPosition => {
-    const { enemies } = this.props;
-    const updatedEnemies = getUpdatedEnemyPositions(
-      enemies,
-      playerPosition,
-      this.props.playerPosition
-    );
-    this.props.updateEnemies(updatedEnemies);
+    const movementX = this.props.playerPosition[0] - playerPosition[0];
+    const movementY = this.props.playerPosition[1] - playerPosition[1];
+    this.props.updateFieldPosition(movementX, movementY);
+  };
+
+  handleFieldPositionUpdate = () => {
+    const { fieldPosition } = this.props;
+    this.moveFieldPositionX(fieldPosition[0]);
+    this.moveFieldPositionY(fieldPosition[1]);
+  };
+
+  moveFieldPositionX = moveTo => {
+    const { animatedFieldPositionX } = this.state;
+
+    Animated.timing(animatedFieldPositionX, {
+      toValue: moveTo,
+      duration: 100,
+      useNativeDriver: true
+    }).start();
+  };
+
+  moveFieldPositionY = moveTo => {
+    const { animatedFieldPositionY } = this.state;
+
+    Animated.timing(animatedFieldPositionY, {
+      toValue: -moveTo,
+      duration: 100,
+      useNativeDriver: true
+    }).start();
   };
 
   animateEnemies = () => {
@@ -71,9 +104,10 @@ class Field extends Component {
   };
 
   handlePlayerRespawn = () => {
+    const { layoutWidth } = this.props;
     const newEnemies = [getNewEnemyData()];
     this.props.updateEnemies(newEnemies);
-    this.props.updatePlayerPosition([50, 50]);
+    this.props.updatePlayerPosition([layoutWidth / 2, layoutWidth / 2]);
   };
 
   startCreateEnemyTimeout = () => {
@@ -103,14 +137,26 @@ class Field extends Component {
       layoutWidth,
       updateEnemies,
       handleEnemyCollision,
-      playerIsDead
+      playerIsDead,
+      fieldPosition
     } = this.props;
-
+    const { animatedFieldPositionX, animatedFieldPositionY } = this.state;
     return (
-      <View
+      <Animated.View
         style={{
+          position: "absolute",
+          left: 0,
+          bottom: 0,
           height: layoutWidth,
-          width: layoutWidth
+          width: layoutWidth,
+          transform: [
+            {
+              translateX: animatedFieldPositionX
+            },
+            {
+              translateY: animatedFieldPositionY
+            }
+          ]
         }}
       >
         {enemies.map(({ position, id, life }) => {
@@ -124,15 +170,17 @@ class Field extends Component {
               removeEnemy={this.removeEnemy}
               handleEnemyCollision={handleEnemyCollision}
               playerIsDead={playerIsDead}
+              fieldPosition={fieldPosition}
+              layoutWidth={layoutWidth}
             />
           );
         })}
-      </View>
+      </Animated.View>
     );
   }
 }
 
-Field.propTypes = {
+PositionField.propTypes = {
   playerPosition: PropTypes.array.isRequired,
   layoutWidth: PropTypes.number.isRequired,
   updatePlayerPosition: PropTypes.func.isRequired,
@@ -141,7 +189,9 @@ Field.propTypes = {
   handleEnemyCollision: PropTypes.func.isRequired,
   playerIsDead: PropTypes.bool.isRequired,
   playSound: PropTypes.func.isRequired,
-  increaseKarma: PropTypes.func.isRequired
+  increaseKarma: PropTypes.func.isRequired,
+  updateFieldPosition: PropTypes.func.isRequired,
+  fieldPosition: PropTypes.array.isRequired
 };
 
-export default Field;
+export default PositionField;
